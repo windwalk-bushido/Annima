@@ -1,5 +1,13 @@
 # Annima
 
+Vue
+JavaScript
+Vuestic UI
+Vitest
+Cypress
+Axios
+Supabase
+
 ## Project Setup
 
 ```sh
