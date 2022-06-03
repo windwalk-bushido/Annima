@@ -16,5 +16,6 @@ Dev's docs for planning and developing the Annima.
 
 ### TODO
 
-- Delete Prettier formatter and Eslint as dev dependencies;
-- Navbar should overlap content...
+- Check user data while typing?
+- "Check" icons should be displayed when inputted data is good
+- Navbar should overlap content, not push it down the page
