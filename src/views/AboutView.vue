@@ -2,6 +2,6 @@
 
 <template>
   <main>
-    <h1>Hello World!</h1>
+    <h1>About</h1>
   </main>
 </template>
