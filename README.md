@@ -2,7 +2,7 @@
 
 Vue
 JavaScript
-Vuestic UI
+Bulma
 Vitest
 Cypress
 Axios

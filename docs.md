@@ -13,3 +13,8 @@ Dev's docs for planning and developing the Annima.
 - Dashboard (stats & search, CRUD)
 - Settings (edit password and/or email)
 - 404
+
+### TODO
+
+- Delete Prettier formatter and Eslint as dev dependencies;
+- Navbar should overlap content...
