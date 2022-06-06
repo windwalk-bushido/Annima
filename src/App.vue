@@ -13,10 +13,10 @@
         const menu_icon = document.getElementById("navbar-burger");
         const menu_links = document.getElementById("navbar-menu");
 
-        if (command != "") {
-          this.menu_active = false;
-        } else {
+        if (command === 0) {
           this.menu_active = !this.menu_active;
+        } else {
+          this.menu_active = false;
         }
 
         if (this.menu_active) {
