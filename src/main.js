@@ -9,9 +9,17 @@ import router from "./router";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 
-import { faEnvelope, faLock, faCheck, faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEnvelope,
+  faLock,
+  faCheck,
+  faCircleExclamation,
+  faPen,
+  faTrash,
+  faEllipsisVertical,
+} from "@fortawesome/free-solid-svg-icons";
 
-library.add(faEnvelope, faLock, faCheck, faCircleExclamation);
+library.add(faEnvelope, faLock, faCheck, faCircleExclamation, faPen, faTrash, faEllipsisVertical);
 
 const app = createApp(App);
 
