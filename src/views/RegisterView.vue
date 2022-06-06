@@ -242,6 +242,14 @@
           modal.classList.remove("is-active");
         }
       },
+
+      TriggerNavMenu() {
+        this.$root.ToggleMenu();
+      },
+    },
+
+    mounted() {
+      this.TriggerNavMenu();
     },
   };
 </script>

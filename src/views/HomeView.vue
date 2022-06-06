@@ -1,4 +1,16 @@
-<script></script>
+<script>
+  export default {
+    methods: {
+      TriggerNavMenu() {
+        this.$root.ToggleMenu();
+      },
+    },
+
+    mounted() {
+      this.TriggerNavMenu();
+    },
+  };
+</script>
 
 <template>
   <main>
