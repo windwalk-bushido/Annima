@@ -1,6 +1,7 @@
 <script>
   import { RouterLink } from "vue-router";
   import { createClient } from "@supabase/supabase-js";
+  import { supabaseUrl, supabaseAnonKey } from "../api";
 
   export default {
     data() {
@@ -213,16 +214,8 @@
           const email_input = document.getElementById("email_input");
           const password1_input = document.getElementById("password1_input");
 
-          //const supabaseUrl = import.meta.env.SUPABASE_URL;
-          //const supabaseAnonKey = import.meta.env.SUPABASE_ANON_KEY;
-
-          const supabaseUrl = "https://qzmtsqocmzxxipunwshg.supabase.co";
-          const supabaseAnonKey =
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF6bXRzcW9jbXp4eGlwdW53c2hnIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NTQyNTk5NTMsImV4cCI6MTk2OTgzNTk1M30.MfjK81h0EpXK0Pf03ZPYDIbA2nW3Q9EwMKbwXrqMmSE";
-
           const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-          //let { user, error } = supabase.auth.signUp({
           supabase.auth.signUp({
             email: email_input.value,
             password: password1_input.value,
