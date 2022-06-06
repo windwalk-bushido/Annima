@@ -14,6 +14,6 @@
 
 <template>
   <main>
-    <h1>About</h1>
+    <h1>Settings</h1>
   </main>
 </template>
