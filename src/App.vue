@@ -9,11 +9,15 @@
     },
 
     methods: {
-      ToggleMenu() {
+      ToggleMenu(command) {
         const menu_icon = document.getElementById("navbar-burger");
         const menu_links = document.getElementById("navbar-menu");
 
-        this.menu_active = !this.menu_active;
+        if (command != "") {
+          this.menu_active = false;
+        } else {
+          this.menu_active = !this.menu_active;
+        }
 
         if (this.menu_active) {
           menu_icon.classList.add("is-active");
@@ -38,7 +42,7 @@
           id="navbar-burger"
           aria-label="menu"
           aria-expanded="false"
-          @click="ToggleMenu()"
+          @click="ToggleMenu(0)"
         >
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
