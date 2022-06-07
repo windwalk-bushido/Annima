@@ -119,6 +119,8 @@
   <main>
     <div class="is-mobile mt-4">
       <div class="column is-10 is-offset-1">
+        <h1 class="is-size-2 has-text-centered mb-4">Login</h1>
+
         <div class="field">
           <label class="label">Email</label>
           <div class="control has-icons-left has-icons-right">
