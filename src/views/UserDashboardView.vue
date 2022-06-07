@@ -51,6 +51,8 @@
         const anni_name_icon = document.getElementById("anni_name_icon");
         const anni_name_helper = document.getElementById("anni_name_helper");
 
+        const anni_type_select = document.getElementById("anni_type_select");
+
         const anni_date_input = document.getElementById("anni_date_input");
         const anni_date_icon = document.getElementById("anni_date_icon");
         const anni_date_helper = document.getElementById("anni_date_helper");
@@ -60,16 +62,21 @@
 
         anni_name_input.classList.remove("is-success");
         anni_name_input.classList.remove("is-danger");
+        anni_name_input.value = "";
         anni_name_icon.classList.add("is-hidden");
         anni_name_helper.innerHTML = "";
 
+        anni_type_select.value = "Birthday";
+
         anni_date_input.classList.remove("is-success");
         anni_date_input.classList.remove("is-danger");
+        anni_date_input.value = "";
         anni_date_icon.classList.add("is-hidden");
         anni_date_helper.innerHTML = "";
 
         anni_note_input.classList.remove("is-success");
         anni_note_input.classList.remove("is-danger");
+        anni_note_input.value = "";
         anni_note_helper.innerHTML = "";
       },
 
@@ -147,26 +154,33 @@
             "Don't leave this field empty.",
             "BAD"
           );
-        } else if (anni_name_input.value < 5) {
+        } else if (anni_name_input.value.length < 5) {
           this.InformUser(
             "name",
             anni_name_input,
             anni_name_helper,
             anni_name_icon,
-            "Min number of characters is 5.",
+            "Minimum number of characters is 5.",
             "BAD"
           );
-        } else if (anni_name_input.value > 150) {
+        } else if (anni_name_input.value.length > 150) {
           this.InformUser(
             "name",
             anni_name_input,
             anni_name_helper,
             anni_name_icon,
-            "Max number of characters is 150.",
+            "Maximum number of characters is 150.",
             "BAD"
           );
         } else {
-          this.InformUser("name", anni_name_input, anni_name_helper, anni_name_icon, "Name is good.", "GOOD");
+          this.InformUser(
+            "name",
+            anni_name_input,
+            anni_name_helper,
+            anni_name_icon,
+            "Name is looking good.",
+            "GOOD"
+          );
           anni_name_good = true;
         }
 
@@ -198,7 +212,14 @@
             "BAD"
           );
         } else {
-          this.InformUser("date", anni_date_input, anni_date_helper, anni_date_icon, "Date is good.", "GOOD");
+          this.InformUser(
+            "date",
+            anni_date_input,
+            anni_date_helper,
+            anni_date_icon,
+            "Date is looking good.",
+            "GOOD"
+          );
           anni_date_good = true;
         }
 
@@ -208,7 +229,7 @@
             anni_note_input,
             anni_note_helper,
             "note",
-            "Max number of characters is 300.",
+            "Maximum number of characters is 300.",
             "BAD"
           );
         } else {
@@ -260,6 +281,7 @@
           */
 
           this.HandleModal("close");
+          this.sending_data = false;
         } else {
           this.sending_data = false;
         }
@@ -345,7 +367,7 @@
           <label class="label">Type</label>
           <div class="control">
             <div class="select">
-              <select id="anni_type_select" :readonly="sending_data">
+              <select id="anni_type_select" :readonly="sending_data" required>
                 <option selected>Birthday</option>
                 <option>Anniversary</option>
                 <option>Name day</option>
