@@ -24,3 +24,4 @@ Dev's docs for planning and developing the Annima.
 - Add policies on Supabase for updating and deleting the anniversaries
 - Center the "new" anni. button (Dashboard page)
 - Notifications should be displayed in toasts
+- All buttons should be centered
