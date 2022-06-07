@@ -14,12 +14,28 @@
     },
 
     methods: {
+      TriggerNavMenu() {
+        this.$root.ToggleMenu();
+      },
+
+      HandleModal(command) {
+        const modal = document.getElementById("modal");
+        if (command === "open") {
+          modal.classList.add("is-active");
+        } else {
+          modal.classList.remove("is-active");
+        }
+      },
+
       InformUser(element, input, helper, icon, message, type) {
         if (type === "BAD") {
           input.classList.add("is-danger");
+
           helper.innerHTML = message;
           helper.classList.add("is-danger");
+
           icon.classList.remove("is-hidden");
+
           switch (element) {
             case "email":
               this.email_icon_value = "circle-exclamation";
@@ -34,9 +50,11 @@
         } else {
           input.classList.remove("is-danger");
           input.classList.add("is-success");
+
           helper.innerHTML = message;
           helper.classList.remove("is-danger");
           helper.classList.add("is-success");
+
           switch (element) {
             case "email":
               this.email_icon_value = "check";
@@ -226,19 +244,6 @@
           this.sending_data = false;
         }
       },
-
-      HandleModal(command) {
-        const modal = document.getElementById("modal");
-        if (command === "open") {
-          modal.classList.add("is-active");
-        } else {
-          modal.classList.remove("is-active");
-        }
-      },
-
-      TriggerNavMenu() {
-        this.$root.ToggleMenu();
-      },
     },
 
     mounted() {
@@ -251,6 +256,8 @@
   <main>
     <div class="is-mobile mt-4">
       <div class="column is-10 is-offset-1">
+        <h1 class="is-size-2 has-text-centered mb-4">Register</h1>
+
         <div class="field">
           <label class="label">Email</label>
           <div class="control has-icons-left has-icons-right">
