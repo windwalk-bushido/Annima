@@ -25,3 +25,6 @@ Dev's docs for planning and developing the Annima.
 - Center the "new" anni. button (Dashboard page)
 - Notifications should be displayed in toasts
 - All buttons should be centered
+- Routes should be protected (AKA guided)
+- Make images for types of events
+- What if there's no events? Display some svg...
