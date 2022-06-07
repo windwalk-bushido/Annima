@@ -328,6 +328,7 @@
       </div>
     </div>
   </main>
+
   <div class="modal" id="modal">
     <div class="modal-background" />
     <div class="modal-card">
@@ -340,8 +341,8 @@
         <p>Please check your email for confirmation link.</p>
       </section>
       <footer class="modal-card-foot">
-        <RouterLink class="button is-success" to="/login">Sign in</RouterLink>
         <button class="button" @click="HandleModal('close')">Close</button>
+        <RouterLink class="button is-success" to="/login">Sign in</RouterLink>
       </footer>
     </div>
   </div>
