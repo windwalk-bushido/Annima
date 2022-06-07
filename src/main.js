@@ -16,10 +16,10 @@ import {
   faCircleExclamation,
   faPen,
   faTrash,
-  faEllipsisVertical,
+  faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 
-library.add(faEnvelope, faLock, faCheck, faCircleExclamation, faPen, faTrash, faEllipsisVertical);
+library.add(faEnvelope, faLock, faCheck, faCircleExclamation, faPen, faTrash, faPlus);
 
 const app = createApp(App);
 
