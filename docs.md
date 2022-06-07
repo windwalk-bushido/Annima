@@ -16,10 +16,11 @@ Dev's docs for planning and developing the Annima.
 
 ### TODO
 
-- "Check" icons should be displayed when inputted data is good
-- Add 'loading' modal while sending data and waiting for response
+- "Check" icons should be displayed when inputted data is good (Register page)
+- Add 'loading' icon to the "Submit" button while sending data and waiting for response (R. and L. pages)
 - Navbar should overlap content, not push it down the page
 - Add captcha on Login/Register
-- Fix Navbar opening
 - Make 'Forgot password' page
-- Add policies on Supabase for UD the anniversaries
+- Add policies on Supabase for updating and deleting the anniversaries
+- Center the "new" anni. button (Dashboard page)
+- Notifications should be displayed in toasts
