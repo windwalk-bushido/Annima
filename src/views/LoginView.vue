@@ -1,7 +1,7 @@
 <script>
   import { RouterLink } from "vue-router";
   import { createClient } from "@supabase/supabase-js";
-  import { supabaseUrl, supabaseAnonKey } from "../api";
+  import { supabaseUrl, supabaseKey } from "../api";
 
   export default {
     data() {
@@ -13,6 +13,23 @@
     },
 
     methods: {
+      CloseNav() {
+        this.$root.ToggleMenu();
+      },
+
+      SwapNavBar() {
+        this.$root.CheckLoggedUser();
+      },
+
+      HandleModal(command) {
+        const modal = document.getElementById("modal");
+        if (command === "open") {
+          modal.classList.add("is-active");
+        } else {
+          modal.classList.remove("is-active");
+        }
+      },
+
       InformUser(element, input, helper, icon, message, type) {
         if (type === "BAD") {
           input.classList.add("is-danger");
@@ -38,8 +55,6 @@
         const password_input = document.getElementById("password_input");
         const password_helper = document.getElementById("password_helper");
         const password_icon = document.getElementById("password_icon");
-
-        const kul_checkbox = document.getElementById("kul_checkbox");
 
         let email_good = false;
         let password_good = false;
@@ -71,12 +86,6 @@
           password_good = true;
         }
 
-        if (kul_checkbox.checked === true) {
-          kul_checked = false;
-        } else {
-          kul_checked = true;
-        }
-
         if (email_good && password_good) {
           return true;
         } else {
@@ -84,33 +93,64 @@
         }
       },
 
-      LoginUser() {
+      async LoginUser() {
+        const submit_btn = document.getElementById("submit_btn");
+        submit_btn.classList.add("is-loading");
+
         if (this.CheckUserData()) {
           this.sending_data = true;
 
           const email_input = document.getElementById("email_input");
           const password_input = document.getElementById("password_input");
 
-          const supabase = createClient(supabaseUrl, supabaseAnonKey);
+          const supabase = createClient(supabaseUrl, supabaseKey);
 
-          supabase.auth.signIn({
+          let { user, error } = await supabase.auth.signIn({
             email: email_input.value,
             password: password_input.value,
           });
 
-          // REDIRECT USER TO THE DASHBOARD PAGE
+          if (user != "" && error === null) {
+            localStorage.removeItem("supabase.auth.token");
+
+            const kul_checkbox = document.getElementById("kul_checkbox");
+
+            if (kul_checkbox.checked) {
+              localStorage.setItem("annima_signed-in_date", new Date().toJSON().split("T")[0]);
+              localStorage.setItem("annima_user_uuid", user.id);
+            } else {
+              sessionStorage.setItem("annima_user_uuid", user.id);
+            }
+
+            this.SwapNavBar();
+            this.$router.push("/user/dashboard");
+          } else {
+            const email_input = document.getElementById("email_input");
+            const email_helper = document.getElementById("email_helper");
+            const email_icon = document.getElementById("email_icon");
+
+            const password_input = document.getElementById("password_input");
+            const password_helper = document.getElementById("password_helper");
+            const password_icon = document.getElementById("password_icon");
+
+            this.InformUser("email", email_input, email_helper, email_icon, "", "BAD");
+            this.InformUser("password", password_input, password_helper, password_icon, "", "BAD");
+
+            this.HandleModal("open");
+
+            submit_btn.classList.remove("is-loading");
+            this.sending_data = false;
+          }
         } else {
+          submit_btn.classList.remove("is-loading");
           this.sending_data = false;
         }
-      },
-
-      TriggerNavMenu() {
-        this.$root.ToggleMenu();
       },
     },
 
     mounted() {
-      this.TriggerNavMenu();
+      this.CloseNav();
+      // Check if the user is 'logged in'. If true -> redirect to '/user/dashboard'
     },
   };
 </script>
@@ -171,10 +211,30 @@
         </div>
         <div class="field is-grouped mt-5">
           <div class="control">
-            <button class="button is-link" @click="LoginUser()" :disabled="sending_data">Submit</button>
+            <button class="button is-link" @click="LoginUser()" :disabled="sending_data" id="submit_btn">
+              Submit
+            </button>
           </div>
         </div>
       </div>
     </div>
   </main>
+
+  <div class="modal" id="modal">
+    <div class="modal-background" />
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Error</p>
+        <button class="delete" aria-label="close" @click="HandleModal('close')"></button>
+      </header>
+      <section class="modal-card-body">
+        <h3 class="is-size-5 mb-4">Email and/or password is wrong.</h3>
+        <p>Either data you've entered is wrong or we don't have an account with that email.</p>
+      </section>
+      <footer class="modal-card-foot">
+        <RouterLink class="button" to="/register">Sign up</RouterLink>
+        <button class="button is-primary" @click="HandleModal('close')">Try again</button>
+      </footer>
+    </div>
+  </div>
 </template>
