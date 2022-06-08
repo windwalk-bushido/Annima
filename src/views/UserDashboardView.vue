@@ -1,23 +1,12 @@
 <script>
   import { createClient } from "@supabase/supabase-js";
-  import { supabaseUrl, supabaseAnonKey } from "../api";
+  import { supabaseUrl, supabaseKey } from "../api";
   import Anni from "../anni";
 
   export default {
     data() {
       return {
-        anni_list: [
-          {
-            name: "First Kiss",
-            date: "04.03.2022.",
-            note: "Tunnel, a space between the buildings, was the last place I expected that...",
-          },
-          {
-            name: "First Kiss",
-            date: "04.03.2022.",
-            note: "Tunnel, a space between the buildings, was the last place I expected that...",
-          },
-        ],
+        events_list: [],
         anni_name_icon_value: "circle-exclamation",
         anni_date_icon_value: "circle-exclamation",
         sending_data: false,
@@ -35,15 +24,24 @@
         anni_date_input.max = new Date().toJSON().split("T")[0];
       },
 
-      FetchData() {
-        const local_storage_data = JSON.parse(localStorage.getItem("supabase.auth.token"));
-        const uuid_token = local_storage_data.currentSession.user.id;
+      async FetchData() {
+        const loading_button = document.getElementById("loading_button");
 
-        const supabase = createClient(supabaseUrl, supabaseAnonKey);
-        let { data, error } = supabase.from("anniversaries").select("*").eq("belongs_to", uuid_token);
+        const uuid_token = this.GetToken();
 
-        console.log(data);
-        console.log(error);
+        const supabase = createClient(supabaseUrl, supabaseKey);
+
+        const { data: events, error } = await supabase.from("events").select("*").eq("belongs_to", uuid_token);
+
+        if (events != null && error === null) {
+          for (let event in events) {
+            this.events_list.push(events[event]);
+          }
+
+          loading_button.classList.remove("is-loading");
+        } else {
+          loading_button.classList.add("is-loading");
+        }
       },
 
       ClearModal() {
@@ -244,7 +242,18 @@
         }
       },
 
-      CreateNewAnni() {
+      GetToken() {
+        const uuid_token_session = sessionStorage.getItem("annima_user_uuid");
+        const uuid_token_storage = localStorage.getItem("annima_user_uuid");
+
+        if (uuid_token_session != null) {
+          return uuid_token_session;
+        } else {
+          return uuid_token_storage;
+        }
+      },
+
+      async CreateNewAnni() {
         if (this.CheckUserData()) {
           this.sending_data = true;
 
@@ -253,8 +262,7 @@
           const anni_date_input = document.getElementById("anni_date_input");
           const anni_note_input = document.getElementById("anni_note_input");
 
-          const local_storage_data = JSON.parse(localStorage.getItem("supabase.auth.token"));
-          const uuid_token = local_storage_data.currentSession.user.id;
+          const uuid_token = this.GetToken();
 
           const new_anni = new Anni(
             uuid_token,
@@ -263,22 +271,23 @@
             anni_date_input.value,
             anni_note_input.value
           );
+          this.events_list.push(new_anni);
 
-          this.anni_list.push(new_anni);
+          const supabase = createClient(supabaseUrl, supabaseKey);
 
-          /*
-          const email_input = document.getElementById("email_input");
-          const password1_input = document.getElementById("password1_input");
+          const { data, error } = await supabase.from("events").insert([
+            {
+              belongs_to: uuid_token,
+              name: anni_name_input.value,
+              type: anni_type_select.value,
+              date: anni_date_input.value,
+              note: anni_note_input.value,
+            },
+          ]);
 
-          const supabase = createClient(supabaseUrl, supabaseAnonKey);
-
-          supabase.auth.signUp({
-            email: email_input.value,
-            password: password1_input.value,
-          });
-
-          this.HandleModal("open");
-          */
+          if (error != null) {
+            console.log(error);
+          }
 
           this.HandleModal("close");
           this.sending_data = false;
@@ -291,7 +300,7 @@
     mounted() {
       this.TriggerNavMenu();
       this.SetMaxDate();
-      //this.FetchData();
+      this.FetchData();
     },
   };
 </script>
@@ -300,9 +309,15 @@
   <main>
     <div class="is-mobile mt-4">
       <div class="column is-10 is-offset-1">
-        <h1 class="is-size-2 has-text-centered mb-4">Dashboard</h1>
+        <h1 class="is-size-2 has-text-centered">Dashboard</h1>
+        <button class="button is-white is-large is-loading mb-4" disabled id="loading_button" />
 
-        <div class="card mt-5 mb-5" v-for="(anni, index) in anni_list" :key="index">
+        <div class="has-text-centered mt-6" v-if="events_list.length === 0">
+          <Icon icon="face-sad-cry" class="is-size-1" />
+          <h2 class="mt-2">No events... yet.</h2>
+        </div>
+
+        <div class="card mt-5 mb-5" v-for="(anni, index) in events_list" :key="index" v-else>
           <div class="card-content p-4">
             <div class="media">
               <div class="media-left">

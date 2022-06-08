@@ -121,6 +121,8 @@
             this.SwapNavBar();
             this.$router.push("/user/dashboard");
           } else {
+            console.log(error);
+
             const email_input = document.getElementById("email_input");
             const email_helper = document.getElementById("email_helper");
             const email_icon = document.getElementById("email_icon");
