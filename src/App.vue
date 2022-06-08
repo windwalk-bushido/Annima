@@ -39,6 +39,15 @@
           menu_links.classList.remove("is-active");
         }
       },
+
+      LogoutUser() {
+        sessionStorage.removeItem("annima_user_uuid");
+        localStorage.removeItem("annima_user_uuid");
+        localStorage.removeItem("annima_signed-in_date");
+
+        this.CheckLoggedUser();
+        this.$router.push("/login");
+      },
     },
   };
 </script>
@@ -66,7 +75,7 @@
           <RouterLink class="navbar-item" to="/user/dashboard">Dashboard</RouterLink>
           <RouterLink class="navbar-item" to="/user/settings">Settings</RouterLink>
           <div class="navbar-item">
-            <button class="button is-light">Logout</button>
+            <button class="button is-light" @click="LogoutUser()">Logout</button>
           </div>
         </div>
       </div>
