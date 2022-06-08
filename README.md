@@ -1,38 +1,40 @@
 # Annima
 
-Vue
-JavaScript
-Bulma
-Vitest
-Cypress
-Axios
-Supabase
+## Tech used
 
-## Project Setup
+- Vue
+- JavaScript
+- Bulma
+- Vitest
+- Cypress
+- Axios
+- Supabase
+
+### Project Setup
 
 ```sh
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+#### Compile and Hot-Reload for Development
 
 ```sh
 npm run dev
 ```
 
-### Compile and Minify for Production
+#### Compile and Minify for Production
 
 ```sh
 npm run build
 ```
 
-### Run Unit Tests with [Vitest](https://vitest.dev/)
+#### Run Unit Tests with [Vitest](https://vitest.dev/)
 
 ```sh
 npm run test:unit
 ```
 
-### Run End-to-End Tests with [Cypress](https://www.cypress.io/)
+#### Run End-to-End Tests with [Cypress](https://www.cypress.io/)
 
 ```sh
 npm run build
