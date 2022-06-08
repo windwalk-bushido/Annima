@@ -5,10 +5,22 @@
     data() {
       return {
         menu_active: false,
+        user_logged_in: false,
       };
     },
 
     methods: {
+      CheckLoggedUser() {
+        const uuid_token_session = sessionStorage.getItem("annima_user_uuid");
+        const uuid_token_storage = localStorage.getItem("annima_user_uuid");
+
+        if (uuid_token_session != null || uuid_token_storage != null) {
+          this.user_logged_in = true;
+        } else {
+          this.user_logged_in = false;
+        }
+      },
+
       ToggleMenu(command) {
         const menu_icon = document.getElementById("navbar-burger");
         const menu_links = document.getElementById("navbar-menu");
@@ -33,7 +45,34 @@
 
 <template>
   <header>
-    <nav class="navbar is-dark">
+    <nav class="navbar is-dark" v-if="user_logged_in">
+      <div class="navbar-brand">
+        <RouterLink class="navbar-item logo" to="/user/dashboard">Annima</RouterLink>
+        <a
+          role="button"
+          class="navbar-burger"
+          id="navbar-burger"
+          aria-label="menu"
+          aria-expanded="false"
+          @click="ToggleMenu(0)"
+        >
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+      <div class="navbar-menu" id="navbar-menu">
+        <div class="navbar-end">
+          <RouterLink class="navbar-item" to="/user/dashboard">Dashboard</RouterLink>
+          <RouterLink class="navbar-item" to="/user/settings">Settings</RouterLink>
+          <div class="navbar-item">
+            <button class="button is-light">Logout</button>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <nav class="navbar is-dark" v-else>
       <div class="navbar-brand">
         <RouterLink class="navbar-item logo" to="/">Annima</RouterLink>
         <a
