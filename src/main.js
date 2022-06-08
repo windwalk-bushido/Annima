@@ -17,9 +17,10 @@ import {
   faPen,
   faTrash,
   faPlus,
+  faFaceSadCry,
 } from "@fortawesome/free-solid-svg-icons";
 
-library.add(faEnvelope, faLock, faCheck, faCircleExclamation, faPen, faTrash, faPlus);
+library.add(faEnvelope, faLock, faCheck, faCircleExclamation, faPen, faTrash, faPlus, faFaceSadCry);
 
 const app = createApp(App);
 
