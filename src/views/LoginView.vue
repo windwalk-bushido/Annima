@@ -17,10 +17,6 @@
         this.$root.ToggleMenu();
       },
 
-      SwapNavBar() {
-        this.$root.CheckLoggedUser();
-      },
-
       HandleModal(command) {
         const modal = document.getElementById("modal");
         if (command === "open") {
@@ -146,11 +142,21 @@
           this.sending_data = false;
         }
       },
+
+      CheckIfUserIsLoggedIn() {
+        const uuid_token_session = sessionStorage.getItem("annima_user_uuid");
+        const uuid_token_storage = localStorage.getItem("annima_user_uuid");
+
+        if (uuid_token_session != null || uuid_token_storage != null) {
+          this.$root.CheckLoggedUser();
+          this.$router.push("/user/dashboard");
+        }
+      },
     },
 
     mounted() {
       this.CloseNav();
-      // Check if the user is 'logged in'. If true -> redirect to '/user/dashboard'
+      this.CheckIfUserIsLoggedIn();
     },
   };
 </script>

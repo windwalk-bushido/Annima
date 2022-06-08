@@ -1,7 +1,7 @@
 <script>
   import { RouterLink } from "vue-router";
   import { createClient } from "@supabase/supabase-js";
-  import { supabaseUrl, supabaseAnonKey } from "../api";
+  import { supabaseUrl, supabaseKey } from "../api";
 
   export default {
     data() {
@@ -14,7 +14,7 @@
     },
 
     methods: {
-      TriggerNavMenu() {
+      CloseNav() {
         this.$root.ToggleMenu();
       },
 
@@ -244,10 +244,21 @@
           this.sending_data = false;
         }
       },
+
+      CheckIfUserIsLoggedIn() {
+        const uuid_token_session = sessionStorage.getItem("annima_user_uuid");
+        const uuid_token_storage = localStorage.getItem("annima_user_uuid");
+
+        if (uuid_token_session != null || uuid_token_storage != null) {
+          this.$root.CheckLoggedUser();
+          this.$router.push("/user/dashboard");
+        }
+      },
     },
 
     mounted() {
-      this.TriggerNavMenu();
+      this.CloseNav();
+      this.CheckIfUserIsLoggedIn();
     },
   };
 </script>
@@ -344,7 +355,7 @@
         <button class="delete" aria-label="close" @click="HandleModal('close')"></button>
       </header>
       <section class="modal-card-body">
-        <h3>Thanks for signing up &lt;3</h3>
+        <h3 class="is-size-5 mb-4">Thanks for signing up &lt;3</h3>
         <p>Please check your email for confirmation link.</p>
       </section>
       <footer class="modal-card-foot">
