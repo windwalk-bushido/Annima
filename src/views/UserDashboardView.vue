@@ -10,8 +10,9 @@
         anni_date_icon_value: "circle-exclamation",
         sending_data: false,
         edit_mode: false,
-        delete_mode: false,
         edit_index: null,
+        delete_index: null,
+        list_index: null,
       };
     },
 
@@ -84,6 +85,7 @@
         } else {
           modal.classList.remove("is-active");
           this.ClearModal();
+          this.edit_mode = false;
         }
       },
 
@@ -271,7 +273,7 @@
             },
           ]);
 
-          this.events_list.push(data);
+          this.events_list.push(data[0]);
 
           if (error != null) {
             console.log(error);
@@ -337,6 +339,31 @@
           this.sending_data = false;
         }
       },
+
+      HandleDeleteModal(command, index) {
+        const modal = document.getElementById("delete_modal");
+
+        if (command === "open") {
+          this.delete_index = this.events_list[index].id;
+          this.list_index = index;
+          modal.classList.add("is-active");
+        } else {
+          this.delete_index = null;
+          this.list_index = null;
+          modal.classList.remove("is-active");
+        }
+      },
+
+      async DeleteEvent() {
+        const { data, error } = await supabase.from("events").delete().eq("id", this.delete_index);
+
+        if (error != null) {
+          console.log(error);
+        }
+
+        this.events_list.splice(this.list_index, 1);
+        this.HandleDeleteModal("close");
+      },
     },
 
     mounted() {
@@ -381,7 +408,7 @@
               <Icon icon="pen" class="mr-2" />
               Edit
             </button>
-            <button class="button is-danger">
+            <button class="button is-danger" @click="HandleDeleteModal('open', index)">
               <Icon icon="trash" class="mr-2" />
               Delete
             </button>
@@ -467,27 +494,25 @@
       </section>
       <footer class="modal-card-foot">
         <button class="button" @click="HandleModal('close')">Close</button>
-        <button
-          class="button is-success"
-          @click="CreateEvent()"
-          v-if="edit_mode === false && delete_mode === false"
-        >
-          Create
-        </button>
-        <button
-          class="button is-warning"
-          @click="UpdateEvent()"
-          v-if="edit_mode === true && delete_mode === false"
-        >
-          Update
-        </button>
-        <button
-          class="button is-danger"
-          @click="DeleteEvent()"
-          v-if="edit_mode === false && delete_mode === true"
-        >
-          Delete
-        </button>
+        <button class="button is-success" @click="CreateEvent()" v-if="!edit_mode">Create</button>
+        <button class="button is-warning" @click="UpdateEvent()" v-if="edit_mode">Update</button>
+      </footer>
+    </div>
+  </div>
+
+  <div class="modal" id="delete_modal">
+    <div class="modal-background" />
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Deleting event</p>
+        <button class="delete" aria-label="close" @click="HandleDeleteModal('close')"></button>
+      </header>
+      <section class="modal-card-body">
+        <h3 class="is-size-5">Are you sure?</h3>
+      </section>
+      <footer class="modal-card-foot">
+        <button class="button" @click="HandleDeleteModal('close')">Close</button>
+        <button class="button is-danger" @click="DeleteEvent()">Delete</button>
       </footer>
     </div>
   </div>
