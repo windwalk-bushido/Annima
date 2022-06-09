@@ -20,13 +20,12 @@ TBM = To be made
 
 ### To do (Priorities)
 
-- Navbar should overlap content, not push it down the page
-- Login and Register pages should trigger "navbar switch" on some other lifecycle hooks (it's not 'mount')
 - Routes should be protected
   - Dashboard page: not available if user is NOT logged in -> Redirect to: Register page
   - Settings page: not available if user is NOT logged in -> Redirect to: Register page
 - Save user inputs on Login/Register/F.Password pages (before unmounting them) in sessionStorage (load them when mounting the pages)
 - Dashboard should check if the user's '7 day' period is over, then redirect it to "Login" page
+- Login and Register pages should trigger "navbar switch" on some other lifecycle hooks (it's not 'mount')
 - FIX SUPABASE POLICIES
 
 ### To do (General)

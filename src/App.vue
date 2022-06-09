@@ -53,10 +53,10 @@
 </script>
 
 <template>
-  <header>
-    <nav class="navbar is-dark" v-if="user_logged_in">
+  <header class="is-relative">
+    <nav class="navbar is-dark is-floating is-fixed-top" v-if="user_logged_in">
       <div class="navbar-brand">
-        <RouterLink class="navbar-item logo" to="/user/dashboard">Annima</RouterLink>
+        <RouterLink class="navbar-item is-logo" to="/user/dashboard">Annima</RouterLink>
         <a
           role="button"
           class="navbar-burger"
@@ -81,9 +81,9 @@
       </div>
     </nav>
 
-    <nav class="navbar is-dark" v-else>
+    <nav class="navbar is-dark is-floating is-fixed-top" v-else>
       <div class="navbar-brand">
-        <RouterLink class="navbar-item logo" to="/">Annima</RouterLink>
+        <RouterLink class="navbar-item is-logo" to="/">Annima</RouterLink>
         <a
           role="button"
           class="navbar-burger"
@@ -112,12 +112,22 @@
     </nav>
   </header>
 
-  <RouterView />
+  <main class="is-lowered-down">
+    <RouterView />
+  </main>
 </template>
 
 <style>
-  .logo {
+  .is-logo {
     font-size: 1.5rem;
     font-family: "Playball", cursive;
+  }
+
+  .is-floating {
+    position: absolute;
+  }
+
+  .is-lowered-down {
+    margin-top: 4.25rem;
   }
 </style>
