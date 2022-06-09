@@ -1,5 +1,4 @@
 <script>
-  import Anni from "../anni";
   import supabase from "../api";
 
   export default {
