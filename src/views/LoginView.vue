@@ -8,6 +8,7 @@
         email_icon_value: "circle-exclamation",
         password_icon_value: "circle-exclamation",
         sending_data: false,
+        error_message: "",
       };
     },
 
@@ -132,6 +133,7 @@
             this.InformUser("password", password_input, password_helper, password_icon, "", "BAD");
 
             this.HandleModal("open");
+            this.error_message = error.message;
 
             submit_btn.classList.remove("is-loading");
             this.sending_data = false;
@@ -229,13 +231,15 @@
     <div class="modal-background" />
     <div class="modal-card">
       <header class="modal-card-head">
-        <p class="modal-card-title">Error</p>
+        <p class="modal-card-title">Error: {{ error_message }}</p>
         <button class="delete" aria-label="close" @click="HandleModal('close')"></button>
       </header>
+      <!--
       <section class="modal-card-body">
         <h3 class="is-size-5 mb-4">Email and/or password is wrong.</h3>
         <p>Either data you've entered is wrong or we don't have an account with that email.</p>
       </section>
+      -->
       <footer class="modal-card-foot">
         <RouterLink class="button" to="/register">Sign up</RouterLink>
         <button class="button is-primary" @click="HandleModal('close')">Try again</button>
