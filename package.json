@@ -33,7 +33,7 @@
   },
   "git": {
     "scripts": {
-      "pre-push": "surge --project ./ --domain windwalks-annima.surge.sh"
+      "pre-push": "npm run build ; cd dist/ ; surge . --domain windwalks-annima.surge.sh"
     }
   }
 }
