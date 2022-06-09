@@ -1,7 +1,6 @@
 <script>
   import { RouterLink } from "vue-router";
-  import { createClient } from "@supabase/supabase-js";
-  import { supabaseUrl, supabaseKey } from "../api";
+  import supabase from "../api";
 
   export default {
     data() {
@@ -225,22 +224,31 @@
         }
       },
 
-      RegisterUser() {
+      async RegisterUser() {
+        const submit_btn = document.getElementById("submit_btn");
+        submit_btn.classList.add("is-loading");
+
         if (this.CheckUserData()) {
           this.sending_data = true;
 
           const email_input = document.getElementById("email_input");
           const password1_input = document.getElementById("password1_input");
 
-          const supabase = createClient(supabaseUrl, supabaseAnonKey);
-
-          supabase.auth.signUp({
+          const { user, error } = await supabase.auth.signUp({
             email: email_input.value,
             password: password1_input.value,
           });
 
-          this.HandleModal("open");
+          if (user != "" && error === null) {
+            localStorage.removeItem("supabase.auth.token");
+            console.log(user); // DELETE THIS
+            this.HandleModal("open");
+          } else {
+            submit_btn.classList.remove("is-loading");
+            console.log(error);
+          }
         } else {
+          submit_btn.classList.remove("is-loading");
           this.sending_data = false;
         }
       },
@@ -250,7 +258,7 @@
         const uuid_token_storage = localStorage.getItem("annima_user_uuid");
 
         if (uuid_token_session != null || uuid_token_storage != null) {
-          this.$root.CheckLoggedUser();
+          this.$root.SwapNavBar();
           this.$router.push("/user/dashboard");
         }
       },

@@ -1,13 +1,13 @@
 <script>
   export default {
     methods: {
-      TriggerNavMenu() {
+      CloseNav() {
         this.$root.ToggleMenu();
       },
     },
 
     mounted() {
-      this.TriggerNavMenu();
+      this.CloseNav();
     },
   };
 </script>

@@ -1,7 +1,6 @@
 <script>
   import { RouterLink } from "vue-router";
-  import { createClient } from "@supabase/supabase-js";
-  import { supabaseUrl, supabaseKey } from "../api";
+  import supabase from "../api";
 
   export default {
     data() {
@@ -99,8 +98,6 @@
           const email_input = document.getElementById("email_input");
           const password_input = document.getElementById("password_input");
 
-          const supabase = createClient(supabaseUrl, supabaseKey);
-
           let { user, error } = await supabase.auth.signIn({
             email: email_input.value,
             password: password_input.value,
@@ -118,7 +115,7 @@
               sessionStorage.setItem("annima_user_uuid", user.id);
             }
 
-            this.SwapNavBar();
+            this.$root.SwapNavBar();
             this.$router.push("/user/dashboard");
           } else {
             console.log(error);
@@ -150,7 +147,7 @@
         const uuid_token_storage = localStorage.getItem("annima_user_uuid");
 
         if (uuid_token_session != null || uuid_token_storage != null) {
-          this.$root.CheckLoggedUser();
+          this.$root.SwapNavBar();
           this.$router.push("/user/dashboard");
         }
       },

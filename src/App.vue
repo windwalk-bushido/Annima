@@ -10,7 +10,7 @@
     },
 
     methods: {
-      CheckLoggedUser() {
+      SwapNavBar() {
         const uuid_token_session = sessionStorage.getItem("annima_user_uuid");
         const uuid_token_storage = localStorage.getItem("annima_user_uuid");
 
@@ -45,7 +45,7 @@
         localStorage.removeItem("annima_user_uuid");
         localStorage.removeItem("annima_signed-in_date");
 
-        this.CheckLoggedUser();
+        this.SwapNavBar();
         this.$router.push("/login");
       },
     },

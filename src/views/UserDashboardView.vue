@@ -1,7 +1,6 @@
 <script>
-  import { createClient } from "@supabase/supabase-js";
-  import { supabaseUrl, supabaseKey } from "../api";
   import Anni from "../anni";
+  import supabase from "../api";
 
   export default {
     data() {
@@ -14,7 +13,7 @@
     },
 
     methods: {
-      TriggerNavMenu() {
+      CloseNav() {
         this.$root.ToggleMenu();
       },
 
@@ -28,8 +27,6 @@
         const loading_button = document.getElementById("loading_button");
 
         const uuid_token = this.GetToken();
-
-        const supabase = createClient(supabaseUrl, supabaseKey);
 
         const { data: events, error } = await supabase.from("events").select("*").eq("belongs_to", uuid_token);
 
@@ -273,8 +270,6 @@
           );
           this.events_list.push(new_anni);
 
-          const supabase = createClient(supabaseUrl, supabaseKey);
-
           const { data, error } = await supabase.from("events").insert([
             {
               belongs_to: uuid_token,
@@ -298,7 +293,7 @@
     },
 
     mounted() {
-      this.TriggerNavMenu();
+      this.CloseNav();
       this.SetMaxDate();
       this.FetchData();
     },
