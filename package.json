@@ -24,9 +24,16 @@
     "@vitejs/plugin-vue": "^2.3.3",
     "@vue/test-utils": "^2.0.0",
     "cypress": "^10.0.2",
+    "git-scripts": "^0.6.4",
     "jsdom": "^19.0.0",
     "start-server-and-test": "^1.14.0",
+    "surge": "^0.23.1",
     "vite": "^2.9.9",
     "vitest": "^0.13.0"
+  },
+  "git": {
+    "scripts": {
+      "pre-push": "surge --project ./ --domain windwalks-annima.surge.sh"
+    }
   }
 }
