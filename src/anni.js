@@ -1,5 +1,5 @@
 class Anni {
-  constructor(uuid, name, type, date, note) {
+  constructor(id, uuid, name, type, date, note) {
     this.uuid = uuid;
     this.name = name;
     this.type = type;

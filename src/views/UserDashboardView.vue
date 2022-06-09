@@ -9,6 +9,9 @@
         anni_name_icon_value: "circle-exclamation",
         anni_date_icon_value: "circle-exclamation",
         sending_data: false,
+        edit_mode: false,
+        delete_mode: false,
+        edit_index: null,
       };
     },
 
@@ -34,11 +37,9 @@
           for (let event in events) {
             this.events_list.push(events[event]);
           }
-
-          loading_button.classList.remove("is-loading");
-        } else {
-          loading_button.classList.add("is-loading");
         }
+
+        loading_button.classList.remove("is-loading");
       },
 
       ClearModal() {
@@ -82,9 +83,8 @@
           modal.classList.add("is-active");
         } else {
           modal.classList.remove("is-active");
+          this.ClearModal();
         }
-
-        this.ClearModal();
       },
 
       InformUser(element, input, helper, icon, message, type) {
@@ -250,7 +250,7 @@
         }
       },
 
-      async CreateNewAnni() {
+      async CreateEvent() {
         if (this.CheckUserData()) {
           this.sending_data = true;
 
@@ -260,15 +260,6 @@
           const anni_note_input = document.getElementById("anni_note_input");
 
           const uuid_token = this.GetToken();
-
-          const new_anni = new Anni(
-            uuid_token,
-            anni_name_input.value,
-            anni_type_select.value,
-            anni_date_input.value,
-            anni_note_input.value
-          );
-          this.events_list.push(new_anni);
 
           const { data, error } = await supabase.from("events").insert([
             {
@@ -280,12 +271,68 @@
             },
           ]);
 
+          this.events_list.push(data);
+
           if (error != null) {
             console.log(error);
           }
 
           this.HandleModal("close");
           this.sending_data = false;
+        } else {
+          this.sending_data = false;
+        }
+      },
+
+      PrepareForEventEditing(index) {
+        const anni_name_input = document.getElementById("anni_name_input");
+        const anni_type_select = document.getElementById("anni_type_select");
+        const anni_date_input = document.getElementById("anni_date_input");
+        const anni_note_input = document.getElementById("anni_note_input");
+
+        anni_name_input.value = this.events_list[index].name;
+        anni_type_select.value = this.events_list[index].type;
+        anni_date_input.value = this.events_list[index].date;
+        anni_note_input.value = this.events_list[index].note;
+
+        this.edit_mode = true;
+        this.delete_mode = false;
+        this.edit_index = index;
+        this.HandleModal("open");
+      },
+
+      async UpdateEvent() {
+        if (this.CheckUserData()) {
+          this.sending_data = true;
+
+          const anni_name_input = document.getElementById("anni_name_input");
+          const anni_type_select = document.getElementById("anni_type_select");
+          const anni_date_input = document.getElementById("anni_date_input");
+          const anni_note_input = document.getElementById("anni_note_input");
+
+          const uuid_token = this.GetToken();
+
+          const { data, error } = await supabase
+            .from("events")
+            .update({
+              belongs_to: uuid_token,
+              name: anni_name_input.value,
+              type: anni_type_select.value,
+              date: anni_date_input.value,
+              note: anni_note_input.value,
+            })
+            .eq("id", this.events_list[this.edit_index].id);
+
+          if (error != null) {
+            console.log(error);
+          }
+
+          this.events_list[this.edit_index] = data[0];
+
+          this.edit_mode = false;
+          this.edit_index = null;
+          this.sending_data = false;
+          this.HandleModal("close");
         } else {
           this.sending_data = false;
         }
@@ -330,7 +377,7 @@
             </div>
           </div>
           <footer class="card-footer p-4 is-flex-direction-row is-justify-content-end">
-            <button class="button is-warning mr-3">
+            <button class="button is-warning mr-3" @click="PrepareForEventEditing(index)">
               <Icon icon="pen" class="mr-2" />
               Edit
             </button>
@@ -420,7 +467,27 @@
       </section>
       <footer class="modal-card-foot">
         <button class="button" @click="HandleModal('close')">Close</button>
-        <button class="button is-success" @click="CreateNewAnni()">Create</button>
+        <button
+          class="button is-success"
+          @click="CreateEvent()"
+          v-if="edit_mode === false && delete_mode === false"
+        >
+          Create
+        </button>
+        <button
+          class="button is-warning"
+          @click="UpdateEvent()"
+          v-if="edit_mode === true && delete_mode === false"
+        >
+          Update
+        </button>
+        <button
+          class="button is-danger"
+          @click="DeleteEvent()"
+          v-if="edit_mode === false && delete_mode === true"
+        >
+          Delete
+        </button>
       </footer>
     </div>
   </div>
