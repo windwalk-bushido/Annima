@@ -363,12 +363,26 @@
         this.events_list.splice(this.list_index, 1);
         this.HandleDeleteModal("close");
       },
+
+      CheckIfUserIsNotLoggedIn() {
+        const uuid_token_session = sessionStorage.getItem("annima_user_uuid");
+        const uuid_token_storage = localStorage.getItem("annima_user_uuid");
+
+        if (uuid_token_session == null || uuid_token_storage == null) {
+          this.$router.push("/login");
+          return true;
+        } else {
+          return false;
+        }
+      },
     },
 
     mounted() {
       this.CloseNav();
-      this.SetMaxDate();
-      this.FetchData();
+      if (!this.CheckIfUserIsNotLoggedIn()) {
+        this.SetMaxDate();
+        this.FetchData();
+      }
     },
   };
 </script>
