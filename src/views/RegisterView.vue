@@ -241,7 +241,6 @@
 
           if (user != "" && error === null) {
             localStorage.removeItem("supabase.auth.token");
-            console.log(user); // DELETE THIS
             this.HandleModal("open");
           } else {
             submit_btn.classList.remove("is-loading");
@@ -348,7 +347,9 @@
         </div>
         <div class="field is-grouped mt-5">
           <div class="control">
-            <button class="button is-link" @click="RegisterUser()" :disabled="sending_data">Submit</button>
+            <button class="button is-link" @click="RegisterUser()" :disabled="sending_data" id="submit_btn">
+              Submit
+            </button>
           </div>
         </div>
       </div>
