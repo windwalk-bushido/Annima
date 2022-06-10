@@ -46,7 +46,7 @@
 
 <template>
   <header class="is-relative">
-    <nav class="navbar is-dark is-floating is-fixed-top" v-if="user_logged_in">
+    <nav class="navbar is-dark is-floating is-fixed-top">
       <div class="navbar-brand">
         <RouterLink class="navbar-item is-logo" to="/user/dashboard" v-if="user_logged_in">Annima</RouterLink>
         <RouterLink class="navbar-item is-logo" to="/" v-else>Annima</RouterLink>
