@@ -20,13 +20,13 @@ TBM = To be made
 
 ### To do (Priorities)
 
+- FIX API REDIRECT ISSUE
 - Fix Navbar emits
-- Change function and variable names if needed
+- Login and Register pages should trigger "navbar switch" on some other lifecycle hooks (it's not 'mount')
 
-- USERS NEED TO BE ABLE TO SELECT YEAR IN EVENT's DATE
 - Save user inputs on Login/Register/F.Password pages (before unmounting them) in sessionStorage (load them when mounting the pages)
 - Dashboard should check if the user's '7 day' period is over, then redirect it to "Login" page
-- Login and Register pages should trigger "navbar switch" on some other lifecycle hooks (it's not 'mount')
+
 - FIX SUPABASE POLICIES
 - Make Settings page
 - Implement ES6 stuff like Try Catch, Arrow functions, etc. (if needed)
