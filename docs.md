@@ -1,6 +1,6 @@
 Dev's docs for planning and developing the Annima.
 
-# MVP
+# MVP (DONE)
 
 - Register/Login/Logout
 - CRUD Anniversaries
@@ -20,18 +20,22 @@ TBM = To be made
 
 ### To do (Priorities)
 
-- Login and Register pages should trigger "navbar switch" on some other lifecycle hooks (it's not 'mount')
+- Use Pinia (some variables needs to be global... e.g. to reduce number of API calls, event_list)
+- Reduce number of variables (by taking them out of the functions) and use v-model as much as possible
 
+- Login and Register pages should trigger "navbar switch" on some other lifecycle hooks (it's not 'mount')
 - Save user inputs on Login/Register/F.Password pages (before unmounting them) in sessionStorage (load them when mounting the pages)
-- Dashboard should check if the user's '7 day' period is over, then redirect it to "Login" page
+
+- Dashboard should check if the user's '7 day' period is over, then redirect it to "Login" page (with an error message);
+- Format Date properly (DD. MM. YYYY)
 
 - FIX SUPABASE POLICIES
 - Make Settings page
+- Make 'Forgot password' page
 - Implement ES6 stuff like Try Catch, Arrow functions, etc. (if needed)
 
 ### To do (General)
 
-- Make 'Forgot password' page
 - "Check" icons should be displayed when inputted data is good (All pages)
 - Add captcha on Login/Register
 - Notifications should be displayed in toasts (Dashboard & Settings)
@@ -43,9 +47,6 @@ TBM = To be made
 
 ### Milestones
 
-- Switch to TypeScript
-- Increase performance (reduce variable number)
-- Use Pinia?
 - Switch to TailwindCSS
 - Write Vitest test's
 - Write Cypress test's

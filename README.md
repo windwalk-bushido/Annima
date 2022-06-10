@@ -2,9 +2,9 @@
 
 ## Tech used
 
-- Vue 3 (Pinia + Router)
-- JavaScript
-- Bulma (via CDN + FontAwesome + Google Fonts)
+- Vue 3 + Pinia + Router
+- TypeScript
+- Bulma + Google Fonts via CDN + FontAwesome via Npm
 - Vitest
 - Cypress
 - Supabase

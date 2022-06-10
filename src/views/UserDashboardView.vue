@@ -1,20 +1,21 @@
-<script setup>
+<script setup lang="ts">
   import { ref, onMounted, defineEmits } from "vue";
+  import type { Ref } from "vue";
   import supabase from "../api";
 
-  let event_list = ref([]);
+  let event_list: Ref<Object | any> = ref([]);
   let event_name_icon = ref("circle-exclamation");
   let event_date_icon = ref("circle-exclamation");
   let is_data_being_sent = ref(false);
   let is_edit_mode_on = ref(false);
-  let edit_index = ref(null);
-  let delete_index = ref(null);
-  let list_index = ref(null);
+  let edit_index = ref(-1);
+  let delete_index = ref(-1);
+  let list_index = ref(-1);
 
   const emit = defineEmits(["NavBarLoggedIn"]);
 
   function SetEventsMaxDate() {
-    const event_date_input = document.getElementById("event_date_input");
+    const event_date_input = document.getElementById("event_date_input") as HTMLFormElement;
 
     event_date_input.max = new Date().toJSON().split("T")[0];
   }
@@ -31,7 +32,7 @@
   }
 
   async function FetchDataFromDatabase() {
-    const loading_button = document.getElementById("loading_button");
+    const loading_button = document.getElementById("loading_button") as HTMLElement;
 
     const uuid_token = GetUsersToken();
 
@@ -47,18 +48,18 @@
   }
 
   function ClearModal() {
-    const event_name_input = document.getElementById("event_name_input");
-    const event_name_icon = document.getElementById("event_name_icon");
-    const event_name_helper = document.getElementById("event_name_helper");
+    const event_name_input = document.getElementById("event_name_input") as HTMLFormElement;
+    const event_name_icon = document.getElementById("event_name_icon") as HTMLElement;
+    const event_name_helper = document.getElementById("event_name_helper") as HTMLElement;
 
-    const event_type_select = document.getElementById("event_type_select");
+    const event_type_select = document.getElementById("event_type_select") as HTMLFormElement;
 
-    const event_date_input = document.getElementById("event_date_input");
-    const event_date_icon = document.getElementById("event_date_icon");
-    const event_date_helper = document.getElementById("event_date_helper");
+    const event_date_input = document.getElementById("event_date_input") as HTMLFormElement;
+    const event_date_icon = document.getElementById("event_date_icon") as HTMLElement;
+    const event_date_helper = document.getElementById("event_date_helper") as HTMLElement;
 
-    const event_note_input = document.getElementById("event_note_input");
-    const event_note_helper = document.getElementById("event_note_helper");
+    const event_note_input = document.getElementById("event_note_input") as HTMLFormElement;
+    const event_note_helper = document.getElementById("event_note_helper") as HTMLElement;
 
     event_name_input.classList.remove("is-success");
     event_name_input.classList.remove("is-danger");
@@ -80,8 +81,8 @@
     event_note_helper.innerHTML = "";
   }
 
-  function ToggleModal(command) {
-    const modal = document.getElementById("modal");
+  function ToggleModal(command: string) {
+    const modal = document.getElementById("modal") as HTMLElement;
 
     if (command === "open") {
       modal.classList.add("is-active");
@@ -92,16 +93,19 @@
     }
   }
 
-  function InformUserAboutInputtedData(element, input, helper, icon, message, type) {
+  function InformUserAboutInputtedData(
+    element: string,
+    input: HTMLFormElement,
+    helper: HTMLElement,
+    icon: HTMLElement,
+    message: string,
+    type: string
+  ) {
     if (type === "BAD") {
       input.classList.add("is-danger");
 
       helper.innerHTML = message;
       helper.classList.add("is-danger");
-
-      if (icon !== "note") {
-        icon.classList.remove("is-hidden");
-      }
 
       if (element === "name") {
         event_name_icon.value = "circle-exclamation";
@@ -117,10 +121,6 @@
       helper.classList.remove("is-danger");
       helper.classList.add("is-success");
 
-      if (icon !== "note") {
-        icon.classList.remove("is-hidden");
-      }
-
       if (element === "name") {
         event_name_icon.value = "check";
       }
@@ -131,16 +131,16 @@
   }
 
   function CheckUsersInputtedData() {
-    const event_name_input = document.getElementById("event_name_input");
-    const event_name_icon = document.getElementById("event_name_icon");
-    const event_name_helper = document.getElementById("event_name_helper");
+    const event_name_input = document.getElementById("event_name_input") as HTMLFormElement;
+    const event_name_icon = document.getElementById("event_name_icon") as HTMLElement;
+    const event_name_helper = document.getElementById("event_name_helper") as HTMLElement;
 
-    const event_date_input = document.getElementById("event_date_input");
-    const event_date_icon = document.getElementById("event_date_icon");
-    const event_date_helper = document.getElementById("event_date_helper");
+    const event_date_input = document.getElementById("event_date_input") as HTMLFormElement;
+    const event_date_icon = document.getElementById("event_date_icon") as HTMLElement;
+    const event_date_helper = document.getElementById("event_date_helper") as HTMLElement;
 
-    const event_note_input = document.getElementById("event_note_input");
-    const event_note_helper = document.getElementById("event_note_helper");
+    const event_note_input = document.getElementById("event_note_input") as HTMLFormElement;
+    const event_note_helper = document.getElementById("event_note_helper") as HTMLElement;
 
     let is_event_name_good = false;
     let is_event_date_good = false;
@@ -224,14 +224,9 @@
     }
 
     if (event_note_input.value.length > 300) {
-      InformUserAboutInputtedData(
-        "note",
-        event_note_input,
-        event_note_helper,
-        "note",
-        "Maximum number of characters is 300.",
-        "BAD"
-      );
+      event_note_input.classList.add("is-danger");
+      event_note_helper.innerHTML = "Maximum number of characters is 300.";
+      event_note_helper.classList.add("is-danger");
     } else {
       event_note_input.classList.remove("is-danger");
       event_note_input.innerHTML = "";
@@ -248,10 +243,10 @@
     if (CheckUsersInputtedData()) {
       is_data_being_sent.value = true;
 
-      const event_name_input = document.getElementById("event_name_input");
-      const event_type_select = document.getElementById("event_type_select");
-      const event_date_input = document.getElementById("event_date_input");
-      const event_note_input = document.getElementById("event_note_input");
+      const event_name_input = document.getElementById("event_name_input") as HTMLFormElement;
+      const event_type_select = document.getElementById("event_type_select") as HTMLFormElement;
+      const event_date_input = document.getElementById("event_date_input") as HTMLFormElement;
+      const event_note_input = document.getElementById("event_note_input") as HTMLFormElement;
 
       const uuid_token = GetUsersToken();
 
@@ -265,7 +260,9 @@
         },
       ]);
 
-      event_list.value.push(data[0]);
+      if (data !== null) {
+        event_list.value.push(data[0]);
+      }
 
       if (error !== null) {
         console.log(error);
@@ -278,11 +275,11 @@
     }
   }
 
-  function PrepareForEventEditing(index) {
-    const event_name_input = document.getElementById("event_name_input");
-    const event_type_select = document.getElementById("event_type_select");
-    const event_date_input = document.getElementById("event_date_input");
-    const event_note_input = document.getElementById("event_note_input");
+  function PrepareForEventEditing(index: number) {
+    const event_name_input = document.getElementById("event_name_input") as HTMLFormElement;
+    const event_type_select = document.getElementById("event_type_select") as HTMLFormElement;
+    const event_date_input = document.getElementById("event_date_input") as HTMLFormElement;
+    const event_note_input = document.getElementById("event_note_input") as HTMLFormElement;
 
     event_name_input.value = event_list.value[index].name;
     event_type_select.value = event_list.value[index].type;
@@ -298,10 +295,10 @@
     if (CheckUsersInputtedData()) {
       is_data_being_sent.value = true;
 
-      const event_name_input = document.getElementById("event_name_input");
-      const event_type_select = document.getElementById("event_type_select");
-      const event_date_input = document.getElementById("event_date_input");
-      const event_note_input = document.getElementById("event_note_input");
+      const event_name_input = document.getElementById("event_name_input") as HTMLFormElement;
+      const event_type_select = document.getElementById("event_type_select") as HTMLFormElement;
+      const event_date_input = document.getElementById("event_date_input") as HTMLFormElement;
+      const event_note_input = document.getElementById("event_note_input") as HTMLFormElement;
 
       const uuid_token = GetUsersToken();
 
@@ -320,10 +317,12 @@
         console.log(error);
       }
 
-      event_list.value[edit_index.value] = data[0];
+      if (data !== null) {
+        event_list.value[edit_index.value] = data[0];
+      }
 
       is_edit_mode_on.value = false;
-      edit_index.value = null;
+      edit_index.value = -1;
       is_data_being_sent.value = false;
       ToggleModal("close");
     } else {
@@ -331,16 +330,16 @@
     }
   }
 
-  function ToggleDeleteModal(command, index) {
-    const modal = document.getElementById("delete_modal");
+  function ToggleDeleteModal(command: string, index: number) {
+    const modal = document.getElementById("delete_modal") as HTMLElement;
 
     if (command === "open") {
       delete_index.value = event_list.value[index].id;
       list_index.value = index;
       modal.classList.add("is-active");
     } else {
-      delete_index.value = null;
-      list_index.value = null;
+      delete_index.value = -1;
+      list_index.value = -1;
       modal.classList.remove("is-active");
     }
   }
@@ -353,7 +352,7 @@
     }
 
     event_list.value.splice(list_index.value, 1);
-    ToggleDeleteModal("close");
+    ToggleDeleteModal("close", -1);
   }
 
   onMounted(() => {

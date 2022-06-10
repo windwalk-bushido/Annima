@@ -52,7 +52,7 @@ const router = createRouter({
   ],
 });
 
-let is_user_logged_in = null;
+let is_user_logged_in: boolean = false;
 
 function CheckIfUserIsLoggedIn() {
   const uuid_token_session = sessionStorage.getItem("annima_user_uuid");

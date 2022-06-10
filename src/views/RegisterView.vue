@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import { ref } from "vue";
   import { RouterLink } from "vue-router";
   import supabase from "../api";
@@ -8,8 +8,8 @@
   let password2_input_icon = ref("circle-exclamation");
   let is_data_being_sent = ref(false);
 
-  function ToggleModal(command) {
-    const modal = document.getElementById("modal");
+  function ToggleModal(command: string) {
+    const modal = document.getElementById("modal") as HTMLElement;
     if (command === "open") {
       modal.classList.add("is-active");
     } else {
@@ -17,7 +17,14 @@
     }
   }
 
-  function InformUserAboutInputtedData(element, input, helper, icon, message, type) {
+  function InformUserAboutInputtedData(
+    element: string,
+    input: HTMLFormElement,
+    helper: HTMLElement,
+    icon: HTMLElement,
+    message: string,
+    type: string
+  ) {
     if (type === "BAD") {
       input.classList.add("is-danger");
 
@@ -60,27 +67,27 @@
   }
 
   function CheckUsersInputtedData() {
-    const email_input = document.getElementById("email_input");
-    const email_helper = document.getElementById("email_helper");
-    const email_icon = document.getElementById("email_icon");
+    const email_input = document.getElementById("email_input") as HTMLFormElement;
+    const email_helper = document.getElementById("email_helper") as HTMLElement;
+    const email_icon = document.getElementById("email_icon") as HTMLElement;
 
-    const password1_input = document.getElementById("password1_input");
-    const password1_helper = document.getElementById("password1_helper");
-    const password1_icon = document.getElementById("password1_icon");
+    const password1_input = document.getElementById("password1_input") as HTMLFormElement;
+    const password1_helper = document.getElementById("password1_helper") as HTMLElement;
+    const password1_icon = document.getElementById("password1_icon") as HTMLElement;
 
-    const password2_input = document.getElementById("password2_input");
-    const password2_helper = document.getElementById("password2_helper");
-    const password2_icon = document.getElementById("password2_icon");
+    const password2_input = document.getElementById("password2_input") as HTMLFormElement;
+    const password2_helper = document.getElementById("password2_helper") as HTMLElement;
+    const password2_icon = document.getElementById("password2_icon") as HTMLElement;
 
-    const toc_checkbox = document.getElementById("toc_checkbox");
-    const toc_helper = document.getElementById("toc_helper");
+    const toc_checkbox = document.getElementById("toc_checkbox") as HTMLFormElement;
+    const toc_helper = document.getElementById("toc_helper") as HTMLElement;
 
-    let is_email_good = false;
-    let is_password1_good = false;
-    let is_password2_good = false;
-    let is_toc_checked = false;
+    let is_email_good: boolean = false;
+    let is_password1_good: boolean = false;
+    let is_password2_good: boolean = false;
+    let is_toc_checked: boolean = false;
 
-    const email_regex = /[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/;
+    const email_regex: RegExp = /[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/;
     const email_regex_testing = email_regex.exec(email_input.value);
 
     if (email_input.value.length === 0) {
@@ -117,7 +124,7 @@
       is_email_good = true;
     }
 
-    const password_regex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/;
+    const password_regex: RegExp = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/;
     const password_regex_testing = password_regex.exec(password1_input.value);
 
     if (password1_input.value.length === 0) {
@@ -216,21 +223,21 @@
   }
 
   async function RegisterUser() {
-    const submit_button = document.getElementById("submit_button");
+    const submit_button = document.getElementById("submit_button") as HTMLElement;
     submit_button.classList.add("is-loading");
 
     if (CheckUsersInputtedData()) {
       is_data_being_sent.value = true;
 
-      const email_input = document.getElementById("email_input");
-      const password1_input = document.getElementById("password1_input");
+      const email_input = document.getElementById("email_input") as HTMLFormElement;
+      const password1_input = document.getElementById("password1_input") as HTMLFormElement;
 
       const { user, error } = await supabase.auth.signUp({
         email: email_input.value,
         password: password1_input.value,
       });
 
-      if (user !== "" && error === null) {
+      if (user !== null && error === null) {
         localStorage.removeItem("supabase.auth.token");
         ToggleModal("open");
       } else {

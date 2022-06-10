@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import { ref, defineEmits } from "vue";
   import { RouterLink, useRouter } from "vue-router";
   import supabase from "../api";
@@ -11,8 +11,8 @@
   const emit = defineEmits(["NavBarLoggedIn"]);
   const router = useRouter();
 
-  function ToggleModal(command) {
-    const modal = document.getElementById("modal");
+  function ToggleModal(command: string) {
+    const modal = document.getElementById("modal") as HTMLElement;
     if (command === "open") {
       modal.classList.add("is-active");
     } else {
@@ -20,7 +20,14 @@
     }
   }
 
-  function InformUserAboutInputtedData(element, input, helper, icon, message, type) {
+  function InformUserAboutInputtedData(
+    element: string,
+    input: HTMLFormElement,
+    helper: HTMLElement,
+    icon: HTMLElement,
+    message: string,
+    type: string
+  ) {
     if (type === "BAD") {
       input.classList.add("is-danger");
       helper.innerHTML = message;
@@ -38,16 +45,16 @@
   }
 
   function CheckUsersInputtedData() {
-    const email_input = document.getElementById("email_input");
-    const email_helper = document.getElementById("email_helper");
-    const email_icon = document.getElementById("email_icon");
+    const email_input = document.getElementById("email_input") as HTMLFormElement;
+    const email_helper = document.getElementById("email_helper") as HTMLElement;
+    const email_icon = document.getElementById("email_icon") as HTMLElement;
 
-    const password_input = document.getElementById("password_input");
-    const password_helper = document.getElementById("password_helper");
-    const password_icon = document.getElementById("password_icon");
+    const password_input = document.getElementById("password_input") as HTMLFormElement;
+    const password_helper = document.getElementById("password_helper") as HTMLElement;
+    const password_icon = document.getElementById("password_icon") as HTMLElement;
 
-    let is_email_good = false;
-    let is_password_good = false;
+    let is_email_good: boolean = false;
+    let is_password_good: boolean = false;
 
     if (email_input.value.length === 0) {
       InformUserAboutInputtedData(
@@ -83,25 +90,25 @@
   }
 
   async function LoginUser() {
-    const submit_button = document.getElementById("submit_button");
+    const submit_button = document.getElementById("submit_button") as HTMLElement;
     submit_button.classList.add("is-loading");
 
     if (CheckUsersInputtedData()) {
       is_data_being_sent.value = true;
 
-      const email_input = document.getElementById("email_input");
-      const password_input = document.getElementById("password_input");
+      const email_input = document.getElementById("email_input") as HTMLFormElement;
+      const password_input = document.getElementById("password_input") as HTMLFormElement;
 
       const { user, error } = await supabase.auth.signIn({
         email: email_input.value,
         password: password_input.value,
       });
 
-      if (user !== "" && error === null) {
+      if (user !== null && error === null) {
         localStorage.removeItem("supabase.auth.token");
 
         // kul = Keep User Logged in
-        const kul_checkbox = document.getElementById("kul_checkbox");
+        const kul_checkbox = document.getElementById("kul_checkbox") as HTMLFormElement;
 
         if (kul_checkbox.checked) {
           localStorage.setItem("annima_signed-in_date", new Date().toJSON().split("T")[0]);
@@ -113,21 +120,22 @@
         emit("NavBarLoggedIn");
         router.push({ name: "dashboard" });
       } else {
-        console.log(error);
+        const email_input = document.getElementById("email_input") as HTMLFormElement;
+        const email_helper = document.getElementById("email_helper") as HTMLElement;
+        const email_icon = document.getElementById("email_icon") as HTMLElement;
 
-        const email_input = document.getElementById("email_input");
-        const email_helper = document.getElementById("email_helper");
-        const email_icon = document.getElementById("email_icon");
-
-        const password_input = document.getElementById("password_input");
-        const password_helper = document.getElementById("password_helper");
-        const password_icon = document.getElementById("password_icon");
+        const password_input = document.getElementById("password_input") as HTMLFormElement;
+        const password_helper = document.getElementById("password_helper") as HTMLElement;
+        const password_icon = document.getElementById("password_icon") as HTMLElement;
 
         InformUserAboutInputtedData("email", email_input, email_helper, email_icon, "", "BAD");
         InformUserAboutInputtedData("password", password_input, password_helper, password_icon, "", "BAD");
 
         ToggleModal("open");
-        error_message.value = error.message;
+        if (error !== null) {
+          error_message.value = error.message;
+          console.log(error);
+        }
 
         submit_button.classList.remove("is-loading");
         is_data_being_sent.value = false;

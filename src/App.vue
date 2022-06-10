@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import { ref } from "vue";
   import { RouterLink, RouterView, useRouter } from "vue-router";
 
@@ -15,7 +15,7 @@
     is_user_logged_in.value = false;
   }
 
-  function ToggleMenu(command) {
+  function ToggleMenu(command: any) {
     const menu_icon = document.getElementById("navbar-burger");
     const menu_links = document.getElementById("navbar-menu");
 
@@ -26,11 +26,11 @@
     }
 
     if (is_menu_active.value) {
-      menu_icon.classList.add("is-active");
-      menu_links.classList.add("is-active");
+      menu_icon?.classList.add("is-active");
+      menu_links?.classList.add("is-active");
     } else {
-      menu_icon.classList.remove("is-active");
-      menu_links.classList.remove("is-active");
+      menu_icon?.classList.remove("is-active");
+      menu_links?.classList.remove("is-active");
     }
   }
 
