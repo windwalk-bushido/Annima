@@ -1,6 +1,6 @@
 <script setup>
-  import { ref, onMounted } from "vue";
-  import { RouterLink } from "vue-router";
+  import { ref, onMounted, defineEmits } from "vue";
+  import { RouterLink, useRouter } from "vue-router";
   import supabase from "../api";
 
   let email_icon_value = ref("circle-exclamation");
@@ -8,8 +8,11 @@
   let password2_icon_value = ref("circle-exclamation");
   let sending_data = ref(false);
 
+  const emit = defineEmits(["ToggleMenu"]);
+  const router = useRouter();
+
   function CloseNav() {
-    this.$root.ToggleMenu();
+    emit("ToggleMenu");
   }
 
   function HandleModal(command) {
@@ -213,7 +216,7 @@
         password: password1_input.value,
       });
 
-      if (user != "" && error === null) {
+      if (user !== "" && error === null) {
         localStorage.removeItem("supabase.auth.token");
         HandleModal("open");
       } else {
@@ -230,9 +233,8 @@
     const uuid_token_session = sessionStorage.getItem("annima_user_uuid");
     const uuid_token_storage = localStorage.getItem("annima_user_uuid");
 
-    if (uuid_token_session != null || uuid_token_storage != null) {
-      this.$root.SwapNavBar();
-      this.$router.push("/user/dashboard");
+    if (uuid_token_session !== null || uuid_token_storage !== null) {
+      router.push("/user/dashboard");
     }
   }
 

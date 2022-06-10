@@ -1,5 +1,6 @@
 <script setup>
-  import { ref, onMounted } from "vue";
+  import { ref, onMounted, defineEmits } from "vue";
+  import { useRouter } from "vue-router";
   import supabase from "../api";
 
   let events_list = ref([]);
@@ -11,8 +12,11 @@
   let delete_index = ref(null);
   let list_index = ref(null);
 
+  const emit = defineEmits(["ToggleMenu", "NavBarLoggedIn"]);
+  const router = useRouter();
+
   function CloseNav() {
-    this.$root.ToggleMenu();
+    emit("ToggleMenu");
   }
 
   function SetMaxDate() {
@@ -28,9 +32,9 @@
 
     const { data: events, error } = await supabase.from("events").select("*").eq("belongs_to", uuid_token);
 
-    if (events != null && error === null) {
+    if (events !== null && error === null) {
       for (let event in events) {
-        events_list.push(events[event]);
+        events_list.value.push(events[event]);
       }
     }
 
@@ -90,7 +94,7 @@
       helper.innerHTML = message;
       helper.classList.add("is-danger");
 
-      if (icon != "note") {
+      if (icon !== "note") {
         icon.classList.remove("is-hidden");
       }
 
@@ -108,7 +112,7 @@
       helper.classList.remove("is-danger");
       helper.classList.add("is-success");
 
-      if (icon != "note") {
+      if (icon !== "note") {
         icon.classList.remove("is-hidden");
       }
 
@@ -225,7 +229,7 @@
     const uuid_token_session = sessionStorage.getItem("annima_user_uuid");
     const uuid_token_storage = localStorage.getItem("annima_user_uuid");
 
-    if (uuid_token_session != null) {
+    if (uuid_token_session !== null) {
       return uuid_token_session;
     } else {
       return uuid_token_storage;
@@ -253,9 +257,9 @@
         },
       ]);
 
-      events_list.push(data[0]);
+      events_list.value.push(data[0]);
 
-      if (error != null) {
+      if (error !== null) {
         console.log(error);
       }
 
@@ -272,13 +276,12 @@
     const anni_date_input = document.getElementById("anni_date_input");
     const anni_note_input = document.getElementById("anni_note_input");
 
-    anni_name_input.value = events_list[index].name;
-    anni_type_select.value = events_list[index].type;
-    anni_date_input.value = events_list[index].date;
-    anni_note_input.value = events_list[index].note;
+    anni_name_input.value = events_list.value[index].name;
+    anni_type_select.value = events_list.value[index].type;
+    anni_date_input.value = events_list.value[index].date;
+    anni_note_input.value = events_list.value[index].note;
 
     edit_mode.value = true;
-    delete_mode = false;
     edit_index.value = index;
     HandleModal("open");
   }
@@ -303,13 +306,13 @@
           date: anni_date_input.value,
           note: anni_note_input.value,
         })
-        .eq("id", events_list[edit_index.value].id);
+        .eq("id", events_list.value[edit_index.value].id);
 
-      if (error != null) {
+      if (error !== null) {
         console.log(error);
       }
 
-      events_list[edit_index.value] = data[0];
+      events_list.value[edit_index.value] = data[0];
 
       edit_mode.value = false;
       edit_index.value = null;
@@ -324,7 +327,7 @@
     const modal = document.getElementById("delete_modal");
 
     if (command === "open") {
-      delete_index.value = events_list[index].id;
+      delete_index.value = events_list.value[index].id;
       list_index.value = index;
       modal.classList.add("is-active");
     } else {
@@ -337,11 +340,11 @@
   async function DeleteEvent() {
     const { data, error } = await supabase.from("events").delete().eq("id", delete_index.value);
 
-    if (error != null) {
+    if (error !== null) {
       console.log(error);
     }
 
-    events_list.splice(list_index.value, 1);
+    events_list.value.splice(list_index.value, 1);
     HandleDeleteModal("close");
   }
 
@@ -349,20 +352,19 @@
     const uuid_token_session = sessionStorage.getItem("annima_user_uuid");
     const uuid_token_storage = localStorage.getItem("annima_user_uuid");
 
-    if (uuid_token_session == null || uuid_token_storage == null) {
-      this.$router.push("/login");
+    if (uuid_token_session === null || uuid_token_storage === null) {
+      router.push("/login");
       return true;
     } else {
+      emit("NavBarLoggedIn");
       return false;
     }
   }
 
   onMounted(() => {
     CloseNav();
-    if (!CheckIfUserIsNotLoggedIn()) {
-      SetMaxDate();
-      FetchData();
-    }
+    SetMaxDate();
+    FetchData();
   });
 </script>
 
@@ -391,7 +393,7 @@
                 <p class="subtitle is-6">{{ anni.date }}</p>
               </div>
             </div>
-            <div class="content" v-if="anni.note != ''">
+            <div class="content" v-if="anni.note !== ''">
               <div class="notification p-4">{{ anni.note }}</div>
             </div>
           </div>

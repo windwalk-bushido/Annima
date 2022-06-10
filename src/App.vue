@@ -1,19 +1,18 @@
 <script setup>
   import { ref } from "vue";
-  import { RouterLink, RouterView } from "vue-router";
+  import { RouterLink, RouterView, useRouter } from "vue-router";
+
+  const router = useRouter();
 
   let menu_active = ref(false);
   let user_logged_in = ref(false);
 
-  function SwapNavBar() {
-    const uuid_token_session = sessionStorage.getItem("annima_user_uuid");
-    const uuid_token_storage = localStorage.getItem("annima_user_uuid");
+  function NavBarLoggedIn() {
+    user_logged_in.value = true;
+  }
 
-    if (uuid_token_session != null || uuid_token_storage != null) {
-      user_logged_in.value = true;
-    } else {
-      user_logged_in.value = false;
-    }
+  function NavBarNormal() {
+    user_logged_in.value = false;
   }
 
   function ToggleMenu(command) {
@@ -40,8 +39,8 @@
     localStorage.removeItem("annima_user_uuid");
     localStorage.removeItem("annima_signed-in_date");
 
-    SwapNavBar();
-    this.$router.push("/login");
+    NavBarNormal();
+    router.push("/login");
   }
 </script>
 

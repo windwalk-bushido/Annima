@@ -20,7 +20,10 @@ TBM = To be made
 
 ### To do (Priorities)
 
-- Change function and variable names if needed...
+- Reduce Navbar logic & fix emits
+- Protect Dashboard and Settings routes
+- Change function and variable names if needed
+
 - USERS NEED TO BE ABLE TO SELECT YEAR IN EVENT's DATE
 - Save user inputs on Login/Register/F.Password pages (before unmounting them) in sessionStorage (load them when mounting the pages)
 - Dashboard should check if the user's '7 day' period is over, then redirect it to "Login" page
@@ -43,10 +46,9 @@ TBM = To be made
 
 ### Milestones
 
-- Use Pinia?
-- Increase performance (reduce variable number)
-- Switch to Composition API
 - Switch to TypeScript
+- Increase performance (reduce variable number)
+- Use Pinia?
 - Switch to TailwindCSS
 - Write Vitest test's
 - Write Cypress test's

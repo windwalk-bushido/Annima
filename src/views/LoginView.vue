@@ -1,6 +1,6 @@
 <script setup>
-  import { ref, onMounted } from "vue";
-  import { RouterLink } from "vue-router";
+  import { ref, onMounted, defineEmits } from "vue";
+  import { RouterLink, useRouter } from "vue-router";
   import supabase from "../api";
 
   let email_icon_value = ref("circle-exclamation");
@@ -8,8 +8,11 @@
   let sending_data = ref(false);
   let error_message = ref("");
 
+  const emit = defineEmits(["ToggleMenu", "NavBarLoggedIn"]);
+  const router = useRouter();
+
   function CloseNav() {
-    this.$root.ToggleMenu();
+    emit("ToggleMenu");
   }
 
   function HandleModal(command) {
@@ -91,7 +94,7 @@
         password: password_input.value,
       });
 
-      if (user != "" && error === null) {
+      if (user !== "" && error === null) {
         localStorage.removeItem("supabase.auth.token");
 
         const kul_checkbox = document.getElementById("kul_checkbox");
@@ -103,8 +106,8 @@
           sessionStorage.setItem("annima_user_uuid", user.id);
         }
 
-        this.$root.SwapNavBar();
-        this.$router.push("/user/dashboard");
+        emit("NavBarLoggedIn");
+        router.push("/user/dashboard");
       } else {
         console.log(error);
 
@@ -135,9 +138,8 @@
     const uuid_token_session = sessionStorage.getItem("annima_user_uuid");
     const uuid_token_storage = localStorage.getItem("annima_user_uuid");
 
-    if (uuid_token_session != null || uuid_token_storage != null) {
-      this.$root.SwapNavBar();
-      this.$router.push("/user/dashboard");
+    if (uuid_token_session !== null || uuid_token_storage !== null) {
+      router.push("/user/dashboard");
     }
   }
 

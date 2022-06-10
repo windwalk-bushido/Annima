@@ -1,8 +1,10 @@
 <script setup>
-  import { onMounted } from "vue";
+  import { onMounted, defineEmits } from "vue";
+
+  const emit = defineEmits(["ToggleMenu"]);
 
   function CloseNav() {
-    this.$root.ToggleMenu();
+    emit("ToggleMenu");
   }
 
   onMounted(() => {

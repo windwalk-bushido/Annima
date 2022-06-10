@@ -1,8 +1,12 @@
 <script setup>
-  import { onMounted } from "vue";
+  import { onMounted, defineEmits } from "vue";
+  import { useRouter } from "vue-router";
+
+  const emit = defineEmits(["ToggleMenu"]);
+  const router = useRouter();
 
   function CloseNav() {
-    this.$root.ToggleMenu();
+    emit("ToggleMenu");
   }
 
   function CheckIfUserIsNotLoggedIn() {
@@ -10,7 +14,7 @@
     const uuid_token_storage = localStorage.getItem("annima_user_uuid");
 
     if (uuid_token_session === null || uuid_token_storage === null) {
-      this.$router.push("/login");
+      router.push("/login");
       return true;
     } else {
       return false;
@@ -19,7 +23,7 @@
 
   onMounted(() => {
     CloseNav();
-    if (!CheckIfUserIsNotLoggedIn()) {
+    if (CheckIfUserIsNotLoggedIn() === false) {
       console.log("WORKS!");
       //FetchUsersData();
     }
