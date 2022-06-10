@@ -1,6 +1,5 @@
 <script setup>
   import { ref, onMounted, defineEmits } from "vue";
-  import { useRouter } from "vue-router";
   import supabase from "../api";
 
   let event_list = ref([]);
@@ -13,7 +12,6 @@
   let list_index = ref(null);
 
   const emit = defineEmits(["ToggleMenu", "NavBarLoggedIn"]);
-  const router = useRouter();
 
   function CloseNavBar() {
     emit("ToggleMenu");
@@ -23,6 +21,17 @@
     const event_date_input = document.getElementById("event_date_input");
 
     event_date_input.max = new Date().toJSON().split("T")[0];
+  }
+
+  function GetUsersToken() {
+    const uuid_token_session = sessionStorage.getItem("annima_user_uuid");
+    const uuid_token_storage = localStorage.getItem("annima_user_uuid");
+
+    if (uuid_token_session !== null) {
+      return uuid_token_session;
+    } else {
+      return uuid_token_storage;
+    }
   }
 
   async function FetchDataFromDatabase() {
@@ -239,17 +248,6 @@
     }
   }
 
-  function GetUsersToken() {
-    const uuid_token_session = sessionStorage.getItem("eventma_user_uuid");
-    const uuid_token_storage = localStorage.getItem("eventma_user_uuid");
-
-    if (uuid_token_session !== null) {
-      return uuid_token_session;
-    } else {
-      return uuid_token_storage;
-    }
-  }
-
   async function CreateEvent() {
     if (CheckUsersInputtedData()) {
       is_data_being_sent.value = true;
@@ -362,25 +360,10 @@
     ToggleDeleteModal("close");
   }
 
-  function CheckIfUserIsNotLoggedIn() {
-    const uuid_token_session = sessionStorage.getItem("eventma_user_uuid");
-    const uuid_token_storage = localStorage.getItem("eventma_user_uuid");
-
-    if (uuid_token_session === null && uuid_token_storage === null) {
-      router.push("/login");
-      return false;
-    } else {
-      emit("NavBarLoggedIn");
-      return true;
-    }
-  }
-
   onMounted(() => {
     CloseNavBar();
-    if (CheckIfUserIsNotLoggedIn()) {
-      SetEventsMaxDate();
-      FetchDataFromDatabase();
-    }
+    SetEventsMaxDate();
+    FetchDataFromDatabase();
   });
 </script>
 

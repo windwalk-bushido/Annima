@@ -20,7 +20,6 @@ TBM = To be made
 
 ### To do (Priorities)
 
-- FIX API REDIRECT ISSUE
 - Fix Navbar emits
 - Login and Register pages should trigger "navbar switch" on some other lifecycle hooks (it's not 'mount')
 

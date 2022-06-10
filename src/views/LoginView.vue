@@ -115,7 +115,7 @@
         }
 
         emit("NavBarLoggedIn");
-        router.push("/user/dashboard");
+        router.push({ name: "dashboard" });
       } else {
         console.log(error);
 
@@ -142,18 +142,8 @@
     }
   }
 
-  function CheckIfUserIsLoggedIn() {
-    const uuid_token_session = sessionStorage.getItem("annima_user_uuid");
-    const uuid_token_storage = localStorage.getItem("annima_user_uuid");
-
-    if (uuid_token_session !== null || uuid_token_storage !== null) {
-      router.push("/user/dashboard");
-    }
-  }
-
   onMounted(() => {
     CloseNavBar();
-    CheckIfUserIsLoggedIn();
   });
 </script>
 

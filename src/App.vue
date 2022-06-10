@@ -40,7 +40,7 @@
     localStorage.removeItem("annima_signed-in_date");
 
     NavBarNormal();
-    router.push("/login");
+    router.push({ name: "login" });
   }
 </script>
 

@@ -52,4 +52,29 @@ const router = createRouter({
   ],
 });
 
+let is_user_logged_in = null;
+
+function CheckIfUserIsLoggedIn() {
+  const uuid_token_session = sessionStorage.getItem("annima_user_uuid");
+  const uuid_token_storage = localStorage.getItem("annima_user_uuid");
+
+  if (uuid_token_session !== null || uuid_token_storage !== null) {
+    is_user_logged_in = true;
+  } else {
+    is_user_logged_in = false;
+  }
+}
+
+router.beforeEach(async (to, from) => {
+  if (is_user_logged_in === null) {
+    CheckIfUserIsLoggedIn();
+  }
+  if (is_user_logged_in === false && (to.name === "dashboard" || to.name === "settings")) {
+    return { name: "login" };
+  }
+  if (is_user_logged_in && (to.name === "login" || to.name === "register")) {
+    return { name: "dashboard" };
+  }
+});
+
 export default router;

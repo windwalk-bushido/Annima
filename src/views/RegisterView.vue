@@ -1,6 +1,6 @@
 <script setup>
   import { ref, onMounted, defineEmits } from "vue";
-  import { RouterLink, useRouter } from "vue-router";
+  import { RouterLink } from "vue-router";
   import supabase from "../api";
 
   let email_input_icon = ref("circle-exclamation");
@@ -9,7 +9,6 @@
   let is_data_being_sent = ref(false);
 
   const emit = defineEmits(["ToggleMenu"]);
-  const router = useRouter();
 
   function CloseNavBar() {
     emit("ToggleMenu");
@@ -250,18 +249,8 @@
     }
   }
 
-  function CheckIfUserIsLoggedIn() {
-    const uuid_token_session = sessionStorage.getItem("annima_user_uuid");
-    const uuid_token_storage = localStorage.getItem("annima_user_uuid");
-
-    if (uuid_token_session !== null || uuid_token_storage !== null) {
-      router.push("/user/dashboard");
-    }
-  }
-
   onMounted(() => {
     CloseNavBar();
-    CheckIfUserIsLoggedIn();
   });
 </script>
 
