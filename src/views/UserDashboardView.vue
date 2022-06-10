@@ -3,11 +3,11 @@
   import { useRouter } from "vue-router";
   import supabase from "../api";
 
-  let events_list = ref([]);
-  let anni_name_icon_value = ref("circle-exclamation");
-  let anni_date_icon_value = ref("circle-exclamation");
-  let sending_data = ref(false);
-  let edit_mode = ref(false);
+  let event_list = ref([]);
+  let event_name_icon = ref("circle-exclamation");
+  let event_date_icon = ref("circle-exclamation");
+  let is_data_being_sent = ref(false);
+  let is_edit_mode_on = ref(false);
   let edit_index = ref(null);
   let delete_index = ref(null);
   let list_index = ref(null);
@@ -19,22 +19,22 @@
     emit("ToggleMenu");
   }
 
-  function SetMaxDate() {
-    const anni_date_input = document.getElementById("anni_date_input");
+  function SetEventsMaxDate() {
+    const event_date_input = document.getElementById("event_date_input");
 
-    anni_date_input.max = new Date().toJSON().split("T")[0];
+    event_date_input.max = new Date().toJSON().split("T")[0];
   }
 
-  async function FetchData() {
+  async function FetchDataFromDatabase() {
     const loading_button = document.getElementById("loading_button");
 
-    const uuid_token = GetToken();
+    const uuid_token = GetUsersToken();
 
     const { data: events, error } = await supabase.from("events").select("*").eq("belongs_to", uuid_token);
 
     if (events !== null && error === null) {
       for (let event in events) {
-        events_list.value.push(events[event]);
+        event_list.value.push(events[event]);
       }
     }
 
@@ -42,40 +42,40 @@
   }
 
   function ClearModal() {
-    const anni_name_input = document.getElementById("anni_name_input");
-    const anni_name_icon = document.getElementById("anni_name_icon");
-    const anni_name_helper = document.getElementById("anni_name_helper");
+    const event_name_input = document.getElementById("event_name_input");
+    const event_name_icon = document.getElementById("event_name_icon");
+    const event_name_helper = document.getElementById("event_name_helper");
 
-    const anni_type_select = document.getElementById("anni_type_select");
+    const event_type_select = document.getElementById("event_type_select");
 
-    const anni_date_input = document.getElementById("anni_date_input");
-    const anni_date_icon = document.getElementById("anni_date_icon");
-    const anni_date_helper = document.getElementById("anni_date_helper");
+    const event_date_input = document.getElementById("event_date_input");
+    const event_date_icon = document.getElementById("event_date_icon");
+    const event_date_helper = document.getElementById("event_date_helper");
 
-    const anni_note_input = document.getElementById("anni_note_input");
-    const anni_note_helper = document.getElementById("anni_note_helper");
+    const event_note_input = document.getElementById("event_note_input");
+    const event_note_helper = document.getElementById("event_note_helper");
 
-    anni_name_input.classList.remove("is-success");
-    anni_name_input.classList.remove("is-danger");
-    anni_name_input.value = "";
-    anni_name_icon.classList.add("is-hidden");
-    anni_name_helper.innerHTML = "";
+    event_name_input.classList.remove("is-success");
+    event_name_input.classList.remove("is-danger");
+    event_name_input.value = "";
+    event_name_icon.classList.add("is-hidden");
+    event_name_helper.innerHTML = "";
 
-    anni_type_select.value = "Birthday";
+    event_type_select.value = "Birthday";
 
-    anni_date_input.classList.remove("is-success");
-    anni_date_input.classList.remove("is-danger");
-    anni_date_input.value = "";
-    anni_date_icon.classList.add("is-hidden");
-    anni_date_helper.innerHTML = "";
+    event_date_input.classList.remove("is-success");
+    event_date_input.classList.remove("is-danger");
+    event_date_input.value = "";
+    event_date_icon.classList.add("is-hidden");
+    event_date_helper.innerHTML = "";
 
-    anni_note_input.classList.remove("is-success");
-    anni_note_input.classList.remove("is-danger");
-    anni_note_input.value = "";
-    anni_note_helper.innerHTML = "";
+    event_note_input.classList.remove("is-success");
+    event_note_input.classList.remove("is-danger");
+    event_note_input.value = "";
+    event_note_helper.innerHTML = "";
   }
 
-  function HandleModal(command) {
+  function ToggleModal(command) {
     const modal = document.getElementById("modal");
 
     if (command === "open") {
@@ -83,11 +83,11 @@
     } else {
       modal.classList.remove("is-active");
       ClearModal();
-      edit_mode.value = false;
+      is_edit_mode_on.value = false;
     }
   }
 
-  function InformUser(element, input, helper, icon, message, type) {
+  function InformUserAboutInputtedData(element, input, helper, icon, message, type) {
     if (type === "BAD") {
       input.classList.add("is-danger");
 
@@ -99,10 +99,10 @@
       }
 
       if (element === "name") {
-        anni_name_icon_value.value = "circle-exclamation";
+        event_name_icon.value = "circle-exclamation";
       }
       if (element === "date") {
-        anni_date_icon_value.value = "circle-exclamation";
+        event_date_icon.value = "circle-exclamation";
       }
     } else {
       input.classList.remove("is-danger");
@@ -117,117 +117,131 @@
       }
 
       if (element === "name") {
-        anni_name_icon_value.value = "check";
+        event_name_icon.value = "check";
       }
       if (element === "date") {
-        anni_date_icon_value.value = "check";
+        event_date_icon.value = "check";
       }
     }
   }
 
-  function CheckUserData() {
-    const anni_name_input = document.getElementById("anni_name_input");
-    const anni_name_icon = document.getElementById("anni_name_icon");
-    const anni_name_helper = document.getElementById("anni_name_helper");
+  function CheckUsersInputtedData() {
+    const event_name_input = document.getElementById("event_name_input");
+    const event_name_icon = document.getElementById("event_name_icon");
+    const event_name_helper = document.getElementById("event_name_helper");
 
-    const anni_date_input = document.getElementById("anni_date_input");
-    const anni_date_icon = document.getElementById("anni_date_icon");
-    const anni_date_helper = document.getElementById("anni_date_helper");
+    const event_date_input = document.getElementById("event_date_input");
+    const event_date_icon = document.getElementById("event_date_icon");
+    const event_date_helper = document.getElementById("event_date_helper");
 
-    const anni_note_input = document.getElementById("anni_note_input");
-    const anni_note_helper = document.getElementById("anni_note_helper");
+    const event_note_input = document.getElementById("event_note_input");
+    const event_note_helper = document.getElementById("event_note_helper");
 
-    let anni_name_good = false;
-    let anni_date_good = false;
+    let is_event_name_good = false;
+    let is_event_date_good = false;
 
-    if (anni_name_input.value.length === 0) {
-      InformUser(
+    if (event_name_input.value.length === 0) {
+      InformUserAboutInputtedData(
         "name",
-        anni_name_input,
-        anni_name_helper,
-        anni_name_icon,
+        event_name_input,
+        event_name_helper,
+        event_name_icon,
         "Don't leave this field empty.",
         "BAD"
       );
-    } else if (anni_name_input.value.length < 5) {
-      InformUser(
+    } else if (event_name_input.value.length < 5) {
+      InformUserAboutInputtedData(
         "name",
-        anni_name_input,
-        anni_name_helper,
-        anni_name_icon,
+        event_name_input,
+        event_name_helper,
+        event_name_icon,
         "Minimum number of characters is 5.",
         "BAD"
       );
-    } else if (anni_name_input.value.length > 150) {
-      InformUser(
+    } else if (event_name_input.value.length > 150) {
+      InformUserAboutInputtedData(
         "name",
-        anni_name_input,
-        anni_name_helper,
-        anni_name_icon,
+        event_name_input,
+        event_name_helper,
+        event_name_icon,
         "Maximum number of characters is 150.",
         "BAD"
       );
     } else {
-      InformUser("name", anni_name_input, anni_name_helper, anni_name_icon, "Name is looking good.", "GOOD");
-      anni_name_good = true;
+      InformUserAboutInputtedData(
+        "name",
+        event_name_input,
+        event_name_helper,
+        event_name_icon,
+        "Name is looking good.",
+        "GOOD"
+      );
+      is_event_name_good = true;
     }
 
-    if (anni_date_input.value.length === 0) {
-      InformUser(
+    if (event_date_input.value.length === 0) {
+      InformUserAboutInputtedData(
         "date",
-        anni_date_input,
-        anni_date_helper,
-        anni_date_icon,
+        event_date_input,
+        event_date_helper,
+        event_date_icon,
         "Don't leave this field empty.",
         "BAD"
       );
-    } else if (anni_date_input.value < anni_date_input.min) {
-      InformUser(
+    } else if (event_date_input.value < event_date_input.min) {
+      InformUserAboutInputtedData(
         "date",
-        anni_date_input,
-        anni_date_helper,
-        anni_date_icon,
+        event_date_input,
+        event_date_helper,
+        event_date_icon,
         "Earliest date you can set is 1920-01-01 (YYYY-MM-DD).",
         "BAD"
       );
-    } else if (anni_date_input.value > anni_date_input.max) {
-      InformUser(
+    } else if (event_date_input.value > event_date_input.max) {
+      InformUserAboutInputtedData(
         "date",
-        anni_date_input,
-        anni_date_helper,
-        anni_date_icon,
+        event_date_input,
+        event_date_helper,
+        event_date_icon,
         "Latest date you can set is today's date.",
         "BAD"
       );
     } else {
-      InformUser("date", anni_date_input, anni_date_helper, anni_date_icon, "Date is looking good.", "GOOD");
-      anni_date_good = true;
+      InformUserAboutInputtedData(
+        "date",
+        event_date_input,
+        event_date_helper,
+        event_date_icon,
+        "Date is looking good.",
+        "GOOD"
+      );
+      is_event_date_good = true;
     }
 
-    if (anni_note_input.value.length > 300) {
-      InformUser(
+    if (event_note_input.value.length > 300) {
+      InformUserAboutInputtedData(
         "note",
-        anni_note_input,
-        anni_note_helper,
+        event_note_input,
+        event_note_helper,
         "note",
         "Maximum number of characters is 300.",
         "BAD"
       );
     } else {
-      anni_note_input.classList.remove("is-danger");
-      anni_note_input.innerHTML = "";
+      event_note_input.classList.remove("is-danger");
+      event_note_input.innerHTML = "";
     }
 
-    if (anni_name_good && anni_date_good) {
+    if (is_event_name_good && is_event_date_good) {
       return true;
     } else {
       return false;
     }
   }
 
-  function GetToken() {
-    const uuid_token_session = sessionStorage.getItem("annima_user_uuid");
-    const uuid_token_storage = localStorage.getItem("annima_user_uuid");
+  function GetUsersToken() {
+    const uuid_token_session = sessionStorage.getItem("eventma_user_uuid");
+    const uuid_token_storage = localStorage.getItem("eventma_user_uuid");
 
     if (uuid_token_session !== null) {
       return uuid_token_session;
@@ -237,97 +251,97 @@
   }
 
   async function CreateEvent() {
-    if (CheckUserData()) {
-      sending_data.value = true;
+    if (CheckUsersInputtedData()) {
+      is_data_being_sent.value = true;
 
-      const anni_name_input = document.getElementById("anni_name_input");
-      const anni_type_select = document.getElementById("anni_type_select");
-      const anni_date_input = document.getElementById("anni_date_input");
-      const anni_note_input = document.getElementById("anni_note_input");
+      const event_name_input = document.getElementById("event_name_input");
+      const event_type_select = document.getElementById("event_type_select");
+      const event_date_input = document.getElementById("event_date_input");
+      const event_note_input = document.getElementById("event_note_input");
 
-      const uuid_token = GetToken();
+      const uuid_token = GetUsersToken();
 
       const { data, error } = await supabase.from("events").insert([
         {
           belongs_to: uuid_token,
-          name: anni_name_input.value,
-          type: anni_type_select.value,
-          date: anni_date_input.value,
-          note: anni_note_input.value,
+          name: event_name_input.value,
+          type: event_type_select.value,
+          date: event_date_input.value,
+          note: event_note_input.value,
         },
       ]);
 
-      events_list.value.push(data[0]);
+      event_list.value.push(data[0]);
 
       if (error !== null) {
         console.log(error);
       }
 
-      HandleModal("close");
-      sending_data.value = false;
+      ToggleModal("close");
+      is_data_being_sent.value = false;
     } else {
-      sending_data.value = false;
+      is_data_being_sent.value = false;
     }
   }
 
   function PrepareForEventEditing(index) {
-    const anni_name_input = document.getElementById("anni_name_input");
-    const anni_type_select = document.getElementById("anni_type_select");
-    const anni_date_input = document.getElementById("anni_date_input");
-    const anni_note_input = document.getElementById("anni_note_input");
+    const event_name_input = document.getElementById("event_name_input");
+    const event_type_select = document.getElementById("event_type_select");
+    const event_date_input = document.getElementById("event_date_input");
+    const event_note_input = document.getElementById("event_note_input");
 
-    anni_name_input.value = events_list.value[index].name;
-    anni_type_select.value = events_list.value[index].type;
-    anni_date_input.value = events_list.value[index].date;
-    anni_note_input.value = events_list.value[index].note;
+    event_name_input.value = event_list.value[index].name;
+    event_type_select.value = event_list.value[index].type;
+    event_date_input.value = event_list.value[index].date;
+    event_note_input.value = event_list.value[index].note;
 
-    edit_mode.value = true;
+    is_edit_mode_on.value = true;
     edit_index.value = index;
-    HandleModal("open");
+    ToggleModal("open");
   }
 
   async function UpdateEvent() {
-    if (CheckUserData()) {
-      sending_data.value = true;
+    if (CheckUsersInputtedData()) {
+      is_data_being_sent.value = true;
 
-      const anni_name_input = document.getElementById("anni_name_input");
-      const anni_type_select = document.getElementById("anni_type_select");
-      const anni_date_input = document.getElementById("anni_date_input");
-      const anni_note_input = document.getElementById("anni_note_input");
+      const event_name_input = document.getElementById("event_name_input");
+      const event_type_select = document.getElementById("event_type_select");
+      const event_date_input = document.getElementById("event_date_input");
+      const event_note_input = document.getElementById("event_note_input");
 
-      const uuid_token = GetToken();
+      const uuid_token = GetUsersToken();
 
       const { data, error } = await supabase
         .from("events")
         .update({
           belongs_to: uuid_token,
-          name: anni_name_input.value,
-          type: anni_type_select.value,
-          date: anni_date_input.value,
-          note: anni_note_input.value,
+          name: event_name_input.value,
+          type: event_type_select.value,
+          date: event_date_input.value,
+          note: event_note_input.value,
         })
-        .eq("id", events_list.value[edit_index.value].id);
+        .eq("id", event_list.value[edit_index.value].id);
 
       if (error !== null) {
         console.log(error);
       }
 
-      events_list.value[edit_index.value] = data[0];
+      event_list.value[edit_index.value] = data[0];
 
-      edit_mode.value = false;
+      is_edit_mode_on.value = false;
       edit_index.value = null;
-      sending_data.value = false;
-      HandleModal("close");
+      is_data_being_sent.value = false;
+      ToggleModal("close");
     } else {
-      sending_data.value = false;
+      is_data_being_sent.value = false;
     }
   }
 
-  function HandleDeleteModal(command, index) {
+  function ToggleDeleteModal(command, index) {
     const modal = document.getElementById("delete_modal");
 
     if (command === "open") {
-      delete_index.value = events_list.value[index].id;
+      delete_index.value = event_list.value[index].id;
       list_index.value = index;
       modal.classList.add("is-active");
     } else {
@@ -344,13 +358,13 @@
       console.log(error);
     }
 
-    events_list.value.splice(list_index.value, 1);
-    HandleDeleteModal("close");
+    event_list.value.splice(list_index.value, 1);
+    ToggleDeleteModal("close");
   }
 
   function CheckIfUserIsNotLoggedIn() {
-    const uuid_token_session = sessionStorage.getItem("annima_user_uuid");
-    const uuid_token_storage = localStorage.getItem("annima_user_uuid");
+    const uuid_token_session = sessionStorage.getItem("eventma_user_uuid");
+    const uuid_token_storage = localStorage.getItem("eventma_user_uuid");
 
     if (uuid_token_session === null && uuid_token_storage === null) {
       router.push("/login");
@@ -364,8 +378,8 @@
   onMounted(() => {
     CloseNavBar();
     if (CheckIfUserIsNotLoggedIn()) {
-      SetMaxDate();
-      FetchData();
+      SetEventsMaxDate();
+      FetchDataFromDatabase();
     }
   });
 </script>
@@ -377,12 +391,12 @@
         <h1 class="is-size-2 has-text-centered">Dashboard</h1>
         <button class="button is-white is-large is-loading mb-4" disabled id="loading_button" />
 
-        <div class="has-text-centered mt-6" v-if="events_list.length === 0">
+        <div class="has-text-centered mt-6" v-if="event_list.length === 0">
           <Icon icon="face-sad-cry" class="is-size-1" />
           <h2 class="mt-2">No events... yet.</h2>
         </div>
 
-        <div class="card mt-5 mb-5" v-for="(anni, index) in events_list" :key="index" v-else>
+        <div class="card mt-5 mb-5" v-for="(event, index) in event_list" :key="index" v-else>
           <div class="card-content p-4">
             <div class="media">
               <div class="media-left">
@@ -391,12 +405,12 @@
                 </figure>
               </div>
               <div class="media-content">
-                <p class="title is-4">{{ anni.name }}</p>
-                <p class="subtitle is-6">{{ anni.date }}</p>
+                <p class="title is-4">{{ event.name }}</p>
+                <p class="subtitle is-6">{{ event.date }}</p>
               </div>
             </div>
-            <div class="content" v-if="anni.note !== ''">
-              <div class="notification p-4">{{ anni.note }}</div>
+            <div class="content" v-if="event.note !== ''">
+              <div class="notification p-4">{{ event.note }}</div>
             </div>
           </div>
           <footer class="card-footer p-4 is-flex-direction-row is-justify-content-end">
@@ -404,14 +418,14 @@
               <Icon icon="pen" class="mr-2" />
               Edit
             </button>
-            <button class="button is-danger" @click="HandleDeleteModal('open', index)">
+            <button class="button is-danger" @click="ToggleDeleteModal('open', index)">
               <Icon icon="trash" class="mr-2" />
               Delete
             </button>
           </footer>
         </div>
 
-        <button class="button is-primary is-rounded main_button" @click="HandleModal('open')">
+        <button class="button is-primary is-rounded main_button" @click="ToggleModal('open')">
           <Icon icon="plus" class="is-size-4" />
         </button>
       </div>
@@ -423,7 +437,7 @@
     <div class="modal-card">
       <header class="modal-card-head">
         <p class="modal-card-title">New event</p>
-        <button class="delete" aria-label="close" @click="HandleModal('close')"></button>
+        <button class="delete" aria-label="close" @click="ToggleModal('close')"></button>
       </header>
       <section class="modal-card-body">
         <div class="field">
@@ -433,25 +447,25 @@
               class="input"
               type="text"
               placeholder="John Doe"
-              id="anni_name_input"
-              :readonly="sending_data"
+              id="event_name_input"
+              :readonly="is_data_being_sent"
               required
             />
-            <span class="icon is-small is-right is-hidden" id="anni_name_icon">
-              <Icon :icon="anni_name_icon_value" />
+            <span class="icon is-small is-right is-hidden" id="event_name_icon">
+              <Icon :icon="event_name_icon" />
             </span>
           </div>
-          <p class="help" id="anni_name_helper"></p>
+          <p class="help" id="event_name_helper"></p>
         </div>
         <div class="field">
           <label class="label">Type</label>
           <div class="control">
             <div class="select">
-              <select id="anni_type_select" :readonly="sending_data" required>
+              <select id="event_type_select" :readonly="is_data_being_sent" required>
                 <option selected>Birthday</option>
                 <option>Anniversary</option>
                 <option>Name day</option>
-                <option>Death anniversary</option>
+                <option>Death eventversary</option>
                 <option>Other</option>
               </select>
             </div>
@@ -464,15 +478,15 @@
               class="input"
               type="date"
               min="1920-01-01"
-              id="anni_date_input"
-              :readonly="sending_data"
+              id="event_date_input"
+              :readonly="is_data_being_sent"
               required
             />
-            <span class="icon is-small is-right is-hidden" id="anni_date_icon">
-              <Icon :icon="anni_date_icon_value" />
+            <span class="icon is-small is-right is-hidden" id="event_date_icon">
+              <Icon :icon="event_date_icon" />
             </span>
           </div>
-          <p class="help" id="anni_date_helper"></p>
+          <p class="help" id="event_date_helper"></p>
         </div>
         <div class="field">
           <label class="label">Note</label>
@@ -481,17 +495,17 @@
               class="textarea"
               rows="3"
               placeholder="He gifted me the mug for my birthday. This year I should get them something... better."
-              id="anni_note_input"
-              :readonly="sending_data"
+              id="event_note_input"
+              :readonly="is_data_being_sent"
             />
           </div>
-          <p class="help" id="anni_note_helper"></p>
+          <p class="help" id="event_note_helper"></p>
         </div>
       </section>
       <footer class="modal-card-foot">
-        <button class="button" @click="HandleModal('close')">Close</button>
-        <button class="button is-success" @click="CreateEvent" v-if="!edit_mode">Create</button>
-        <button class="button is-warning" @click="UpdateEvent" v-if="edit_mode">Update</button>
+        <button class="button" @click="ToggleModal('close')">Close</button>
+        <button class="button is-success" @click="CreateEvent()" v-if="!is_edit_mode_on">Create</button>
+        <button class="button is-warning" @click="UpdateEvent()" v-if="is_edit_mode_on">Update</button>
       </footer>
     </div>
   </div>
@@ -501,14 +515,14 @@
     <div class="modal-card">
       <header class="modal-card-head">
         <p class="modal-card-title">Deleting event</p>
-        <button class="delete" aria-label="close" @click="HandleDeleteModal('close')"></button>
+        <button class="delete" aria-label="close" @click="ToggleDeleteModal('close')"></button>
       </header>
       <section class="modal-card-body">
         <h3 class="is-size-5">Are you sure?</h3>
       </section>
       <footer class="modal-card-foot">
-        <button class="button" @click="HandleDeleteModal('close')">Close</button>
-        <button class="button is-danger" @click="DeleteEvent">Delete</button>
+        <button class="button" @click="ToggleDeleteModal('close')">Close</button>
+        <button class="button is-danger" @click="DeleteEvent()">Delete</button>
       </footer>
     </div>
   </div>

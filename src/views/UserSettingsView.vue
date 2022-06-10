@@ -25,7 +25,6 @@
   onMounted(() => {
     CloseNavBar();
     if (CheckIfUserIsNotLoggedIn()) {
-      console.log("WORKS!");
       //FetchUsersData();
     }
   });

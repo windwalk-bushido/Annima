@@ -4,15 +4,15 @@
 
   const router = useRouter();
 
-  let menu_active = ref(false);
-  let user_logged_in = ref(false);
+  let is_menu_active = ref(false);
+  let is_user_logged_in = ref(false);
 
   function NavBarLoggedIn() {
-    user_logged_in.value = true;
+    is_user_logged_in.value = true;
   }
 
   function NavBarNormal() {
-    user_logged_in.value = false;
+    is_user_logged_in.value = false;
   }
 
   function ToggleMenu(command) {
@@ -20,12 +20,12 @@
     const menu_links = document.getElementById("navbar-menu");
 
     if (command === 0) {
-      menu_active.value = !menu_active.value;
+      is_menu_active.value = !is_menu_active.value;
     } else {
-      menu_active.value = false;
+      is_menu_active.value = false;
     }
 
-    if (menu_active.value) {
+    if (is_menu_active.value) {
       menu_icon.classList.add("is-active");
       menu_links.classList.add("is-active");
     } else {
@@ -48,7 +48,9 @@
   <header class="is-relative">
     <nav class="navbar is-dark is-floating is-fixed-top">
       <div class="navbar-brand">
-        <RouterLink class="navbar-item is-logo" to="/user/dashboard" v-if="user_logged_in">Annima</RouterLink>
+        <RouterLink class="navbar-item is-logo" to="/user/dashboard" v-if="is_user_logged_in"
+          >Annima</RouterLink
+        >
         <RouterLink class="navbar-item is-logo" to="/" v-else>Annima</RouterLink>
         <a
           role="button"
@@ -65,11 +67,11 @@
       </div>
       <div class="navbar-menu" id="navbar-menu">
         <div class="navbar-end">
-          <RouterLink class="navbar-item" to="/user/dashboard" v-if="user_logged_in">Dashboard</RouterLink>
+          <RouterLink class="navbar-item" to="/user/dashboard" v-if="is_user_logged_in">Dashboard</RouterLink>
           <RouterLink class="navbar-item" to="/" v-else>Home</RouterLink>
-          <RouterLink class="navbar-item" to="/user/settings" v-if="user_logged_in">Settings</RouterLink>
+          <RouterLink class="navbar-item" to="/user/settings" v-if="is_user_logged_in">Settings</RouterLink>
           <RouterLink class="navbar-item" to="/about" v-else>About</RouterLink>
-          <div class="navbar-item" v-if="user_logged_in">
+          <div class="navbar-item" v-if="is_user_logged_in">
             <button class="button is-light" @click="LogoutUser">Logout</button>
           </div>
           <div class="navbar-item" v-else>

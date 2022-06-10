@@ -3,10 +3,10 @@
   import { RouterLink, useRouter } from "vue-router";
   import supabase from "../api";
 
-  let email_icon_value = ref("circle-exclamation");
-  let password1_icon_value = ref("circle-exclamation");
-  let password2_icon_value = ref("circle-exclamation");
-  let sending_data = ref(false);
+  let email_input_icon = ref("circle-exclamation");
+  let password1_input_icon = ref("circle-exclamation");
+  let password2_input_icon = ref("circle-exclamation");
+  let is_data_being_sent = ref(false);
 
   const emit = defineEmits(["ToggleMenu"]);
   const router = useRouter();
@@ -15,7 +15,7 @@
     emit("ToggleMenu");
   }
 
-  function HandleModal(command) {
+  function ToggleModal(command) {
     const modal = document.getElementById("modal");
     if (command === "open") {
       modal.classList.add("is-active");
@@ -24,7 +24,7 @@
     }
   }
 
-  function InformUser(element, input, helper, icon, message, type) {
+  function InformUserAboutInputtedData(element, input, helper, icon, message, type) {
     if (type === "BAD") {
       input.classList.add("is-danger");
 
@@ -35,13 +35,13 @@
 
       switch (element) {
         case "email":
-          email_icon_value.value = "circle-exclamation";
+          email_input_icon.value = "circle-exclamation";
           break;
         case "password1":
-          password1_icon_value.value = "circle-exclamation";
+          password1_input_icon.value = "circle-exclamation";
           break;
         case "password2":
-          password2_icon_value.value = "circle-exclamation";
+          password2_input_icon.value = "circle-exclamation";
           break;
       }
     } else {
@@ -54,19 +54,19 @@
 
       switch (element) {
         case "email":
-          email_icon_value.value = "check";
+          email_input_icon.value = "check";
           break;
         case "password1":
-          password1_icon_value.value = "check";
+          password1_input_icon.value = "check";
           break;
         case "password2":
-          password2_icon_value.value = "check";
+          password2_input_icon.value = "check";
           break;
       }
     }
   }
 
-  function CheckUserData() {
+  function CheckUsersInputtedData() {
     const email_input = document.getElementById("email_input");
     const email_helper = document.getElementById("email_helper");
     const email_icon = document.getElementById("email_icon");
@@ -82,18 +82,25 @@
     const toc_checkbox = document.getElementById("toc_checkbox");
     const toc_helper = document.getElementById("toc_helper");
 
-    let email_good = false;
-    let password1_good = false;
-    let password2_good = false;
-    let toc_checked = false;
+    let is_email_good = false;
+    let is_password1_good = false;
+    let is_password2_good = false;
+    let is_toc_checked = false;
 
     const email_regex = /[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/;
     const email_regex_testing = email_regex.exec(email_input.value);
 
     if (email_input.value.length === 0) {
-      InformUser("email", email_input, email_helper, email_icon, "Don't leave this field empty.", "BAD");
+      InformUserAboutInputtedData(
+        "email",
+        email_input,
+        email_helper,
+        email_icon,
+        "Don't leave this field empty.",
+        "BAD"
+      );
     } else if (email_input.value.length < 8) {
-      InformUser(
+      InformUserAboutInputtedData(
         "email",
         email_input,
         email_helper,
@@ -102,7 +109,7 @@
         "BAD"
       );
     } else if (email_input.value.length > 64) {
-      InformUser(
+      InformUserAboutInputtedData(
         "email",
         email_input,
         email_helper,
@@ -111,17 +118,17 @@
         "BAD"
       );
     } else if (!email_regex_testing) {
-      InformUser("email", email_input, email_helper, email_icon, "Not a valid email.", "BAD");
+      InformUserAboutInputtedData("email", email_input, email_helper, email_icon, "Not a valid email.", "BAD");
     } else {
-      InformUser("email", email_input, email_helper, email_icon, "Email is good.", "GOOD");
-      email_good = true;
+      InformUserAboutInputtedData("email", email_input, email_helper, email_icon, "Email is good.", "GOOD");
+      is_email_good = true;
     }
 
     const password_regex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/;
     const password_regex_testing = password_regex.exec(password1_input.value);
 
     if (password1_input.value.length === 0) {
-      InformUser(
+      InformUserAboutInputtedData(
         "password1",
         password1_input,
         password1_helper,
@@ -130,7 +137,7 @@
         "BAD"
       );
     } else if (password1_input.value.length < 8) {
-      InformUser(
+      InformUserAboutInputtedData(
         "password1",
         password1_input,
         password1_helper,
@@ -139,7 +146,7 @@
         "BAD"
       );
     } else if (password1_input.value.length > 64) {
-      InformUser(
+      InformUserAboutInputtedData(
         "password1",
         password1_input,
         password1_helper,
@@ -148,7 +155,7 @@
         "BAD"
       );
     } else if (!password_regex_testing) {
-      InformUser(
+      InformUserAboutInputtedData(
         "password1",
         password1_input,
         password1_helper,
@@ -157,12 +164,19 @@
         "BAD"
       );
     } else {
-      InformUser("password1", password1_input, password1_helper, password1_icon, "Password is good.", "GOOD");
-      password1_good = true;
+      InformUserAboutInputtedData(
+        "password1",
+        password1_input,
+        password1_helper,
+        password1_icon,
+        "Password is good.",
+        "GOOD"
+      );
+      is_password1_good = true;
     }
 
     if (password2_input.value.length === 0) {
-      InformUser(
+      InformUserAboutInputtedData(
         "password2",
         password2_input,
         password2_helper,
@@ -171,7 +185,7 @@
         "BAD"
       );
     } else if (password2_input.value !== password1_input.value) {
-      InformUser(
+      InformUserAboutInputtedData(
         "password2",
         password2_input,
         password2_helper,
@@ -180,8 +194,15 @@
         "BAD"
       );
     } else {
-      InformUser("password2", password2_input, password2_helper, password2_icon, "Passwords match.", "GOOD");
-      password2_good = true;
+      InformUserAboutInputtedData(
+        "password2",
+        password2_input,
+        password2_helper,
+        password2_icon,
+        "Passwords match.",
+        "GOOD"
+      );
+      is_password2_good = true;
     }
 
     if (!toc_checkbox.checked) {
@@ -191,10 +212,10 @@
       toc_helper.innerHTML = "You have agreed.";
       toc_helper.classList.remove("is-danger");
       toc_helper.classList.add("is-success");
-      toc_checked = true;
+      is_toc_checked = true;
     }
 
-    if (email_good && password1_good && password2_good && toc_checked) {
+    if (is_email_good && is_password1_good && is_password2_good && is_toc_checked) {
       return true;
     } else {
       return false;
@@ -202,11 +223,11 @@
   }
 
   async function RegisterUser() {
-    const submit_btn = document.getElementById("submit_btn");
-    submit_btn.classList.add("is-loading");
+    const submit_button = document.getElementById("submit_button");
+    submit_button.classList.add("is-loading");
 
-    if (CheckUserData()) {
-      sending_data.value = true;
+    if (CheckUsersInputtedData()) {
+      is_data_being_sent.value = true;
 
       const email_input = document.getElementById("email_input");
       const password1_input = document.getElementById("password1_input");
@@ -218,14 +239,14 @@
 
       if (user !== "" && error === null) {
         localStorage.removeItem("supabase.auth.token");
-        HandleModal("open");
+        ToggleModal("open");
       } else {
-        submit_btn.classList.remove("is-loading");
+        submit_button.classList.remove("is-loading");
         console.log(error);
       }
     } else {
-      submit_btn.classList.remove("is-loading");
-      sending_data.value = false;
+      submit_button.classList.remove("is-loading");
+      is_data_being_sent.value = false;
     }
   }
 
@@ -258,14 +279,14 @@
               type="email"
               placeholder="user@example.com"
               id="email_input"
-              :readonly="sending_data"
+              :readonly="is_data_being_sent"
               required
             />
             <span class="icon is-small is-left">
               <Icon icon="envelope" />
             </span>
             <span class="icon is-small is-right is-hidden" id="email_icon">
-              <Icon :icon="email_icon_value" />
+              <Icon :icon="email_input_icon" />
             </span>
           </div>
           <p class="help" id="email_helper"></p>
@@ -278,14 +299,14 @@
               type="password"
               placeholder="sR9ESQ7sdYzdJ0E07"
               id="password1_input"
-              :readonly="sending_data"
+              :readonly="is_data_being_sent"
               required
             />
             <span class="icon is-small is-left">
               <Icon icon="lock" />
             </span>
             <span class="icon is-small is-right is-hidden" id="password1_icon">
-              <Icon :icon="password1_icon_value" />
+              <Icon :icon="password1_input_icon" />
             </span>
           </div>
           <p class="help" id="password1_helper"></p>
@@ -298,14 +319,14 @@
               type="password"
               placeholder="sR9ESQ7sdYzdJ0E07"
               id="password2_input"
-              :readonly="sending_data"
+              :readonly="is_data_being_sent"
               required
             />
             <span class="icon is-small is-left">
               <Icon icon="lock" />
             </span>
             <span class="icon is-small is-right is-hidden" id="password2_icon">
-              <Icon :icon="password2_icon_value" />
+              <Icon :icon="password2_input_icon" />
             </span>
           </div>
           <p class="help" id="password2_helper"></p>
@@ -313,7 +334,7 @@
         <div class="field mt-5">
           <div class="control">
             <label class="checkbox">
-              <input type="checkbox" id="toc_checkbox" :disabled="sending_data" required />
+              <input type="checkbox" id="toc_checkbox" :disabled="is_data_being_sent" required />
               I agree to the <a href="#">Terms and Conditions</a>
             </label>
           </div>
@@ -321,7 +342,12 @@
         </div>
         <div class="field is-grouped mt-5">
           <div class="control">
-            <button class="button is-link" @click="RegisterUser" :disabled="sending_data" id="submit_btn">
+            <button
+              class="button is-link"
+              @click="RegisterUser()"
+              :disabled="is_data_being_sent"
+              id="submit_button"
+            >
               Submit
             </button>
           </div>
@@ -335,14 +361,14 @@
     <div class="modal-card">
       <header class="modal-card-head">
         <p class="modal-card-title">Registration successfull</p>
-        <button class="delete" aria-label="close" @click="HandleModal('close')"></button>
+        <button class="delete" aria-label="close" @click="ToggleModal('close')"></button>
       </header>
       <section class="modal-card-body">
         <h3 class="is-size-5 mb-4">Thanks for signing up &lt;3</h3>
         <p>Please check your email for confirmation link.</p>
       </section>
       <footer class="modal-card-foot">
-        <button class="button" @click="HandleModal('close')">Close</button>
+        <button class="button" @click="ToggleModal('close')">Close</button>
         <RouterLink class="button is-success" to="/login">Sign in</RouterLink>
       </footer>
     </div>

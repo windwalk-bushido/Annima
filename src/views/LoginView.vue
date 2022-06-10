@@ -3,9 +3,9 @@
   import { RouterLink, useRouter } from "vue-router";
   import supabase from "../api";
 
-  let email_icon_value = ref("circle-exclamation");
-  let password_icon_value = ref("circle-exclamation");
-  let sending_data = ref(false);
+  let email_input_icon = ref("circle-exclamation");
+  let password_input_icon = ref("circle-exclamation");
+  let is_data_being_sent = ref(false);
   let error_message = ref("");
 
   const emit = defineEmits(["ToggleMenu", "NavBarLoggedIn"]);
@@ -15,7 +15,7 @@
     emit("ToggleMenu");
   }
 
-  function HandleModal(command) {
+  function ToggleModal(command) {
     const modal = document.getElementById("modal");
     if (command === "open") {
       modal.classList.add("is-active");
@@ -24,24 +24,24 @@
     }
   }
 
-  function InformUser(element, input, helper, icon, message, type) {
+  function InformUserAboutInputtedData(element, input, helper, icon, message, type) {
     if (type === "BAD") {
       input.classList.add("is-danger");
       helper.innerHTML = message;
       helper.classList.add("is-danger");
       icon.classList.remove("is-hidden");
       element === "email"
-        ? (email_icon_value.value = "circle-exclamation")
-        : (password_icon_value.value = "circle-exclamation");
+        ? (email_input_icon.value = "circle-exclamation")
+        : (password_input_icon.value = "circle-exclamation");
     } else {
       input.classList.remove("is-danger");
       helper.innerHTML = "";
       helper.classList.remove("is-danger");
-      element === "email" ? (email_icon_value.value = "check") : (password_icon_value.value = "check");
+      element === "email" ? (email_input_icon.value = "check") : (password_input_icon.value = "check");
     }
   }
 
-  function CheckUserData() {
+  function CheckUsersInputtedData() {
     const email_input = document.getElementById("email_input");
     const email_helper = document.getElementById("email_helper");
     const email_icon = document.getElementById("email_icon");
@@ -50,17 +50,24 @@
     const password_helper = document.getElementById("password_helper");
     const password_icon = document.getElementById("password_icon");
 
-    let email_good = false;
-    let password_good = false;
+    let is_email_good = false;
+    let is_password_good = false;
 
     if (email_input.value.length === 0) {
-      InformUser("email", email_input, email_helper, email_icon, "Don't leave this field empty.", "BAD");
+      InformUserAboutInputtedData(
+        "email",
+        email_input,
+        email_helper,
+        email_icon,
+        "Don't leave this field empty.",
+        "BAD"
+      );
     } else {
-      email_good = true;
+      is_email_good = true;
     }
 
     if (password_input.value.length === 0) {
-      InformUser(
+      InformUserAboutInputtedData(
         "password",
         password_input,
         password_helper,
@@ -69,10 +76,10 @@
         "BAD"
       );
     } else {
-      password_good = true;
+      is_password_good = true;
     }
 
-    if (email_good && password_good) {
+    if (is_email_good && is_password_good) {
       return true;
     } else {
       return false;
@@ -80,11 +87,11 @@
   }
 
   async function LoginUser() {
-    const submit_btn = document.getElementById("submit_btn");
-    submit_btn.classList.add("is-loading");
+    const submit_button = document.getElementById("submit_button");
+    submit_button.classList.add("is-loading");
 
-    if (CheckUserData()) {
-      sending_data.value = true;
+    if (CheckUsersInputtedData()) {
+      is_data_being_sent.value = true;
 
       const email_input = document.getElementById("email_input");
       const password_input = document.getElementById("password_input");
@@ -97,6 +104,7 @@
       if (user !== "" && error === null) {
         localStorage.removeItem("supabase.auth.token");
 
+        // kul = Keep User Logged in
         const kul_checkbox = document.getElementById("kul_checkbox");
 
         if (kul_checkbox.checked) {
@@ -119,18 +127,18 @@
         const password_helper = document.getElementById("password_helper");
         const password_icon = document.getElementById("password_icon");
 
-        InformUser("email", email_input, email_helper, email_icon, "", "BAD");
-        InformUser("password", password_input, password_helper, password_icon, "", "BAD");
+        InformUserAboutInputtedData("email", email_input, email_helper, email_icon, "", "BAD");
+        InformUserAboutInputtedData("password", password_input, password_helper, password_icon, "", "BAD");
 
-        HandleModal("open");
+        ToggleModal("open");
         error_message.value = error.message;
 
-        submit_btn.classList.remove("is-loading");
-        sending_data.value = false;
+        submit_button.classList.remove("is-loading");
+        is_data_being_sent.value = false;
       }
     } else {
-      submit_btn.classList.remove("is-loading");
-      sending_data.value = false;
+      submit_button.classList.remove("is-loading");
+      is_data_being_sent.value = false;
     }
   }
 
@@ -163,14 +171,14 @@
               type="email"
               placeholder="user@example.com"
               id="email_input"
-              :readonly="sending_data"
+              :readonly="is_data_being_sent"
               required
             />
             <span class="icon is-small is-left">
               <Icon icon="envelope" />
             </span>
             <span class="icon is-small is-right is-hidden" id="email_icon">
-              <Icon :icon="email_icon_value" />
+              <Icon :icon="email_input_icon" />
             </span>
           </div>
           <p class="help" id="email_helper"></p>
@@ -183,14 +191,14 @@
               type="password"
               placeholder="sR9ESQ7sdYzdJ0E07"
               id="password_input"
-              :readonly="sending_data"
+              :readonly="is_data_being_sent"
               required
             />
             <span class="icon is-small is-left">
               <Icon icon="lock" />
             </span>
             <span class="icon is-small is-right is-hidden" id="password_icon">
-              <Icon :icon="password_icon_value" />
+              <Icon :icon="password_input_icon" />
             </span>
           </div>
           <p class="help" id="password_helper"></p>
@@ -198,14 +206,19 @@
         <div class="field mt-5">
           <div class="control">
             <label class="checkbox">
-              <input type="checkbox" id="kul_checkbox" :disabled="sending_data" />
+              <input type="checkbox" id="kul_checkbox" :disabled="is_data_being_sent" />
               Keep me logged in for 7 days
             </label>
           </div>
         </div>
         <div class="field is-grouped mt-5">
           <div class="control">
-            <button class="button is-link" @click="LoginUser" :disabled="sending_data" id="submit_btn">
+            <button
+              class="button is-link"
+              @click="LoginUser()"
+              :disabled="is_data_being_sent"
+              id="submit_button"
+            >
               Submit
             </button>
           </div>
@@ -219,11 +232,11 @@
     <div class="modal-card">
       <header class="modal-card-head">
         <p class="modal-card-title">Error: {{ error_message }}</p>
-        <button class="delete" aria-label="close" @click="HandleModal('close')"></button>
+        <button class="delete" aria-label="close" @click="ToggleModal('close')"></button>
       </header>
       <footer class="modal-card-foot">
         <RouterLink class="button" to="/register">Sign up</RouterLink>
-        <button class="button is-primary" @click="HandleModal('close')">Try again</button>
+        <button class="button is-primary" @click="ToggleModal('close')">Try again</button>
       </footer>
     </div>
   </div>
