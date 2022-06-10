@@ -492,13 +492,13 @@
     <div class="modal-card">
       <header class="modal-card-head">
         <p class="modal-card-title">Deleting event</p>
-        <button class="delete" aria-label="close" @click="ToggleDeleteModal('close')"></button>
+        <button class="delete" aria-label="close" @click="ToggleDeleteModal('close', -1)"></button>
       </header>
       <section class="modal-card-body">
         <h3 class="is-size-5">Are you sure?</h3>
       </section>
       <footer class="modal-card-foot">
-        <button class="button" @click="ToggleDeleteModal('close')">Close</button>
+        <button class="button" @click="ToggleDeleteModal('close', -1)">Close</button>
         <button class="button is-danger" @click="DeleteEvent()">Delete</button>
       </footer>
     </div>
