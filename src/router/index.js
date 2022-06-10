@@ -66,9 +66,7 @@ function CheckIfUserIsLoggedIn() {
 }
 
 router.beforeEach(async (to, from) => {
-  if (is_user_logged_in === null) {
-    CheckIfUserIsLoggedIn();
-  }
+  CheckIfUserIsLoggedIn();
   if (is_user_logged_in === false && (to.name === "dashboard" || to.name === "settings")) {
     return { name: "login" };
   }
