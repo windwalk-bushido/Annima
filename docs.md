@@ -20,7 +20,6 @@ TBM = To be made
 
 ### To do (Priorities)
 
-- Fix Navbar emits
 - Login and Register pages should trigger "navbar switch" on some other lifecycle hooks (it's not 'mount')
 
 - Save user inputs on Login/Register/F.Password pages (before unmounting them) in sessionStorage (load them when mounting the pages)

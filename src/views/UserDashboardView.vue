@@ -11,11 +11,7 @@
   let delete_index = ref(null);
   let list_index = ref(null);
 
-  const emit = defineEmits(["ToggleMenu", "NavBarLoggedIn"]);
-
-  function CloseNavBar() {
-    emit("ToggleMenu");
-  }
+  const emit = defineEmits(["NavBarLoggedIn"]);
 
   function SetEventsMaxDate() {
     const event_date_input = document.getElementById("event_date_input");
@@ -361,7 +357,6 @@
   }
 
   onMounted(() => {
-    CloseNavBar();
     SetEventsMaxDate();
     FetchDataFromDatabase();
   });

@@ -1,14 +1,7 @@
 <script setup>
-  import { onMounted, defineEmits } from "vue";
-
-  const emit = defineEmits(["ToggleMenu"]);
-
-  function CloseNavBar() {
-    emit("ToggleMenu");
-  }
+  import { onMounted } from "vue";
 
   onMounted(() => {
-    CloseNavBar();
     //FetchUsersData();
   });
 </script>

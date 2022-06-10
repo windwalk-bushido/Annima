@@ -40,6 +40,7 @@
     localStorage.removeItem("annima_signed-in_date");
 
     NavBarNormal();
+    ToggleMenu(0);
     router.push({ name: "login" });
   }
 </script>
@@ -67,17 +68,21 @@
       </div>
       <div class="navbar-menu" id="navbar-menu">
         <div class="navbar-end">
-          <RouterLink class="navbar-item" to="/user/dashboard" v-if="is_user_logged_in">Dashboard</RouterLink>
-          <RouterLink class="navbar-item" to="/" v-else>Home</RouterLink>
-          <RouterLink class="navbar-item" to="/user/settings" v-if="is_user_logged_in">Settings</RouterLink>
-          <RouterLink class="navbar-item" to="/about" v-else>About</RouterLink>
+          <RouterLink class="navbar-item" to="/user/dashboard" v-if="is_user_logged_in" @click="ToggleMenu(0)">
+            Dashboard
+          </RouterLink>
+          <RouterLink class="navbar-item" to="/" v-else @click="ToggleMenu(0)">Home</RouterLink>
+          <RouterLink class="navbar-item" to="/user/settings" v-if="is_user_logged_in" @click="ToggleMenu(0)">
+            Settings
+          </RouterLink>
+          <RouterLink class="navbar-item" to="/about" v-else @click="ToggleMenu(0)">About</RouterLink>
           <div class="navbar-item" v-if="is_user_logged_in">
             <button class="button is-light" @click="LogoutUser">Logout</button>
           </div>
           <div class="navbar-item" v-else>
             <div class="buttons">
-              <RouterLink class="button is-primary" to="/register">Sign up</RouterLink>
-              <RouterLink class="button is-light" to="/login">Sign in</RouterLink>
+              <RouterLink class="button is-primary" to="/register" @click="ToggleMenu(0)">Sign up</RouterLink>
+              <RouterLink class="button is-light" to="/login" @click="ToggleMenu(0)">Sign in</RouterLink>
             </div>
           </div>
         </div>

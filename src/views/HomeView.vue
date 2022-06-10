@@ -1,16 +1,4 @@
-<script setup>
-  import { onMounted, defineEmits } from "vue";
-
-  const emit = defineEmits(["ToggleMenu"]);
-
-  function CloseNavBar() {
-    emit("ToggleMenu");
-  }
-
-  onMounted(() => {
-    CloseNavBar();
-  });
-</script>
+<script setup></script>
 
 <template>
   <main>

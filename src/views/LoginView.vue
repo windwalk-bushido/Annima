@@ -1,5 +1,5 @@
 <script setup>
-  import { ref, onMounted, defineEmits } from "vue";
+  import { ref, defineEmits } from "vue";
   import { RouterLink, useRouter } from "vue-router";
   import supabase from "../api";
 
@@ -8,12 +8,8 @@
   let is_data_being_sent = ref(false);
   let error_message = ref("");
 
-  const emit = defineEmits(["ToggleMenu", "NavBarLoggedIn"]);
+  const emit = defineEmits(["NavBarLoggedIn"]);
   const router = useRouter();
-
-  function CloseNavBar() {
-    emit("ToggleMenu");
-  }
 
   function ToggleModal(command) {
     const modal = document.getElementById("modal");
@@ -141,10 +137,6 @@
       is_data_being_sent.value = false;
     }
   }
-
-  onMounted(() => {
-    CloseNavBar();
-  });
 </script>
 
 <template>

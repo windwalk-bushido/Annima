@@ -1,5 +1,5 @@
 <script setup>
-  import { ref, onMounted, defineEmits } from "vue";
+  import { ref } from "vue";
   import { RouterLink } from "vue-router";
   import supabase from "../api";
 
@@ -7,12 +7,6 @@
   let password1_input_icon = ref("circle-exclamation");
   let password2_input_icon = ref("circle-exclamation");
   let is_data_being_sent = ref(false);
-
-  const emit = defineEmits(["ToggleMenu"]);
-
-  function CloseNavBar() {
-    emit("ToggleMenu");
-  }
 
   function ToggleModal(command) {
     const modal = document.getElementById("modal");
@@ -248,10 +242,6 @@
       is_data_being_sent.value = false;
     }
   }
-
-  onMounted(() => {
-    CloseNavBar();
-  });
 </script>
 
 <template>
