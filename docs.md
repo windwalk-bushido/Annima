@@ -20,7 +20,6 @@ TBM = To be made
 
 ### To do (Priorities)
 
-- Reduce Navbar logic & fix emits
 - Protect Dashboard and Settings routes
 - Change function and variable names if needed
 

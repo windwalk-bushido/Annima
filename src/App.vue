@@ -48,7 +48,8 @@
   <header class="is-relative">
     <nav class="navbar is-dark is-floating is-fixed-top" v-if="user_logged_in">
       <div class="navbar-brand">
-        <RouterLink class="navbar-item is-logo" to="/user/dashboard">Annima</RouterLink>
+        <RouterLink class="navbar-item is-logo" to="/user/dashboard" v-if="user_logged_in">Annima</RouterLink>
+        <RouterLink class="navbar-item is-logo" to="/" v-else>Annima</RouterLink>
         <a
           role="button"
           class="navbar-burger"
@@ -64,36 +65,14 @@
       </div>
       <div class="navbar-menu" id="navbar-menu">
         <div class="navbar-end">
-          <RouterLink class="navbar-item" to="/user/dashboard">Dashboard</RouterLink>
-          <RouterLink class="navbar-item" to="/user/settings">Settings</RouterLink>
-          <div class="navbar-item">
+          <RouterLink class="navbar-item" to="/user/dashboard" v-if="user_logged_in">Dashboard</RouterLink>
+          <RouterLink class="navbar-item" to="/" v-else>Home</RouterLink>
+          <RouterLink class="navbar-item" to="/user/settings" v-if="user_logged_in">Settings</RouterLink>
+          <RouterLink class="navbar-item" to="/about" v-else>About</RouterLink>
+          <div class="navbar-item" v-if="user_logged_in">
             <button class="button is-light" @click="LogoutUser">Logout</button>
           </div>
-        </div>
-      </div>
-    </nav>
-
-    <nav class="navbar is-dark is-floating is-fixed-top" v-else>
-      <div class="navbar-brand">
-        <RouterLink class="navbar-item is-logo" to="/">Annima</RouterLink>
-        <a
-          role="button"
-          class="navbar-burger"
-          id="navbar-burger"
-          aria-label="menu"
-          aria-expanded="false"
-          @click="ToggleMenu(0)"
-        >
-          <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
-        </a>
-      </div>
-      <div class="navbar-menu" id="navbar-menu">
-        <div class="navbar-end">
-          <RouterLink class="navbar-item" to="/">Home</RouterLink>
-          <RouterLink class="navbar-item" to="/about">About</RouterLink>
-          <div class="navbar-item">
+          <div class="navbar-item" v-else>
             <div class="buttons">
               <RouterLink class="button is-primary" to="/register">Sign up</RouterLink>
               <RouterLink class="button is-light" to="/login">Sign in</RouterLink>
