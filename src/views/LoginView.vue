@@ -11,7 +11,7 @@
   const emit = defineEmits(["ToggleMenu", "NavBarLoggedIn"]);
   const router = useRouter();
 
-  function CloseNav() {
+  function CloseNavBar() {
     emit("ToggleMenu");
   }
 
@@ -144,7 +144,7 @@
   }
 
   onMounted(() => {
-    CloseNav();
+    CloseNavBar();
     CheckIfUserIsLoggedIn();
   });
 </script>

@@ -5,7 +5,7 @@
   const emit = defineEmits(["ToggleMenu"]);
   const router = useRouter();
 
-  function CloseNav() {
+  function CloseNavBar() {
     emit("ToggleMenu");
   }
 
@@ -13,17 +13,18 @@
     const uuid_token_session = sessionStorage.getItem("annima_user_uuid");
     const uuid_token_storage = localStorage.getItem("annima_user_uuid");
 
-    if (uuid_token_session === null || uuid_token_storage === null) {
+    if (uuid_token_session === null && uuid_token_storage === null) {
       router.push("/login");
-      return true;
-    } else {
       return false;
+    } else {
+      emit("NavBarLoggedIn");
+      return true;
     }
   }
 
   onMounted(() => {
-    CloseNav();
-    if (CheckIfUserIsNotLoggedIn() === false) {
+    CloseNavBar();
+    if (CheckIfUserIsNotLoggedIn()) {
       console.log("WORKS!");
       //FetchUsersData();
     }

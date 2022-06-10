@@ -15,7 +15,7 @@
   const emit = defineEmits(["ToggleMenu", "NavBarLoggedIn"]);
   const router = useRouter();
 
-  function CloseNav() {
+  function CloseNavBar() {
     emit("ToggleMenu");
   }
 
@@ -352,19 +352,21 @@
     const uuid_token_session = sessionStorage.getItem("annima_user_uuid");
     const uuid_token_storage = localStorage.getItem("annima_user_uuid");
 
-    if (uuid_token_session === null || uuid_token_storage === null) {
+    if (uuid_token_session === null && uuid_token_storage === null) {
       router.push("/login");
-      return true;
+      return false;
     } else {
       emit("NavBarLoggedIn");
-      return false;
+      return true;
     }
   }
 
   onMounted(() => {
-    CloseNav();
-    SetMaxDate();
-    FetchData();
+    CloseNavBar();
+    if (CheckIfUserIsNotLoggedIn()) {
+      SetMaxDate();
+      FetchData();
+    }
   });
 </script>
 

@@ -20,7 +20,7 @@ TBM = To be made
 
 ### To do (Priorities)
 
-- Protect Dashboard and Settings routes
+- Fix Navbar emits
 - Change function and variable names if needed
 
 - USERS NEED TO BE ABLE TO SELECT YEAR IN EVENT's DATE

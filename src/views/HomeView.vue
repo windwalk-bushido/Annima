@@ -3,12 +3,12 @@
 
   const emit = defineEmits(["ToggleMenu"]);
 
-  function CloseNav() {
+  function CloseNavBar() {
     emit("ToggleMenu");
   }
 
   onMounted(() => {
-    CloseNav();
+    CloseNavBar();
   });
 </script>
 
