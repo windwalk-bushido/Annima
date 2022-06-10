@@ -1,15 +1,13 @@
-<script>
-  export default {
-    methods: {
-      CloseNav() {
-        this.$root.ToggleMenu();
-      },
-    },
+<script setup>
+  import { onMounted } from "vue";
 
-    mounted() {
-      this.CloseNav();
-    },
-  };
+  function CloseNav() {
+    this.$root.ToggleMenu();
+  }
+
+  onMounted(() => {
+    CloseNav();
+  });
 </script>
 
 <template>

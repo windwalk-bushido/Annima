@@ -1,390 +1,369 @@
-<script>
+<script setup>
+  import { ref, onMounted } from "vue";
   import supabase from "../api";
 
-  export default {
-    data() {
-      return {
-        events_list: [],
-        anni_name_icon_value: "circle-exclamation",
-        anni_date_icon_value: "circle-exclamation",
-        sending_data: false,
-        edit_mode: false,
-        edit_index: null,
-        delete_index: null,
-        list_index: null,
-      };
-    },
+  let events_list = ref([]);
+  let anni_name_icon_value = ref("circle-exclamation");
+  let anni_date_icon_value = ref("circle-exclamation");
+  let sending_data = ref(false);
+  let edit_mode = ref(false);
+  let edit_index = ref(null);
+  let delete_index = ref(null);
+  let list_index = ref(null);
 
-    methods: {
-      CloseNav() {
-        this.$root.ToggleMenu();
-      },
+  function CloseNav() {
+    this.$root.ToggleMenu();
+  }
 
-      SetMaxDate() {
-        const anni_date_input = document.getElementById("anni_date_input");
+  function SetMaxDate() {
+    const anni_date_input = document.getElementById("anni_date_input");
 
-        anni_date_input.max = new Date().toJSON().split("T")[0];
-      },
+    anni_date_input.max = new Date().toJSON().split("T")[0];
+  }
 
-      async FetchData() {
-        const loading_button = document.getElementById("loading_button");
+  async function FetchData() {
+    const loading_button = document.getElementById("loading_button");
 
-        const uuid_token = this.GetToken();
+    const uuid_token = GetToken();
 
-        const { data: events, error } = await supabase.from("events").select("*").eq("belongs_to", uuid_token);
+    const { data: events, error } = await supabase.from("events").select("*").eq("belongs_to", uuid_token);
 
-        if (events != null && error === null) {
-          for (let event in events) {
-            this.events_list.push(events[event]);
-          }
-        }
-
-        loading_button.classList.remove("is-loading");
-      },
-
-      ClearModal() {
-        const anni_name_input = document.getElementById("anni_name_input");
-        const anni_name_icon = document.getElementById("anni_name_icon");
-        const anni_name_helper = document.getElementById("anni_name_helper");
-
-        const anni_type_select = document.getElementById("anni_type_select");
-
-        const anni_date_input = document.getElementById("anni_date_input");
-        const anni_date_icon = document.getElementById("anni_date_icon");
-        const anni_date_helper = document.getElementById("anni_date_helper");
-
-        const anni_note_input = document.getElementById("anni_note_input");
-        const anni_note_helper = document.getElementById("anni_note_helper");
-
-        anni_name_input.classList.remove("is-success");
-        anni_name_input.classList.remove("is-danger");
-        anni_name_input.value = "";
-        anni_name_icon.classList.add("is-hidden");
-        anni_name_helper.innerHTML = "";
-
-        anni_type_select.value = "Birthday";
-
-        anni_date_input.classList.remove("is-success");
-        anni_date_input.classList.remove("is-danger");
-        anni_date_input.value = "";
-        anni_date_icon.classList.add("is-hidden");
-        anni_date_helper.innerHTML = "";
-
-        anni_note_input.classList.remove("is-success");
-        anni_note_input.classList.remove("is-danger");
-        anni_note_input.value = "";
-        anni_note_helper.innerHTML = "";
-      },
-
-      HandleModal(command) {
-        const modal = document.getElementById("modal");
-
-        if (command === "open") {
-          modal.classList.add("is-active");
-        } else {
-          modal.classList.remove("is-active");
-          this.ClearModal();
-          this.edit_mode = false;
-        }
-      },
-
-      InformUser(element, input, helper, icon, message, type) {
-        if (type === "BAD") {
-          input.classList.add("is-danger");
-
-          helper.innerHTML = message;
-          helper.classList.add("is-danger");
-
-          if (icon != "note") {
-            icon.classList.remove("is-hidden");
-          }
-
-          if (element === "name") {
-            this.anni_name_icon_value = "circle-exclamation";
-          }
-          if (element === "date") {
-            this.anni_date_icon_value = "circle-exclamation";
-          }
-        } else {
-          input.classList.remove("is-danger");
-          input.classList.add("is-success");
-
-          helper.innerHTML = message;
-          helper.classList.remove("is-danger");
-          helper.classList.add("is-success");
-
-          if (icon != "note") {
-            icon.classList.remove("is-hidden");
-          }
-
-          if (element === "name") {
-            this.anni_name_icon_value = "check";
-          }
-          if (element === "date") {
-            this.anni_date_icon_value = "check";
-          }
-        }
-      },
-
-      CheckUserData() {
-        const anni_name_input = document.getElementById("anni_name_input");
-        const anni_name_icon = document.getElementById("anni_name_icon");
-        const anni_name_helper = document.getElementById("anni_name_helper");
-
-        const anni_date_input = document.getElementById("anni_date_input");
-        const anni_date_icon = document.getElementById("anni_date_icon");
-        const anni_date_helper = document.getElementById("anni_date_helper");
-
-        const anni_note_input = document.getElementById("anni_note_input");
-        const anni_note_helper = document.getElementById("anni_note_helper");
-
-        let anni_name_good = false;
-        let anni_date_good = false;
-
-        if (anni_name_input.value.length === 0) {
-          this.InformUser(
-            "name",
-            anni_name_input,
-            anni_name_helper,
-            anni_name_icon,
-            "Don't leave this field empty.",
-            "BAD"
-          );
-        } else if (anni_name_input.value.length < 5) {
-          this.InformUser(
-            "name",
-            anni_name_input,
-            anni_name_helper,
-            anni_name_icon,
-            "Minimum number of characters is 5.",
-            "BAD"
-          );
-        } else if (anni_name_input.value.length > 150) {
-          this.InformUser(
-            "name",
-            anni_name_input,
-            anni_name_helper,
-            anni_name_icon,
-            "Maximum number of characters is 150.",
-            "BAD"
-          );
-        } else {
-          this.InformUser(
-            "name",
-            anni_name_input,
-            anni_name_helper,
-            anni_name_icon,
-            "Name is looking good.",
-            "GOOD"
-          );
-          anni_name_good = true;
-        }
-
-        if (anni_date_input.value.length === 0) {
-          this.InformUser(
-            "date",
-            anni_date_input,
-            anni_date_helper,
-            anni_date_icon,
-            "Don't leave this field empty.",
-            "BAD"
-          );
-        } else if (anni_date_input.value < anni_date_input.min) {
-          this.InformUser(
-            "date",
-            anni_date_input,
-            anni_date_helper,
-            anni_date_icon,
-            "Earliest date you can set is 1920-01-01 (YYYY-MM-DD).",
-            "BAD"
-          );
-        } else if (anni_date_input.value > anni_date_input.max) {
-          this.InformUser(
-            "date",
-            anni_date_input,
-            anni_date_helper,
-            anni_date_icon,
-            "Latest date you can set is today's date.",
-            "BAD"
-          );
-        } else {
-          this.InformUser(
-            "date",
-            anni_date_input,
-            anni_date_helper,
-            anni_date_icon,
-            "Date is looking good.",
-            "GOOD"
-          );
-          anni_date_good = true;
-        }
-
-        if (anni_note_input.value.length > 300) {
-          this.InformUser(
-            "note",
-            anni_note_input,
-            anni_note_helper,
-            "note",
-            "Maximum number of characters is 300.",
-            "BAD"
-          );
-        } else {
-          anni_note_input.classList.remove("is-danger");
-          anni_note_input.innerHTML = "";
-        }
-
-        if (anni_name_good && anni_date_good) {
-          return true;
-        } else {
-          return false;
-        }
-      },
-
-      GetToken() {
-        const uuid_token_session = sessionStorage.getItem("annima_user_uuid");
-        const uuid_token_storage = localStorage.getItem("annima_user_uuid");
-
-        if (uuid_token_session != null) {
-          return uuid_token_session;
-        } else {
-          return uuid_token_storage;
-        }
-      },
-
-      async CreateEvent() {
-        if (this.CheckUserData()) {
-          this.sending_data = true;
-
-          const anni_name_input = document.getElementById("anni_name_input");
-          const anni_type_select = document.getElementById("anni_type_select");
-          const anni_date_input = document.getElementById("anni_date_input");
-          const anni_note_input = document.getElementById("anni_note_input");
-
-          const uuid_token = this.GetToken();
-
-          const { data, error } = await supabase.from("events").insert([
-            {
-              belongs_to: uuid_token,
-              name: anni_name_input.value,
-              type: anni_type_select.value,
-              date: anni_date_input.value,
-              note: anni_note_input.value,
-            },
-          ]);
-
-          this.events_list.push(data[0]);
-
-          if (error != null) {
-            console.log(error);
-          }
-
-          this.HandleModal("close");
-          this.sending_data = false;
-        } else {
-          this.sending_data = false;
-        }
-      },
-
-      PrepareForEventEditing(index) {
-        const anni_name_input = document.getElementById("anni_name_input");
-        const anni_type_select = document.getElementById("anni_type_select");
-        const anni_date_input = document.getElementById("anni_date_input");
-        const anni_note_input = document.getElementById("anni_note_input");
-
-        anni_name_input.value = this.events_list[index].name;
-        anni_type_select.value = this.events_list[index].type;
-        anni_date_input.value = this.events_list[index].date;
-        anni_note_input.value = this.events_list[index].note;
-
-        this.edit_mode = true;
-        this.delete_mode = false;
-        this.edit_index = index;
-        this.HandleModal("open");
-      },
-
-      async UpdateEvent() {
-        if (this.CheckUserData()) {
-          this.sending_data = true;
-
-          const anni_name_input = document.getElementById("anni_name_input");
-          const anni_type_select = document.getElementById("anni_type_select");
-          const anni_date_input = document.getElementById("anni_date_input");
-          const anni_note_input = document.getElementById("anni_note_input");
-
-          const uuid_token = this.GetToken();
-
-          const { data, error } = await supabase
-            .from("events")
-            .update({
-              belongs_to: uuid_token,
-              name: anni_name_input.value,
-              type: anni_type_select.value,
-              date: anni_date_input.value,
-              note: anni_note_input.value,
-            })
-            .eq("id", this.events_list[this.edit_index].id);
-
-          if (error != null) {
-            console.log(error);
-          }
-
-          this.events_list[this.edit_index] = data[0];
-
-          this.edit_mode = false;
-          this.edit_index = null;
-          this.sending_data = false;
-          this.HandleModal("close");
-        } else {
-          this.sending_data = false;
-        }
-      },
-
-      HandleDeleteModal(command, index) {
-        const modal = document.getElementById("delete_modal");
-
-        if (command === "open") {
-          this.delete_index = this.events_list[index].id;
-          this.list_index = index;
-          modal.classList.add("is-active");
-        } else {
-          this.delete_index = null;
-          this.list_index = null;
-          modal.classList.remove("is-active");
-        }
-      },
-
-      async DeleteEvent() {
-        const { data, error } = await supabase.from("events").delete().eq("id", this.delete_index);
-
-        if (error != null) {
-          console.log(error);
-        }
-
-        this.events_list.splice(this.list_index, 1);
-        this.HandleDeleteModal("close");
-      },
-
-      CheckIfUserIsNotLoggedIn() {
-        const uuid_token_session = sessionStorage.getItem("annima_user_uuid");
-        const uuid_token_storage = localStorage.getItem("annima_user_uuid");
-
-        if (uuid_token_session == null || uuid_token_storage == null) {
-          this.$router.push("/login");
-          return true;
-        } else {
-          return false;
-        }
-      },
-    },
-
-    mounted() {
-      this.CloseNav();
-      if (!this.CheckIfUserIsNotLoggedIn()) {
-        this.SetMaxDate();
-        this.FetchData();
+    if (events != null && error === null) {
+      for (let event in events) {
+        events_list.push(events[event]);
       }
-    },
-  };
+    }
+
+    loading_button.classList.remove("is-loading");
+  }
+
+  function ClearModal() {
+    const anni_name_input = document.getElementById("anni_name_input");
+    const anni_name_icon = document.getElementById("anni_name_icon");
+    const anni_name_helper = document.getElementById("anni_name_helper");
+
+    const anni_type_select = document.getElementById("anni_type_select");
+
+    const anni_date_input = document.getElementById("anni_date_input");
+    const anni_date_icon = document.getElementById("anni_date_icon");
+    const anni_date_helper = document.getElementById("anni_date_helper");
+
+    const anni_note_input = document.getElementById("anni_note_input");
+    const anni_note_helper = document.getElementById("anni_note_helper");
+
+    anni_name_input.classList.remove("is-success");
+    anni_name_input.classList.remove("is-danger");
+    anni_name_input.value = "";
+    anni_name_icon.classList.add("is-hidden");
+    anni_name_helper.innerHTML = "";
+
+    anni_type_select.value = "Birthday";
+
+    anni_date_input.classList.remove("is-success");
+    anni_date_input.classList.remove("is-danger");
+    anni_date_input.value = "";
+    anni_date_icon.classList.add("is-hidden");
+    anni_date_helper.innerHTML = "";
+
+    anni_note_input.classList.remove("is-success");
+    anni_note_input.classList.remove("is-danger");
+    anni_note_input.value = "";
+    anni_note_helper.innerHTML = "";
+  }
+
+  function HandleModal(command) {
+    const modal = document.getElementById("modal");
+
+    if (command === "open") {
+      modal.classList.add("is-active");
+    } else {
+      modal.classList.remove("is-active");
+      ClearModal();
+      edit_mode.value = false;
+    }
+  }
+
+  function InformUser(element, input, helper, icon, message, type) {
+    if (type === "BAD") {
+      input.classList.add("is-danger");
+
+      helper.innerHTML = message;
+      helper.classList.add("is-danger");
+
+      if (icon != "note") {
+        icon.classList.remove("is-hidden");
+      }
+
+      if (element === "name") {
+        anni_name_icon_value.value = "circle-exclamation";
+      }
+      if (element === "date") {
+        anni_date_icon_value.value = "circle-exclamation";
+      }
+    } else {
+      input.classList.remove("is-danger");
+      input.classList.add("is-success");
+
+      helper.innerHTML = message;
+      helper.classList.remove("is-danger");
+      helper.classList.add("is-success");
+
+      if (icon != "note") {
+        icon.classList.remove("is-hidden");
+      }
+
+      if (element === "name") {
+        anni_name_icon_value.value = "check";
+      }
+      if (element === "date") {
+        anni_date_icon_value.value = "check";
+      }
+    }
+  }
+
+  function CheckUserData() {
+    const anni_name_input = document.getElementById("anni_name_input");
+    const anni_name_icon = document.getElementById("anni_name_icon");
+    const anni_name_helper = document.getElementById("anni_name_helper");
+
+    const anni_date_input = document.getElementById("anni_date_input");
+    const anni_date_icon = document.getElementById("anni_date_icon");
+    const anni_date_helper = document.getElementById("anni_date_helper");
+
+    const anni_note_input = document.getElementById("anni_note_input");
+    const anni_note_helper = document.getElementById("anni_note_helper");
+
+    let anni_name_good = false;
+    let anni_date_good = false;
+
+    if (anni_name_input.value.length === 0) {
+      InformUser(
+        "name",
+        anni_name_input,
+        anni_name_helper,
+        anni_name_icon,
+        "Don't leave this field empty.",
+        "BAD"
+      );
+    } else if (anni_name_input.value.length < 5) {
+      InformUser(
+        "name",
+        anni_name_input,
+        anni_name_helper,
+        anni_name_icon,
+        "Minimum number of characters is 5.",
+        "BAD"
+      );
+    } else if (anni_name_input.value.length > 150) {
+      InformUser(
+        "name",
+        anni_name_input,
+        anni_name_helper,
+        anni_name_icon,
+        "Maximum number of characters is 150.",
+        "BAD"
+      );
+    } else {
+      InformUser("name", anni_name_input, anni_name_helper, anni_name_icon, "Name is looking good.", "GOOD");
+      anni_name_good = true;
+    }
+
+    if (anni_date_input.value.length === 0) {
+      InformUser(
+        "date",
+        anni_date_input,
+        anni_date_helper,
+        anni_date_icon,
+        "Don't leave this field empty.",
+        "BAD"
+      );
+    } else if (anni_date_input.value < anni_date_input.min) {
+      InformUser(
+        "date",
+        anni_date_input,
+        anni_date_helper,
+        anni_date_icon,
+        "Earliest date you can set is 1920-01-01 (YYYY-MM-DD).",
+        "BAD"
+      );
+    } else if (anni_date_input.value > anni_date_input.max) {
+      InformUser(
+        "date",
+        anni_date_input,
+        anni_date_helper,
+        anni_date_icon,
+        "Latest date you can set is today's date.",
+        "BAD"
+      );
+    } else {
+      InformUser("date", anni_date_input, anni_date_helper, anni_date_icon, "Date is looking good.", "GOOD");
+      anni_date_good = true;
+    }
+
+    if (anni_note_input.value.length > 300) {
+      InformUser(
+        "note",
+        anni_note_input,
+        anni_note_helper,
+        "note",
+        "Maximum number of characters is 300.",
+        "BAD"
+      );
+    } else {
+      anni_note_input.classList.remove("is-danger");
+      anni_note_input.innerHTML = "";
+    }
+
+    if (anni_name_good && anni_date_good) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  function GetToken() {
+    const uuid_token_session = sessionStorage.getItem("annima_user_uuid");
+    const uuid_token_storage = localStorage.getItem("annima_user_uuid");
+
+    if (uuid_token_session != null) {
+      return uuid_token_session;
+    } else {
+      return uuid_token_storage;
+    }
+  }
+
+  async function CreateEvent() {
+    if (CheckUserData()) {
+      sending_data.value = true;
+
+      const anni_name_input = document.getElementById("anni_name_input");
+      const anni_type_select = document.getElementById("anni_type_select");
+      const anni_date_input = document.getElementById("anni_date_input");
+      const anni_note_input = document.getElementById("anni_note_input");
+
+      const uuid_token = GetToken();
+
+      const { data, error } = await supabase.from("events").insert([
+        {
+          belongs_to: uuid_token,
+          name: anni_name_input.value,
+          type: anni_type_select.value,
+          date: anni_date_input.value,
+          note: anni_note_input.value,
+        },
+      ]);
+
+      events_list.push(data[0]);
+
+      if (error != null) {
+        console.log(error);
+      }
+
+      HandleModal("close");
+      sending_data.value = false;
+    } else {
+      sending_data.value = false;
+    }
+  }
+
+  function PrepareForEventEditing(index) {
+    const anni_name_input = document.getElementById("anni_name_input");
+    const anni_type_select = document.getElementById("anni_type_select");
+    const anni_date_input = document.getElementById("anni_date_input");
+    const anni_note_input = document.getElementById("anni_note_input");
+
+    anni_name_input.value = events_list[index].name;
+    anni_type_select.value = events_list[index].type;
+    anni_date_input.value = events_list[index].date;
+    anni_note_input.value = events_list[index].note;
+
+    edit_mode.value = true;
+    delete_mode = false;
+    edit_index.value = index;
+    HandleModal("open");
+  }
+
+  async function UpdateEvent() {
+    if (CheckUserData()) {
+      sending_data.value = true;
+
+      const anni_name_input = document.getElementById("anni_name_input");
+      const anni_type_select = document.getElementById("anni_type_select");
+      const anni_date_input = document.getElementById("anni_date_input");
+      const anni_note_input = document.getElementById("anni_note_input");
+
+      const uuid_token = GetToken();
+
+      const { data, error } = await supabase
+        .from("events")
+        .update({
+          belongs_to: uuid_token,
+          name: anni_name_input.value,
+          type: anni_type_select.value,
+          date: anni_date_input.value,
+          note: anni_note_input.value,
+        })
+        .eq("id", events_list[edit_index.value].id);
+
+      if (error != null) {
+        console.log(error);
+      }
+
+      events_list[edit_index.value] = data[0];
+
+      edit_mode.value = false;
+      edit_index.value = null;
+      sending_data.value = false;
+      HandleModal("close");
+    } else {
+      sending_data.value = false;
+    }
+  }
+
+  function HandleDeleteModal(command, index) {
+    const modal = document.getElementById("delete_modal");
+
+    if (command === "open") {
+      delete_index.value = events_list[index].id;
+      list_index.value = index;
+      modal.classList.add("is-active");
+    } else {
+      delete_index.value = null;
+      list_index.value = null;
+      modal.classList.remove("is-active");
+    }
+  }
+
+  async function DeleteEvent() {
+    const { data, error } = await supabase.from("events").delete().eq("id", delete_index.value);
+
+    if (error != null) {
+      console.log(error);
+    }
+
+    events_list.splice(list_index.value, 1);
+    HandleDeleteModal("close");
+  }
+
+  function CheckIfUserIsNotLoggedIn() {
+    const uuid_token_session = sessionStorage.getItem("annima_user_uuid");
+    const uuid_token_storage = localStorage.getItem("annima_user_uuid");
+
+    if (uuid_token_session == null || uuid_token_storage == null) {
+      this.$router.push("/login");
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  onMounted(() => {
+    CloseNav();
+    if (!CheckIfUserIsNotLoggedIn()) {
+      SetMaxDate();
+      FetchData();
+    }
+  });
 </script>
 
 <template>
@@ -507,8 +486,8 @@
       </section>
       <footer class="modal-card-foot">
         <button class="button" @click="HandleModal('close')">Close</button>
-        <button class="button is-success" @click="CreateEvent()" v-if="!edit_mode">Create</button>
-        <button class="button is-warning" @click="UpdateEvent()" v-if="edit_mode">Update</button>
+        <button class="button is-success" @click="CreateEvent" v-if="!edit_mode">Create</button>
+        <button class="button is-warning" @click="UpdateEvent" v-if="edit_mode">Update</button>
       </footer>
     </div>
   </div>
@@ -525,7 +504,7 @@
       </section>
       <footer class="modal-card-foot">
         <button class="button" @click="HandleDeleteModal('close')">Close</button>
-        <button class="button is-danger" @click="DeleteEvent()">Delete</button>
+        <button class="button is-danger" @click="DeleteEvent">Delete</button>
       </footer>
     </div>
   </div>

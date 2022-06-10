@@ -1,55 +1,48 @@
-<script>
+<script setup>
+  import { ref } from "vue";
   import { RouterLink, RouterView } from "vue-router";
 
-  export default {
-    data() {
-      return {
-        menu_active: false,
-        user_logged_in: false,
-      };
-    },
+  let menu_active = ref(false);
+  let user_logged_in = ref(false);
 
-    methods: {
-      SwapNavBar() {
-        const uuid_token_session = sessionStorage.getItem("annima_user_uuid");
-        const uuid_token_storage = localStorage.getItem("annima_user_uuid");
+  function SwapNavBar() {
+    const uuid_token_session = sessionStorage.getItem("annima_user_uuid");
+    const uuid_token_storage = localStorage.getItem("annima_user_uuid");
 
-        if (uuid_token_session != null || uuid_token_storage != null) {
-          this.user_logged_in = true;
-        } else {
-          this.user_logged_in = false;
-        }
-      },
+    if (uuid_token_session != null || uuid_token_storage != null) {
+      user_logged_in.value = true;
+    } else {
+      user_logged_in.value = false;
+    }
+  }
 
-      ToggleMenu(command) {
-        const menu_icon = document.getElementById("navbar-burger");
-        const menu_links = document.getElementById("navbar-menu");
+  function ToggleMenu(command) {
+    const menu_icon = document.getElementById("navbar-burger");
+    const menu_links = document.getElementById("navbar-menu");
 
-        if (command === 0) {
-          this.menu_active = !this.menu_active;
-        } else {
-          this.menu_active = false;
-        }
+    if (command === 0) {
+      menu_active.value = !menu_active.value;
+    } else {
+      menu_active.value = false;
+    }
 
-        if (this.menu_active) {
-          menu_icon.classList.add("is-active");
-          menu_links.classList.add("is-active");
-        } else {
-          menu_icon.classList.remove("is-active");
-          menu_links.classList.remove("is-active");
-        }
-      },
+    if (menu_active.value) {
+      menu_icon.classList.add("is-active");
+      menu_links.classList.add("is-active");
+    } else {
+      menu_icon.classList.remove("is-active");
+      menu_links.classList.remove("is-active");
+    }
+  }
 
-      LogoutUser() {
-        sessionStorage.removeItem("annima_user_uuid");
-        localStorage.removeItem("annima_user_uuid");
-        localStorage.removeItem("annima_signed-in_date");
+  function LogoutUser() {
+    sessionStorage.removeItem("annima_user_uuid");
+    localStorage.removeItem("annima_user_uuid");
+    localStorage.removeItem("annima_signed-in_date");
 
-        this.SwapNavBar();
-        this.$router.push("/login");
-      },
-    },
-  };
+    SwapNavBar();
+    this.$router.push("/login");
+  }
 </script>
 
 <template>
@@ -75,7 +68,7 @@
           <RouterLink class="navbar-item" to="/user/dashboard">Dashboard</RouterLink>
           <RouterLink class="navbar-item" to="/user/settings">Settings</RouterLink>
           <div class="navbar-item">
-            <button class="button is-light" @click="LogoutUser()">Logout</button>
+            <button class="button is-light" @click="LogoutUser">Logout</button>
           </div>
         </div>
       </div>

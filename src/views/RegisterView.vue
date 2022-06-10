@@ -1,273 +1,245 @@
-<script>
+<script setup>
+  import { ref, onMounted } from "vue";
   import { RouterLink } from "vue-router";
   import supabase from "../api";
 
-  export default {
-    data() {
-      return {
-        email_icon_value: "circle-exclamation",
-        password1_icon_value: "circle-exclamation",
-        password2_icon_value: "circle-exclamation",
-        sending_data: false,
-      };
-    },
+  let email_icon_value = ref("circle-exclamation");
+  let password1_icon_value = ref("circle-exclamation");
+  let password2_icon_value = ref("circle-exclamation");
+  let sending_data = ref(false);
 
-    methods: {
-      CloseNav() {
-        this.$root.ToggleMenu();
-      },
+  function CloseNav() {
+    this.$root.ToggleMenu();
+  }
 
-      HandleModal(command) {
-        const modal = document.getElementById("modal");
-        if (command === "open") {
-          modal.classList.add("is-active");
-        } else {
-          modal.classList.remove("is-active");
-        }
-      },
+  function HandleModal(command) {
+    const modal = document.getElementById("modal");
+    if (command === "open") {
+      modal.classList.add("is-active");
+    } else {
+      modal.classList.remove("is-active");
+    }
+  }
 
-      InformUser(element, input, helper, icon, message, type) {
-        if (type === "BAD") {
-          input.classList.add("is-danger");
+  function InformUser(element, input, helper, icon, message, type) {
+    if (type === "BAD") {
+      input.classList.add("is-danger");
 
-          helper.innerHTML = message;
-          helper.classList.add("is-danger");
+      helper.innerHTML = message;
+      helper.classList.add("is-danger");
 
-          icon.classList.remove("is-hidden");
+      icon.classList.remove("is-hidden");
 
-          switch (element) {
-            case "email":
-              this.email_icon_value = "circle-exclamation";
-              break;
-            case "password1":
-              this.password1_icon_value = "circle-exclamation";
-              break;
-            case "password2":
-              this.password2_icon_value = "circle-exclamation";
-              break;
-          }
-        } else {
-          input.classList.remove("is-danger");
-          input.classList.add("is-success");
+      switch (element) {
+        case "email":
+          email_icon_value.value = "circle-exclamation";
+          break;
+        case "password1":
+          password1_icon_value.value = "circle-exclamation";
+          break;
+        case "password2":
+          password2_icon_value.value = "circle-exclamation";
+          break;
+      }
+    } else {
+      input.classList.remove("is-danger");
+      input.classList.add("is-success");
 
-          helper.innerHTML = message;
-          helper.classList.remove("is-danger");
-          helper.classList.add("is-success");
+      helper.innerHTML = message;
+      helper.classList.remove("is-danger");
+      helper.classList.add("is-success");
 
-          switch (element) {
-            case "email":
-              this.email_icon_value = "check";
-              break;
-            case "password1":
-              this.password1_icon_value = "check";
-              break;
-            case "password2":
-              this.password2_icon_value = "check";
-              break;
-          }
-        }
-      },
+      switch (element) {
+        case "email":
+          email_icon_value.value = "check";
+          break;
+        case "password1":
+          password1_icon_value.value = "check";
+          break;
+        case "password2":
+          password2_icon_value.value = "check";
+          break;
+      }
+    }
+  }
 
-      CheckUserData() {
-        const email_input = document.getElementById("email_input");
-        const email_helper = document.getElementById("email_helper");
-        const email_icon = document.getElementById("email_icon");
+  function CheckUserData() {
+    const email_input = document.getElementById("email_input");
+    const email_helper = document.getElementById("email_helper");
+    const email_icon = document.getElementById("email_icon");
 
-        const password1_input = document.getElementById("password1_input");
-        const password1_helper = document.getElementById("password1_helper");
-        const password1_icon = document.getElementById("password1_icon");
+    const password1_input = document.getElementById("password1_input");
+    const password1_helper = document.getElementById("password1_helper");
+    const password1_icon = document.getElementById("password1_icon");
 
-        const password2_input = document.getElementById("password2_input");
-        const password2_helper = document.getElementById("password2_helper");
-        const password2_icon = document.getElementById("password2_icon");
+    const password2_input = document.getElementById("password2_input");
+    const password2_helper = document.getElementById("password2_helper");
+    const password2_icon = document.getElementById("password2_icon");
 
-        const toc_checkbox = document.getElementById("toc_checkbox");
-        const toc_helper = document.getElementById("toc_helper");
+    const toc_checkbox = document.getElementById("toc_checkbox");
+    const toc_helper = document.getElementById("toc_helper");
 
-        let email_good = false;
-        let password1_good = false;
-        let password2_good = false;
-        let toc_checked = false;
+    let email_good = false;
+    let password1_good = false;
+    let password2_good = false;
+    let toc_checked = false;
 
-        const email_regex = /[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/;
-        const email_regex_testing = email_regex.exec(email_input.value);
+    const email_regex = /[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/;
+    const email_regex_testing = email_regex.exec(email_input.value);
 
-        if (email_input.value.length === 0) {
-          this.InformUser(
-            "email",
-            email_input,
-            email_helper,
-            email_icon,
-            "Don't leave this field empty.",
-            "BAD"
-          );
-        } else if (email_input.value.length < 8) {
-          this.InformUser(
-            "email",
-            email_input,
-            email_helper,
-            email_icon,
-            "Email too short. Minimum number of characters is 8.",
-            "BAD"
-          );
-        } else if (email_input.value.length > 64) {
-          this.InformUser(
-            "email",
-            email_input,
-            email_helper,
-            email_icon,
-            "Email too long. Maximum number of characters is 64.",
-            "BAD"
-          );
-        } else if (!email_regex_testing) {
-          this.InformUser("email", email_input, email_helper, email_icon, "Not a valid email.", "BAD");
-        } else {
-          this.InformUser("email", email_input, email_helper, email_icon, "Email is good.", "GOOD");
-          email_good = true;
-        }
+    if (email_input.value.length === 0) {
+      InformUser("email", email_input, email_helper, email_icon, "Don't leave this field empty.", "BAD");
+    } else if (email_input.value.length < 8) {
+      InformUser(
+        "email",
+        email_input,
+        email_helper,
+        email_icon,
+        "Email too short. Minimum number of characters is 8.",
+        "BAD"
+      );
+    } else if (email_input.value.length > 64) {
+      InformUser(
+        "email",
+        email_input,
+        email_helper,
+        email_icon,
+        "Email too long. Maximum number of characters is 64.",
+        "BAD"
+      );
+    } else if (!email_regex_testing) {
+      InformUser("email", email_input, email_helper, email_icon, "Not a valid email.", "BAD");
+    } else {
+      InformUser("email", email_input, email_helper, email_icon, "Email is good.", "GOOD");
+      email_good = true;
+    }
 
-        const password_regex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/;
-        const password_regex_testing = password_regex.exec(password1_input.value);
+    const password_regex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/;
+    const password_regex_testing = password_regex.exec(password1_input.value);
 
-        if (password1_input.value.length === 0) {
-          this.InformUser(
-            "password1",
-            password1_input,
-            password1_helper,
-            password1_icon,
-            "Don't leave this field empty.",
-            "BAD"
-          );
-        } else if (password1_input.value.length < 8) {
-          this.InformUser(
-            "password1",
-            password1_input,
-            password1_helper,
-            password1_icon,
-            "Password too short. Minimum number of characters is 8.",
-            "BAD"
-          );
-        } else if (password1_input.value.length > 64) {
-          this.InformUser(
-            "password1",
-            password1_input,
-            password1_helper,
-            password1_icon,
-            "Password too long. Maximum number of characters is 64.",
-            "BAD"
-          );
-        } else if (!password_regex_testing) {
-          this.InformUser(
-            "password1",
-            password1_input,
-            password1_helper,
-            password1_icon,
-            "Invalid characters. Enter at least one upper case English letter, one lower case English letter, one number and one special character.",
-            "BAD"
-          );
-        } else {
-          this.InformUser(
-            "password1",
-            password1_input,
-            password1_helper,
-            password1_icon,
-            "Password is good.",
-            "GOOD"
-          );
-          password1_good = true;
-        }
+    if (password1_input.value.length === 0) {
+      InformUser(
+        "password1",
+        password1_input,
+        password1_helper,
+        password1_icon,
+        "Don't leave this field empty.",
+        "BAD"
+      );
+    } else if (password1_input.value.length < 8) {
+      InformUser(
+        "password1",
+        password1_input,
+        password1_helper,
+        password1_icon,
+        "Password too short. Minimum number of characters is 8.",
+        "BAD"
+      );
+    } else if (password1_input.value.length > 64) {
+      InformUser(
+        "password1",
+        password1_input,
+        password1_helper,
+        password1_icon,
+        "Password too long. Maximum number of characters is 64.",
+        "BAD"
+      );
+    } else if (!password_regex_testing) {
+      InformUser(
+        "password1",
+        password1_input,
+        password1_helper,
+        password1_icon,
+        "Invalid characters. Enter at least one upper case English letter, one lower case English letter, one number and one special character.",
+        "BAD"
+      );
+    } else {
+      InformUser("password1", password1_input, password1_helper, password1_icon, "Password is good.", "GOOD");
+      password1_good = true;
+    }
 
-        if (password2_input.value.length === 0) {
-          this.InformUser(
-            "password2",
-            password2_input,
-            password2_helper,
-            password2_icon,
-            "Don't leave this field empty.",
-            "BAD"
-          );
-        } else if (password2_input.value !== password1_input.value) {
-          this.InformUser(
-            "password2",
-            password2_input,
-            password2_helper,
-            password2_icon,
-            "Passwords are not the same.",
-            "BAD"
-          );
-        } else {
-          this.InformUser(
-            "password2",
-            password2_input,
-            password2_helper,
-            password2_icon,
-            "Passwords match.",
-            "GOOD"
-          );
-          password2_good = true;
-        }
+    if (password2_input.value.length === 0) {
+      InformUser(
+        "password2",
+        password2_input,
+        password2_helper,
+        password2_icon,
+        "Don't leave this field empty.",
+        "BAD"
+      );
+    } else if (password2_input.value !== password1_input.value) {
+      InformUser(
+        "password2",
+        password2_input,
+        password2_helper,
+        password2_icon,
+        "Passwords are not the same.",
+        "BAD"
+      );
+    } else {
+      InformUser("password2", password2_input, password2_helper, password2_icon, "Passwords match.", "GOOD");
+      password2_good = true;
+    }
 
-        if (toc_checkbox.checked === false) {
-          toc_helper.innerHTML = "You have to agree in order to proceed.";
-          toc_helper.classList.add("is-danger");
-        } else {
-          toc_helper.innerHTML = "You have agreed.";
-          toc_helper.classList.remove("is-danger");
-          toc_helper.classList.add("is-success");
-          toc_checked = true;
-        }
+    if (!toc_checkbox.checked) {
+      toc_helper.innerHTML = "You have to agree in order to proceed.";
+      toc_helper.classList.add("is-danger");
+    } else {
+      toc_helper.innerHTML = "You have agreed.";
+      toc_helper.classList.remove("is-danger");
+      toc_helper.classList.add("is-success");
+      toc_checked = true;
+    }
 
-        if (email_good && password1_good && password2_good && toc_checked) {
-          return true;
-        } else {
-          return false;
-        }
-      },
+    if (email_good && password1_good && password2_good && toc_checked) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
-      async RegisterUser() {
-        const submit_btn = document.getElementById("submit_btn");
-        submit_btn.classList.add("is-loading");
+  async function RegisterUser() {
+    const submit_btn = document.getElementById("submit_btn");
+    submit_btn.classList.add("is-loading");
 
-        if (this.CheckUserData()) {
-          this.sending_data = true;
+    if (CheckUserData()) {
+      sending_data.value = true;
 
-          const email_input = document.getElementById("email_input");
-          const password1_input = document.getElementById("password1_input");
+      const email_input = document.getElementById("email_input");
+      const password1_input = document.getElementById("password1_input");
 
-          const { user, error } = await supabase.auth.signUp({
-            email: email_input.value,
-            password: password1_input.value,
-          });
+      const { user, error } = await supabase.auth.signUp({
+        email: email_input.value,
+        password: password1_input.value,
+      });
 
-          if (user != "" && error === null) {
-            localStorage.removeItem("supabase.auth.token");
-            this.HandleModal("open");
-          } else {
-            submit_btn.classList.remove("is-loading");
-            console.log(error);
-          }
-        } else {
-          submit_btn.classList.remove("is-loading");
-          this.sending_data = false;
-        }
-      },
+      if (user != "" && error === null) {
+        localStorage.removeItem("supabase.auth.token");
+        HandleModal("open");
+      } else {
+        submit_btn.classList.remove("is-loading");
+        console.log(error);
+      }
+    } else {
+      submit_btn.classList.remove("is-loading");
+      sending_data.value = false;
+    }
+  }
 
-      CheckIfUserIsLoggedIn() {
-        const uuid_token_session = sessionStorage.getItem("annima_user_uuid");
-        const uuid_token_storage = localStorage.getItem("annima_user_uuid");
+  function CheckIfUserIsLoggedIn() {
+    const uuid_token_session = sessionStorage.getItem("annima_user_uuid");
+    const uuid_token_storage = localStorage.getItem("annima_user_uuid");
 
-        if (uuid_token_session != null || uuid_token_storage != null) {
-          this.$root.SwapNavBar();
-          this.$router.push("/user/dashboard");
-        }
-      },
-    },
+    if (uuid_token_session != null || uuid_token_storage != null) {
+      this.$root.SwapNavBar();
+      this.$router.push("/user/dashboard");
+    }
+  }
 
-    mounted() {
-      this.CloseNav();
-      this.CheckIfUserIsLoggedIn();
-    },
-  };
+  onMounted(() => {
+    CloseNav();
+    CheckIfUserIsLoggedIn();
+  });
 </script>
 
 <template>
@@ -347,7 +319,7 @@
         </div>
         <div class="field is-grouped mt-5">
           <div class="control">
-            <button class="button is-link" @click="RegisterUser()" :disabled="sending_data" id="submit_btn">
+            <button class="button is-link" @click="RegisterUser" :disabled="sending_data" id="submit_btn">
               Submit
             </button>
           </div>

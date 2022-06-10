@@ -1,31 +1,29 @@
-<script>
-  export default {
-    methods: {
-      CloseNav() {
-        this.$root.ToggleMenu();
-      },
+<script setup>
+  import { onMounted } from "vue";
 
-      CheckIfUserIsNotLoggedIn() {
-        const uuid_token_session = sessionStorage.getItem("annima_user_uuid");
-        const uuid_token_storage = localStorage.getItem("annima_user_uuid");
+  function CloseNav() {
+    this.$root.ToggleMenu();
+  }
 
-        if (uuid_token_session == null || uuid_token_storage == null) {
-          this.$router.push("/login");
-          return true;
-        } else {
-          return false;
-        }
-      },
-    },
+  function CheckIfUserIsNotLoggedIn() {
+    const uuid_token_session = sessionStorage.getItem("annima_user_uuid");
+    const uuid_token_storage = localStorage.getItem("annima_user_uuid");
 
-    mounted() {
-      this.CloseNav();
-      if (!this.CheckIfUserIsNotLoggedIn()) {
-        console.log("WORKS!");
-        //this.FetchUsersData();
-      }
-    },
-  };
+    if (uuid_token_session === null || uuid_token_storage === null) {
+      this.$router.push("/login");
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  onMounted(() => {
+    CloseNav();
+    if (!CheckIfUserIsNotLoggedIn()) {
+      console.log("WORKS!");
+      //FetchUsersData();
+    }
+  });
 </script>
 
 <template>
