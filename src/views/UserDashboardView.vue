@@ -358,6 +358,7 @@
   onMounted(() => {
     SetEventsMaxDate();
     FetchDataFromDatabase();
+    emit("NavBarLoggedIn");
   });
 </script>
 

@@ -91,7 +91,7 @@
   </header>
 
   <main class="is-lowered-down">
-    <RouterView />
+    <RouterView @NavBarLoggedIn="NavBarLoggedIn" />
   </main>
 </template>
 
