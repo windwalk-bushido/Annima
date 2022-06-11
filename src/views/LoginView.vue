@@ -108,8 +108,6 @@
       });
 
       if (user !== null && error === null) {
-        localStorage.removeItem("supabase.auth.token");
-
         // kul = Keep User Logged in
         const kul_checkbox = document.getElementById("kul_checkbox") as HTMLFormElement;
 

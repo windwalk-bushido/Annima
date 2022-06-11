@@ -247,7 +247,6 @@
       });
 
       if (user !== null && error === null) {
-        localStorage.removeItem("supabase.auth.token");
         ToggleModal("open");
       } else {
         submit_button.classList.remove("is-loading");

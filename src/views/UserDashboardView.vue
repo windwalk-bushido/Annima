@@ -46,10 +46,14 @@
 
     const { data: events, error } = await supabase.from("events").select("*").eq("belongs_to", uuid_token);
 
-    if (events !== null && error === null) {
+    if (events !== null) {
       for (let event in events) {
         event_list.value.push(events[event]);
       }
+    }
+
+    if (error !== null) {
+      console.log(error);
     }
 
     loading_button.classList.remove("is-loading");
