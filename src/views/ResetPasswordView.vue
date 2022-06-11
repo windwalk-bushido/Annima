@@ -38,21 +38,22 @@
 
       const email_input = document.getElementById("email_input") as HTMLFormElement;
 
-      const { user, error } = await supabase.auth.signIn({
+      const { user, error }: any = await supabase.auth.signIn({
         email: email_input.value,
       });
 
-      if (error === null) {
-        localStorage.setItem("reset_token", "true");
-        localStorage.setItem("email_address", email_input.value);
+      if (user !== null) {
+        console.log(user);
+        localStorage.setItem("supabase.auth.token", user);
       }
 
-      submit_button.classList.remove("is-loading");
-      is_data_being_sent.value = false;
-    } else {
-      submit_button.classList.remove("is-loading");
-      is_data_being_sent.value = false;
+      if (error !== null) {
+        console.log(error);
+      }
     }
+
+    submit_button.classList.remove("is-loading");
+    is_data_being_sent.value = false;
   }
 </script>
 

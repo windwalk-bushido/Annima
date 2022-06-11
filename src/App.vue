@@ -37,7 +37,6 @@
   function LogoutUser() {
     sessionStorage.removeItem("annima_user_uuid");
     localStorage.removeItem("annima_user_uuid");
-    localStorage.removeItem("annima_signed-in_date");
     localStorage.removeItem("supabase.auth.token");
 
     NavBarNormal();

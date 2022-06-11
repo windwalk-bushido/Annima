@@ -168,7 +168,10 @@
     if (CheckUsersInputtedData()) {
       is_data_being_sent.value = true;
 
-      const email_input: any = localStorage.getItem("email_address");
+      const supabase_token_dirty: any = localStorage.getItem("supabase.auth.token");
+      const supabase_token = JSON.parse(supabase_token_dirty);
+
+      const email_input = supabase_token.currentSession.user.email;
       const password1_input = document.getElementById("password1_input") as HTMLFormElement;
 
       const { user, error } = await supabase.auth.update({
@@ -177,18 +180,17 @@
       });
 
       if (user !== null) {
-        localStorage.removeItem("email_address");
-        localStorage.removeItem("reset_token");
+        sessionStorage.setItem("annima_user_uuid", supabase_token.currentSession.user.id);
         ToggleModal("open");
-      } else {
-        submit_button.classList.remove("is-loading");
-        is_data_being_sent.value = false;
+      }
+
+      if (error !== null) {
         console.log(error);
       }
-    } else {
-      submit_button.classList.remove("is-loading");
-      is_data_being_sent.value = false;
     }
+
+    submit_button.classList.remove("is-loading");
+    is_data_being_sent.value = false;
   }
 </script>
 
