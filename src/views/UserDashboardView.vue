@@ -20,6 +20,14 @@
     event_date_input.max = new Date().toJSON().split("T")[0];
   }
 
+  function FormatDate(input: string) {
+    const splitted_date = input.split("-");
+    const year = splitted_date[0];
+    const month = splitted_date[1];
+    const day = splitted_date[2];
+    return day + ". " + month + ". " + year + ".";
+  }
+
   function GetUsersToken() {
     const uuid_token_session = sessionStorage.getItem("annima_user_uuid");
     const uuid_token_storage = localStorage.getItem("annima_user_uuid");
@@ -384,7 +392,7 @@
               </div>
               <div class="media-content">
                 <p class="title is-4">{{ event.name }}</p>
-                <p class="subtitle is-6">{{ event.date }}</p>
+                <p class="subtitle is-6">{{ FormatDate(event.date) }}</p>
               </div>
             </div>
             <div class="content" v-if="event.note !== ''">

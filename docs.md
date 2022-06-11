@@ -20,9 +20,6 @@ TBM = To be made
 
 ### To do (Priorities)
 
-- Format Date properly (DD. MM. YYYY)
-
-- FIX SUPABASE POLICIES
 - Make Settings page
 - Make 'Forgot password' page
 
