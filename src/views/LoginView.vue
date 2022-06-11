@@ -136,14 +136,11 @@
           error_message.value = error.message;
           console.log(error);
         }
-
-        submit_button.classList.remove("is-loading");
-        is_data_being_sent.value = false;
       }
-    } else {
-      submit_button.classList.remove("is-loading");
-      is_data_being_sent.value = false;
     }
+
+    submit_button.classList.remove("is-loading");
+    is_data_being_sent.value = false;
   }
 
   function CheckIfUserWantsToChangePassword() {

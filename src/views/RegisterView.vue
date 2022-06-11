@@ -246,17 +246,17 @@
         password: password1_input.value,
       });
 
-      if (user !== null && error === null) {
+      if (user !== null) {
         ToggleModal("open");
-      } else {
-        submit_button.classList.remove("is-loading");
-        is_data_being_sent.value = false;
+      }
+
+      if (error !== null) {
         console.log(error);
       }
-    } else {
-      submit_button.classList.remove("is-loading");
-      is_data_being_sent.value = false;
     }
+
+    submit_button.classList.remove("is-loading");
+    is_data_being_sent.value = false;
   }
 </script>
 

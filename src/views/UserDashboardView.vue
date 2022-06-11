@@ -282,8 +282,6 @@
 
       ToggleModal("close");
       is_data_being_sent.value = false;
-    } else {
-      is_data_being_sent.value = false;
     }
   }
 
@@ -337,8 +335,6 @@
       edit_index.value = -1;
       is_data_being_sent.value = false;
       ToggleModal("close");
-    } else {
-      is_data_being_sent.value = false;
     }
   }
 
