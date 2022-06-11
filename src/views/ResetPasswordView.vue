@@ -38,7 +38,9 @@
 
       const email_input = document.getElementById("email_input") as HTMLFormElement;
 
-      const { data, error } = await supabase.auth.api.resetPasswordForEmail(email_input.value);
+      const { user, error } = await supabase.auth.signIn({
+        email: email_input.value,
+      });
 
       if (error === null) {
         localStorage.setItem("reset_token", "true");

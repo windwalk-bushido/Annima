@@ -250,6 +250,7 @@
         ToggleModal("open");
       } else {
         submit_button.classList.remove("is-loading");
+        is_data_being_sent.value = false;
         console.log(error);
       }
     } else {

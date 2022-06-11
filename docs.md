@@ -14,15 +14,13 @@ TBM = To be made
 - Register
 - Login
 - Forgot Password
-- New Password (TBM)
 - Dashboard (stats & search)
-- Settings (edit password and/or email) (TBM)
+- Settings (edit password and/or email)
 - 404 (TBM)
 
 ### To do (Priorities)
 
-- Make Settings page
-- Make New Password page
+- Make Settings page (change email func.)
 
 - Use Pinia (some variables needs to be global... e.g. to reduce number of API calls, event_list)
 - Reduce number of variables and use v-model as much as possible

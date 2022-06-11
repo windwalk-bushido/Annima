@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { ref, defineEmits } from "vue";
+  import { ref, defineEmits, onMounted } from "vue";
   import { RouterLink, useRouter } from "vue-router";
   import supabase from "../api";
 
@@ -145,6 +145,18 @@
       is_data_being_sent.value = false;
     }
   }
+
+  function CheckIfUserWantsToChangePassword() {
+    const supabase_token = localStorage.getItem("supabase.auth.token");
+
+    if (supabase_token !== null) {
+      router.push({ name: "settings" });
+    }
+  }
+
+  onMounted(() => {
+    CheckIfUserWantsToChangePassword();
+  });
 </script>
 
 <template>
