@@ -5,6 +5,8 @@ import RegisterView from "../views/RegisterView.vue";
 import LoginView from "../views/LoginView.vue";
 import UserDashboard from "../views/UserDashboardView.vue";
 import UserSettings from "../views/UserSettingsView.vue";
+import ResetPassword from "../views/ResetPasswordView.vue";
+import NewPassword from "../views/NewPasswordView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -39,6 +41,16 @@ const router = createRouter({
       name: "settings",
       component: UserSettings,
     },
+    {
+      path: "/reset-password",
+      name: "reset-password",
+      component: ResetPassword,
+    },
+    {
+      path: "/new-password",
+      name: "new-password",
+      component: NewPassword,
+    },
     /*
     {
       path: "/about",
@@ -65,12 +77,31 @@ function CheckIfUserIsLoggedIn() {
   }
 }
 
+function CheckIfUserHasResetToken() {
+  const reset_token = localStorage.getItem("reset_token");
+  const email_address = localStorage.getItem("email_address");
+
+  if (reset_token !== null && email_address !== null) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 router.beforeEach(async (to, from) => {
+  if (to.name === "new-password") {
+    if (CheckIfUserHasResetToken()) {
+      return { name: "new-password" };
+    } else {
+      return { name: "reset-password" };
+    }
+  }
+
   CheckIfUserIsLoggedIn();
   if (is_user_logged_in === false && (to.name === "dashboard" || to.name === "settings")) {
     return { name: "login" };
   }
-  if (is_user_logged_in && (to.name === "login" || to.name === "register")) {
+  if (is_user_logged_in && (to.name === "login" || to.name === "register" || to.name === "reset-password")) {
     return { name: "dashboard" };
   }
 });

@@ -193,6 +193,9 @@
           </div>
           <p class="help" id="password_helper"></p>
         </div>
+        <div class="field">
+          <RouterLink class="" to="/reset-password">Forgot password?</RouterLink>
+        </div>
         <div class="field mt-5">
           <div class="control">
             <label class="checkbox">
