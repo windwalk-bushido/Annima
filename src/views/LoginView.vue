@@ -40,6 +40,7 @@
       input.classList.remove("is-danger");
       helper.innerHTML = "";
       helper.classList.remove("is-danger");
+      icon.classList.remove("is-hidden");
       element === "email" ? (email_input_icon.value = "check") : (password_input_icon.value = "check");
     }
   }
@@ -66,6 +67,7 @@
         "BAD"
       );
     } else {
+      InformUserAboutInputtedData("email", email_input, email_helper, email_icon, "", "GOOD");
       is_email_good = true;
     }
 
@@ -79,6 +81,7 @@
         "BAD"
       );
     } else {
+      InformUserAboutInputtedData("password", password_input, password_helper, password_icon, "", "GOOD");
       is_password_good = true;
     }
 
@@ -111,7 +114,6 @@
         const kul_checkbox = document.getElementById("kul_checkbox") as HTMLFormElement;
 
         if (kul_checkbox.checked) {
-          localStorage.setItem("annima_signed-in_date", new Date().toJSON().split("T")[0]);
           localStorage.setItem("annima_user_uuid", user.id);
         } else {
           sessionStorage.setItem("annima_user_uuid", user.id);
@@ -197,7 +199,7 @@
           <div class="control">
             <label class="checkbox">
               <input type="checkbox" id="kul_checkbox" :disabled="is_data_being_sent" />
-              Keep me logged in for 7 days
+              Keep me logged in
             </label>
           </div>
         </div>

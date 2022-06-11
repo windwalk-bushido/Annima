@@ -20,18 +20,14 @@ TBM = To be made
 
 ### To do (Priorities)
 
-- Use Pinia (some variables needs to be global... e.g. to reduce number of API calls, event_list)
-- Reduce number of variables (by taking them out of the functions) and use v-model as much as possible
-
-- Login and Register pages should trigger "navbar switch" on some other lifecycle hooks (it's not 'mount')
-- Save user inputs on Login/Register/F.Password pages (before unmounting them) in sessionStorage (load them when mounting the pages)
-
-- Dashboard should check if the user's '7 day' period is over, then redirect it to "Login" page (with an error message);
 - Format Date properly (DD. MM. YYYY)
 
 - FIX SUPABASE POLICIES
 - Make Settings page
 - Make 'Forgot password' page
+
+- Use Pinia (some variables needs to be global... e.g. to reduce number of API calls, event_list)
+- Reduce number of variables and use v-model as much as possible
 - Implement ES6 stuff like Try Catch, Arrow functions, etc. (if needed)
 
 ### To do (General)

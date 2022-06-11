@@ -52,6 +52,8 @@
       helper.classList.remove("is-danger");
       helper.classList.add("is-success");
 
+      icon.classList.remove("is-hidden");
+
       switch (element) {
         case "email":
           email_input_icon.value = "check";
@@ -120,7 +122,14 @@
     } else if (!email_regex_testing) {
       InformUserAboutInputtedData("email", email_input, email_helper, email_icon, "Not a valid email.", "BAD");
     } else {
-      InformUserAboutInputtedData("email", email_input, email_helper, email_icon, "Email is good.", "GOOD");
+      InformUserAboutInputtedData(
+        "email",
+        email_input,
+        email_helper,
+        email_icon,
+        "Email is looking good.",
+        "GOOD"
+      );
       is_email_good = true;
     }
 
@@ -169,7 +178,7 @@
         password1_input,
         password1_helper,
         password1_icon,
-        "Password is good.",
+        "Password is looking good.",
         "GOOD"
       );
       is_password1_good = true;
