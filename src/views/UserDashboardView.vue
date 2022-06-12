@@ -387,7 +387,19 @@
             <div class="media">
               <div class="media-left">
                 <figure class="image is-64x64">
-                  <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image" />
+                  <img src="../assets/birthday.png" alt="Placeholder image" v-if="event.type === 'Birthday'" />
+                  <img
+                    src="../assets/anniversary.png"
+                    alt="Placeholder image"
+                    v-if="event.type === 'Anniversary'"
+                  />
+                  <img src="../assets/name-day.png" alt="Placeholder image" v-if="event.type === 'Name day'" />
+                  <img
+                    src="../assets/death-anniversary.png"
+                    alt="Placeholder image"
+                    v-if="event.type === 'Death anniversary'"
+                  />
+                  <img src="../assets/other.png" alt="Placeholder image" v-if="event.type === 'Other'" />
                 </figure>
               </div>
               <div class="media-content">
@@ -451,7 +463,7 @@
                 <option selected>Birthday</option>
                 <option>Anniversary</option>
                 <option>Name day</option>
-                <option>Death eventversary</option>
+                <option>Death anniversary</option>
                 <option>Other</option>
               </select>
             </div>

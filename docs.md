@@ -20,8 +20,8 @@ TBM = To be made
 
 ### To do (Priorities)
 
-- Use Pinia (some variables needs to be global... e.g. to reduce number of API calls, event_list)
-- Reduce number of variables and use v-model as much as possible
+- Some variables & functions needs to be global and use v-model as much as possible
+- Reduce number of API calls (e.g. event_list)
 - Implement ES6 stuff like Try Catch, Arrow functions, etc. (if needed)
 
 ### To do (General)
@@ -29,7 +29,6 @@ TBM = To be made
 - Add captcha on Login/Register/ForgotPassword
 - Notifications should be displayed in toasts (Dashboard & Settings)
 - All buttons should be centered
-- Make images for types of events
 - Center (and make it) 'Loading' modal on Dashboard page;
 - "Check" icons should be displayed when inputted data is good (All pages)
 
