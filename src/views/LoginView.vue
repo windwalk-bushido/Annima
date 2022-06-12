@@ -213,8 +213,8 @@
             </label>
           </div>
         </div>
-        <div class="field is-grouped mt-5">
-          <div class="control">
+        <div class="field is-grouped mt-6">
+          <div class="control is-flex is-flex-direction-row is-justify-content-center spread">
             <button
               class="button is-link"
               @click="LoginUser()"
@@ -236,7 +236,7 @@
         <p class="modal-card-title">Error: {{ error_message }}</p>
         <button class="delete" aria-label="close" @click="ToggleModal('close')"></button>
       </header>
-      <footer class="modal-card-foot">
+      <footer class="modal-card-foot is-flex is-flex-direction-row is-justify-content-center">
         <RouterLink class="button" to="/register">Sign up</RouterLink>
         <button class="button is-primary" @click="ToggleModal('close')">Try again</button>
       </footer>

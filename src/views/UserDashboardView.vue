@@ -374,8 +374,10 @@
   <main>
     <div class="is-mobile mt-4">
       <div class="column is-10 is-offset-1">
-        <h1 class="is-size-2 has-text-centered">Dashboard</h1>
-        <button class="button is-white is-large is-loading mb-4" disabled id="loading_button" />
+        <div class="is-flex is-flex-direction-column is-justify-content-center">
+          <h1 class="is-size-2 has-text-centered">Dashboard</h1>
+          <button class="button is-white is-large is-loading mb-4" disabled id="loading_button" />
+        </div>
 
         <div class="has-text-centered mt-6" v-if="event_list.length === 0">
           <Icon icon="face-sad-cry" class="is-size-1" />
@@ -411,21 +413,23 @@
               <div class="notification p-4">{{ event.note }}</div>
             </div>
           </div>
-          <footer class="card-footer p-4 is-flex-direction-row is-justify-content-end">
-            <button class="button is-warning mr-3" @click="PrepareForEventEditing(index)">
-              <Icon icon="pen" class="mr-2" />
-              Edit
-            </button>
+          <footer class="card-footer p-4 is-flex is-flex-direction-row is-justify-content-center">
             <button class="button is-danger" @click="ToggleDeleteModal('open', index)">
               <Icon icon="trash" class="mr-2" />
               Delete
             </button>
+            <button class="button is-warning ml-3" @click="PrepareForEventEditing(index)">
+              <Icon icon="pen" class="mr-2" />
+              Edit
+            </button>
           </footer>
         </div>
 
-        <button class="button is-primary is-rounded main_button" @click="ToggleModal('open')">
-          <Icon icon="plus" class="is-size-4" />
-        </button>
+        <div class="is-flex is-flex-direction-row is-justify-content-center spread p-4 main-button">
+          <button class="button is-primary is-rounded" @click="ToggleModal('open')">
+            <Icon icon="plus" class="is-size-4" />
+          </button>
+        </div>
       </div>
     </div>
   </main>
@@ -500,7 +504,7 @@
           <p class="help" id="event_note_helper"></p>
         </div>
       </section>
-      <footer class="modal-card-foot">
+      <footer class="modal-card-foot is-flex is-flex-direction-row is-justify-content-center">
         <button class="button" @click="ToggleModal('close')">Close</button>
         <button class="button is-success" @click="CreateEvent()" v-if="!is_edit_mode_on">Create</button>
         <button class="button is-warning" @click="UpdateEvent()" v-if="is_edit_mode_on">Update</button>
@@ -518,7 +522,7 @@
       <section class="modal-card-body">
         <h3 class="is-size-5">Are you sure?</h3>
       </section>
-      <footer class="modal-card-foot">
+      <footer class="modal-card-foot is-flex is-flex-direction-row is-justify-content-center">
         <button class="button" @click="ToggleDeleteModal('close', -1)">Close</button>
         <button class="button is-danger" @click="DeleteEvent()">Delete</button>
       </footer>
@@ -527,10 +531,9 @@
 </template>
 
 <style>
-  .main_button {
+  .main-button {
     bottom: 0;
-    z-index: 2;
     position: fixed;
-    margin-bottom: 0.75rem;
+    z-index: 10;
   }
 </style>

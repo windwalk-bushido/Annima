@@ -335,8 +335,8 @@
           </div>
           <p class="help" id="toc_helper"></p>
         </div>
-        <div class="field is-grouped mt-5">
-          <div class="control">
+        <div class="field is-grouped mt-6">
+          <div class="control is-flex is-flex-direction-row is-justify-content-center spread">
             <button
               class="button is-link"
               @click="RegisterUser()"
@@ -362,7 +362,7 @@
         <h3 class="is-size-5 mb-4">Thanks for signing up &lt;3</h3>
         <p>Please check your email for confirmation link.</p>
       </section>
-      <footer class="modal-card-foot">
+      <footer class="modal-card-foot is-flex is-flex-direction-row is-justify-content-center">
         <button class="button" @click="ToggleModal('close')">Close</button>
         <RouterLink class="button is-success" to="/login">Sign in</RouterLink>
       </footer>

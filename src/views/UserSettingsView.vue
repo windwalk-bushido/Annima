@@ -351,6 +351,8 @@
   <main>
     <div class="is-mobile mt-4">
       <div class="column is-10 is-offset-1">
+        <h1 class="is-size-2 has-text-centered">Settings</h1>
+
         <div class="card mt-5 mb-5">
           <div class="card-content p-4">
             <h1 class="is-size-4 has-text-centered mb-4">Update password</h1>
@@ -403,8 +405,8 @@
               </div>
               <p class="help" id="password2_helper"></p>
             </div>
-            <div class="field is-grouped mt-5">
-              <div class="control">
+            <div class="field is-grouped mt-6">
+              <div class="control is-flex is-flex-direction-row is-justify-content-center spread">
                 <button
                   class="button is-link"
                   @click="UpdatePassword()"
@@ -470,8 +472,8 @@
               </div>
               <p class="help" id="password_helper"></p>
             </div>
-            <div class="field is-grouped mt-5">
-              <div class="control">
+            <div class="field is-grouped mt-6">
+              <div class="control is-flex is-flex-direction-row is-justify-content-center spread">
                 <button
                   class="button is-link"
                   @click="UpdateEmail()"
@@ -499,7 +501,7 @@
       <section class="modal-card-body" v-if="api_response !== ''">
         {{ api_response }}
       </section>
-      <footer class="modal-card-foot">
+      <footer class="modal-card-foot is-flex is-flex-direction-row is-justify-content-center">
         <button class="button" @click="ToggleModal('password', 'close')">Close</button>
       </footer>
     </div>
@@ -516,7 +518,7 @@
       <section class="modal-card-body" v-if="api_response !== ''">
         {{ api_response }}
       </section>
-      <footer class="modal-card-foot">
+      <footer class="modal-card-foot is-flex is-flex-direction-row is-justify-content-center">
         <button class="button" @click="ToggleModal('email', 'close')">Close</button>
       </footer>
     </div>

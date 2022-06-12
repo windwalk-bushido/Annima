@@ -90,8 +90,8 @@
           </div>
           <p class="help" id="email_helper"></p>
         </div>
-        <div class="field is-grouped mt-5">
-          <div class="control">
+        <div class="field is-grouped mt-6">
+          <div class="control is-flex is-flex-direction-row is-justify-content-center spread">
             <button
               class="button is-link"
               @click="ResetPassword()"
