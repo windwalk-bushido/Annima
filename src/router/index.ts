@@ -53,9 +53,9 @@ let is_user_logged_in: boolean = false;
 function CheckIfUserIsLoggedIn() {
   const uuid_token_session = sessionStorage.getItem("annima_user_uuid");
   const uuid_token_storage = localStorage.getItem("annima_user_uuid");
-  const supabase_token = localStorage.getItem("supabase.auth.token");
+  const reset_token = localStorage.getItem("reset_token");
 
-  if (uuid_token_session !== null || uuid_token_storage !== null || supabase_token !== null) {
+  if (uuid_token_session !== null || uuid_token_storage !== null || reset_token !== null) {
     is_user_logged_in = true;
   } else {
     is_user_logged_in = false;

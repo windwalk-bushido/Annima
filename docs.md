@@ -20,10 +20,6 @@ TBM = To be made
 
 ### To do (Priorities)
 
-- Make Settings page (change email func.)
-- Make 404 page
-- "Check" icons should be displayed when inputted data is good (All pages)
-
 - Use Pinia (some variables needs to be global... e.g. to reduce number of API calls, event_list)
 - Reduce number of variables and use v-model as much as possible
 - Implement ES6 stuff like Try Catch, Arrow functions, etc. (if needed)
@@ -35,6 +31,7 @@ TBM = To be made
 - All buttons should be centered
 - Make images for types of events
 - Center (and make it) 'Loading' modal on Dashboard page;
+- "Check" icons should be displayed when inputted data is good (All pages)
 
 ### Milestones
 

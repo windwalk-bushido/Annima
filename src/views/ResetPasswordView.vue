@@ -45,6 +45,7 @@
       if (user !== null) {
         console.log(user);
         localStorage.setItem("supabase.auth.token", user);
+        localStorage.setItem("reset_token", "true");
       }
 
       if (error !== null) {
