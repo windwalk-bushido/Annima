@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { ref } from "vue";
+  import { ref, defineEmits, onMounted } from "vue";
   import { RouterLink } from "vue-router";
   import supabase from "../api";
 
@@ -9,6 +9,8 @@
   let password_input_icon = ref("circle-exclamation");
   let is_data_being_sent = ref(false);
   let api_response = ref("");
+
+  const emit = defineEmits(["NavBarLoggedIn"]);
 
   function ToggleModal(type: string, command: string) {
     let modal = undefined;
@@ -345,152 +347,154 @@
     submit_button.classList.remove("is-loading");
     is_data_being_sent.value = false;
   }
+
+  onMounted(() => {
+    emit("NavBarLoggedIn");
+  });
 </script>
 
 <template>
-  <main>
-    <div class="column is-flex is-flex-direction-row is-justify-content-center spread">
-      <div
-        class="column is-9-desktop is-flex is-flex-direction-row is-flex-wrap-wrap is-justify-content-center"
-      >
-        <h1 class="is-size-2 has-text-centered spread mb-6">Settings</h1>
+  <div class="column is-flex is-flex-direction-row is-justify-content-center spread">
+    <div class="column is-9-desktop is-flex is-flex-direction-row is-flex-wrap-wrap is-justify-content-center">
+      <h1 class="is-size-2 has-text-centered spread mb-6">Settings</h1>
 
-        <div class="card m-5 main-width">
-          <div class="card-content p-4">
-            <h1 class="is-size-4 has-text-centered mb-4">Update password</h1>
-            <article class="message is-warning">
-              <div class="message-header">
-                <p>Warning</p>
-              </div>
-              <div class="message-body">
-                <p>Use this form when you're resetting password via link in email only!</p>
-              </div>
-            </article>
-
-            <div class="field">
-              <label class="label">Password</label>
-              <div class="control has-icons-left has-icons-right">
-                <input
-                  class="input"
-                  type="password"
-                  placeholder="sR9ESQ7sdYzdJ0E07"
-                  id="password1_input"
-                  :readonly="is_data_being_sent"
-                  required
-                />
-                <span class="icon is-small is-left">
-                  <Icon icon="lock" />
-                </span>
-                <span class="icon is-small is-right is-hidden" id="password1_icon">
-                  <Icon :icon="password1_input_icon" />
-                </span>
-              </div>
-              <p class="help" id="password1_helper"></p>
+      <div class="card m-5 main-width">
+        <div class="card-content p-4">
+          <h1 class="is-size-4 has-text-centered mb-4">Update password</h1>
+          <article class="message is-warning">
+            <div class="message-header">
+              <p>Warning</p>
             </div>
-            <div class="field">
-              <label class="label">Password again</label>
-              <div class="control has-icons-left has-icons-right">
-                <input
-                  class="input"
-                  type="password"
-                  placeholder="sR9ESQ7sdYzdJ0E07"
-                  id="password2_input"
-                  :readonly="is_data_being_sent"
-                  required
-                />
-                <span class="icon is-small is-left">
-                  <Icon icon="lock" />
-                </span>
-                <span class="icon is-small is-right is-hidden" id="password2_icon">
-                  <Icon :icon="password2_input_icon" />
-                </span>
-              </div>
-              <p class="help" id="password2_helper"></p>
+            <div class="message-body">
+              <p>Use this form when you're resetting password via link in email only!</p>
             </div>
-            <div class="field is-grouped mt-6">
-              <div class="control is-flex is-flex-direction-row is-justify-content-center spread">
-                <button
-                  class="button is-link"
-                  @click="UpdatePassword()"
-                  :disabled="is_data_being_sent"
-                  id="submit_button"
-                >
-                  Submit
-                </button>
-              </div>
+          </article>
+          <div class="field">
+            <label class="label">Password</label>
+            <div class="control has-icons-left has-icons-right">
+              <input
+                class="input"
+                type="password"
+                placeholder="sR9ESQ7sdYzdJ0E07"
+                id="password1_input"
+                :readonly="is_data_being_sent"
+                required
+              />
+              <span class="icon is-small is-left">
+                <Icon icon="lock" />
+              </span>
+              <span class="icon is-small is-right is-hidden" id="password1_icon">
+                <Icon :icon="password1_input_icon" />
+              </span>
+            </div>
+            <p class="help" id="password1_helper"></p>
+          </div>
+          <div class="field">
+            <label class="label">Password again</label>
+            <div class="control has-icons-left has-icons-right">
+              <input
+                class="input"
+                type="password"
+                placeholder="sR9ESQ7sdYzdJ0E07"
+                id="password2_input"
+                :readonly="is_data_being_sent"
+                required
+              />
+              <span class="icon is-small is-left">
+                <Icon icon="lock" />
+              </span>
+              <span class="icon is-small is-right is-hidden" id="password2_icon">
+                <Icon :icon="password2_input_icon" />
+              </span>
+            </div>
+            <p class="help" id="password2_helper"></p>
+          </div>
+          <div class="field is-grouped mt-6">
+            <div class="control is-flex is-flex-direction-row is-justify-content-center spread">
+              <button
+                aria-label="update password button"
+                type="button"
+                class="button is-link"
+                @click="UpdatePassword()"
+                :disabled="is_data_being_sent"
+                id="submit_button"
+              >
+                Submit
+              </button>
             </div>
           </div>
         </div>
+      </div>
 
-        <div class="card m-5 main-width">
-          <div class="card-content p-4">
-            <h1 class="is-size-4 has-text-centered mb-4">Update email</h1>
-            <article class="message is-info">
-              <div class="message-header">
-                <p>Tip</p>
-              </div>
-              <div class="message-body">
-                <p>You'll have to confirm your new email after you change it.</p>
-              </div>
-            </article>
-
-            <div class="field">
-              <label class="label">New email</label>
-              <div class="control has-icons-left has-icons-right">
-                <input
-                  class="input"
-                  type="email"
-                  placeholder="user@example.com"
-                  id="email_input"
-                  :readonly="is_data_being_sent"
-                  required
-                />
-                <span class="icon is-small is-left">
-                  <Icon icon="envelope" />
-                </span>
-                <span class="icon is-small is-right is-hidden" id="email_icon">
-                  <Icon :icon="email_input_icon" />
-                </span>
-              </div>
-              <p class="help" id="email_helper"></p>
+      <div class="card m-5 main-width">
+        <div class="card-content p-4">
+          <h1 class="is-size-4 has-text-centered mb-4">Update email</h1>
+          <article class="message is-info">
+            <div class="message-header">
+              <p>Tip</p>
             </div>
-            <div class="field">
-              <label class="label">Current password</label>
-              <div class="control has-icons-left has-icons-right">
-                <input
-                  class="input"
-                  type="password"
-                  placeholder="sR9ESQ7sdYzdJ0E07"
-                  id="password_input"
-                  :readonly="is_data_being_sent"
-                  required
-                />
-                <span class="icon is-small is-left">
-                  <Icon icon="lock" />
-                </span>
-                <span class="icon is-small is-right is-hidden" id="password_icon">
-                  <Icon :icon="password_input_icon" />
-                </span>
-              </div>
-              <p class="help" id="password_helper"></p>
+            <div class="message-body">
+              <p>You'll have to confirm your new email after you change it.</p>
             </div>
-            <div class="field is-grouped mt-6">
-              <div class="control is-flex is-flex-direction-row is-justify-content-center spread">
-                <button
-                  class="button is-link"
-                  @click="UpdateEmail()"
-                  :disabled="is_data_being_sent"
-                  id="submit_button"
-                >
-                  Submit
-                </button>
-              </div>
+          </article>
+          <div class="field">
+            <label class="label">New email</label>
+            <div class="control has-icons-left has-icons-right">
+              <input
+                class="input"
+                type="email"
+                placeholder="user@example.com"
+                id="email_input"
+                :readonly="is_data_being_sent"
+                required
+              />
+              <span class="icon is-small is-left">
+                <Icon icon="envelope" />
+              </span>
+              <span class="icon is-small is-right is-hidden" id="email_icon">
+                <Icon :icon="email_input_icon" />
+              </span>
+            </div>
+            <p class="help" id="email_helper"></p>
+          </div>
+          <div class="field">
+            <label class="label">Current password</label>
+            <div class="control has-icons-left has-icons-right">
+              <input
+                class="input"
+                type="password"
+                placeholder="sR9ESQ7sdYzdJ0E07"
+                id="password_input"
+                :readonly="is_data_being_sent"
+                required
+              />
+              <span class="icon is-small is-left">
+                <Icon icon="lock" />
+              </span>
+              <span class="icon is-small is-right is-hidden" id="password_icon">
+                <Icon :icon="password_input_icon" />
+              </span>
+            </div>
+            <p class="help" id="password_helper"></p>
+          </div>
+          <div class="field is-grouped mt-6">
+            <div class="control is-flex is-flex-direction-row is-justify-content-center spread">
+              <button
+                aria-label="update email button"
+                type="button"
+                class="button is-link"
+                @click="UpdateEmail()"
+                :disabled="is_data_being_sent"
+                id="submit_button"
+              >
+                Submit
+              </button>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </main>
+  </div>
 
   <div class="modal" id="modal_password">
     <div class="modal-background" />
@@ -498,13 +502,25 @@
       <header class="modal-card-head">
         <p class="modal-card-title" v-if="api_response !== ''">Password updated successfully</p>
         <p class="modal-card-title" v-else>Error</p>
-        <button class="delete" aria-label="close" @click="ToggleModal('password', 'close')"></button>
+        <button
+          aria-label="close modal button"
+          type="button"
+          class="delete"
+          @click="ToggleModal('password', 'close')"
+        ></button>
       </header>
       <section class="modal-card-body" v-if="api_response !== ''">
         {{ api_response }}
       </section>
       <footer class="modal-card-foot is-flex is-flex-direction-row is-justify-content-center">
-        <button class="button" @click="ToggleModal('password', 'close')">Close</button>
+        <button
+          aria-label="close modal button"
+          type="button"
+          class="button"
+          @click="ToggleModal('password', 'close')"
+        >
+          Close
+        </button>
       </footer>
     </div>
   </div>
@@ -515,13 +531,25 @@
       <header class="modal-card-head">
         <p class="modal-card-title" v-if="api_response !== ''">Email updated successfully/p></p>
         <p class="modal-card-title" v-else>Error</p>
-        <button class="delete" aria-label="close" @click="ToggleModal('email', 'close')"></button>
+        <button
+          aria-label="close modal button"
+          type="button"
+          class="delete"
+          @click="ToggleModal('email', 'close')"
+        ></button>
       </header>
       <section class="modal-card-body" v-if="api_response !== ''">
         {{ api_response }}
       </section>
       <footer class="modal-card-foot is-flex is-flex-direction-row is-justify-content-center">
-        <button class="button" @click="ToggleModal('email', 'close')">Close</button>
+        <button
+          aria-label="close modal button"
+          type="button"
+          class="button"
+          @click="ToggleModal('email', 'close')"
+        >
+          Close
+        </button>
       </footer>
     </div>
   </div>

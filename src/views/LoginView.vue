@@ -157,88 +157,100 @@
 </script>
 
 <template>
-  <main>
-    <div class="column is-flex is-flex-direction-row is-justify-content-center spread">
-      <div class="column main-width">
-        <h1 class="is-size-2 has-text-centered mb-4">Login</h1>
+  <div class="column is-flex is-flex-direction-row is-justify-content-center spread">
+    <div class="column main-width">
+      <h1 class="is-size-2 has-text-centered mb-4">Login</h1>
 
-        <div class="field">
-          <label class="label">Email</label>
-          <div class="control has-icons-left has-icons-right">
-            <input
-              class="input"
-              type="email"
-              placeholder="user@example.com"
-              id="email_input"
-              :readonly="is_data_being_sent"
-              required
-            />
-            <span class="icon is-small is-left">
-              <Icon icon="envelope" />
-            </span>
-            <span class="icon is-small is-right is-hidden" id="email_icon">
-              <Icon :icon="email_input_icon" />
-            </span>
-          </div>
-          <p class="help" id="email_helper"></p>
+      <div class="field">
+        <label class="label">Email</label>
+        <div class="control has-icons-left has-icons-right">
+          <input
+            class="input"
+            type="email"
+            placeholder="user@example.com"
+            id="email_input"
+            :readonly="is_data_being_sent"
+            required
+          />
+          <span class="icon is-small is-left">
+            <Icon icon="envelope" />
+          </span>
+          <span class="icon is-small is-right is-hidden" id="email_icon">
+            <Icon :icon="email_input_icon" />
+          </span>
         </div>
-        <div class="field">
-          <label class="label">Password</label>
-          <div class="control has-icons-left has-icons-right">
-            <input
-              class="input"
-              type="password"
-              placeholder="sR9ESQ7sdYzdJ0E07"
-              id="password_input"
-              :readonly="is_data_being_sent"
-              required
-            />
-            <span class="icon is-small is-left">
-              <Icon icon="lock" />
-            </span>
-            <span class="icon is-small is-right is-hidden" id="password_icon">
-              <Icon :icon="password_input_icon" />
-            </span>
-          </div>
-          <p class="help" id="password_helper"></p>
+        <p class="help" id="email_helper"></p>
+      </div>
+      <div class="field">
+        <label class="label">Password</label>
+        <div class="control has-icons-left has-icons-right">
+          <input
+            class="input"
+            type="password"
+            placeholder="sR9ESQ7sdYzdJ0E07"
+            id="password_input"
+            :readonly="is_data_being_sent"
+            required
+          />
+          <span class="icon is-small is-left">
+            <Icon icon="lock" />
+          </span>
+          <span class="icon is-small is-right is-hidden" id="password_icon">
+            <Icon :icon="password_input_icon" />
+          </span>
         </div>
-        <div class="field is-flex is-flex-direction-row is-justify-content-center spread">
-          <RouterLink class="button is-ghost" to="/reset-password">Forgot password?</RouterLink>
+        <p class="help" id="password_helper"></p>
+      </div>
+      <div class="field is-flex is-flex-direction-row is-justify-content-center spread">
+        <RouterLink class="button is-ghost" to="/reset-password">Forgot password?</RouterLink>
+      </div>
+      <div class="field mt-5">
+        <div class="control">
+          <label class="checkbox">
+            <input type="checkbox" id="kul_checkbox" :disabled="is_data_being_sent" />
+            Keep me logged in
+          </label>
         </div>
-        <div class="field mt-5">
-          <div class="control">
-            <label class="checkbox">
-              <input type="checkbox" id="kul_checkbox" :disabled="is_data_being_sent" />
-              Keep me logged in
-            </label>
-          </div>
-        </div>
-        <div class="field is-grouped mt-6">
-          <div class="control is-flex is-flex-direction-row is-justify-content-center spread">
-            <button
-              class="button is-link"
-              @click="LoginUser()"
-              :disabled="is_data_being_sent"
-              id="submit_button"
-            >
-              Submit
-            </button>
-          </div>
+      </div>
+      <div class="field is-grouped mt-6">
+        <div class="control is-flex is-flex-direction-row is-justify-content-center spread">
+          <button
+            aria-label="sign in button"
+            type="button"
+            class="button is-link"
+            @click="LoginUser()"
+            :disabled="is_data_being_sent"
+            id="submit_button"
+          >
+            Submit
+          </button>
         </div>
       </div>
     </div>
-  </main>
+  </div>
 
   <div class="modal" id="modal">
     <div class="modal-background" />
     <div class="modal-card">
       <header class="modal-card-head">
         <p class="modal-card-title">Error: {{ error_message }}</p>
-        <button class="delete" aria-label="close" @click="ToggleModal('close')"></button>
+        <button
+          aria-label="close modal button"
+          type="button"
+          class="delete"
+          @click="ToggleModal('close')"
+        ></button>
       </header>
       <footer class="modal-card-foot is-flex is-flex-direction-row is-justify-content-center">
         <RouterLink class="button" to="/register">Sign up</RouterLink>
-        <button class="button is-primary" @click="ToggleModal('close')">Try again</button>
+        <button
+          aria-label="delete modal button"
+          type="button"
+          class="button is-primary"
+          @click="ToggleModal('close')"
+        >
+          Try again
+        </button>
       </footer>
     </div>
   </div>

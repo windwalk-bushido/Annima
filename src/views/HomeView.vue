@@ -1,7 +1,5 @@
 <script setup lang="ts"></script>
 
 <template>
-  <main>
-    <h1>Head to Menu -> Sign up</h1>
-  </main>
+  <h1>Head to Menu -> Sign up</h1>
 </template>

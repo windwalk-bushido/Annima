@@ -59,50 +59,50 @@
 </script>
 
 <template>
-  <main>
-    <div class="column is-flex is-flex-direction-row is-justify-content-center spread">
-      <div class="column main-width">
-        <h1 class="is-size-3 has-text-centered mb-6">Reset Password</h1>
+  <div class="column is-flex is-flex-direction-row is-justify-content-center spread">
+    <div class="column main-width">
+      <h1 class="is-size-3 has-text-centered mb-6">Reset Password</h1>
 
-        <p>Type in your email address you used when signing up/in below.</p>
-        <p class="mt-2">
-          If the email address is correct, you will get email from us with the link to the page where you can
-          type in new password.
-        </p>
+      <p>Type in your email address you used when signing up/in below.</p>
+      <p class="mt-2">
+        If the email address is correct, you will get email from us with the link to the page where you can
+        type in new password.
+      </p>
 
-        <div class="field mt-4">
-          <label class="label">Email</label>
-          <div class="control has-icons-left has-icons-right">
-            <input
-              class="input"
-              type="email"
-              placeholder="user@example.com"
-              id="email_input"
-              :readonly="is_data_being_sent"
-              required
-            />
-            <span class="icon is-small is-left">
-              <Icon icon="envelope" />
-            </span>
-            <span class="icon is-small is-right is-hidden" id="email_icon">
-              <Icon :icon="email_input_icon" />
-            </span>
-          </div>
-          <p class="help" id="email_helper"></p>
+      <div class="field mt-4">
+        <label class="label">Email</label>
+        <div class="control has-icons-left has-icons-right">
+          <input
+            class="input"
+            type="email"
+            placeholder="user@example.com"
+            id="email_input"
+            :readonly="is_data_being_sent"
+            required
+          />
+          <span class="icon is-small is-left">
+            <Icon icon="envelope" />
+          </span>
+          <span class="icon is-small is-right is-hidden" id="email_icon">
+            <Icon :icon="email_input_icon" />
+          </span>
         </div>
-        <div class="field is-grouped mt-6">
-          <div class="control is-flex is-flex-direction-row is-justify-content-center spread">
-            <button
-              class="button is-link"
-              @click="ResetPassword()"
-              :disabled="is_data_being_sent"
-              id="submit_button"
-            >
-              Submit
-            </button>
-          </div>
+        <p class="help" id="email_helper"></p>
+      </div>
+      <div class="field is-grouped mt-6">
+        <div class="control is-flex is-flex-direction-row is-justify-content-center spread">
+          <button
+            aria-label="reset password button"
+            type="button"
+            class="button is-link"
+            @click="ResetPassword()"
+            :disabled="is_data_being_sent"
+            id="submit_button"
+          >
+            Submit
+          </button>
         </div>
       </div>
     </div>
-  </main>
+  </div>
 </template>

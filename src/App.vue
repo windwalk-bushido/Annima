@@ -47,7 +47,7 @@
 
 <template>
   <header class="is-relative">
-    <nav class="navbar is-dark is-floating is-fixed-top">
+    <nav class="navbar is-dark is-floating is-fixed-top has-shadow">
       <div class="navbar-brand">
         <RouterLink
           class="navbar-item is-logo"
@@ -81,7 +81,9 @@
           </RouterLink>
           <RouterLink class="navbar-item" to="/about" v-else @click="ToggleMenu(0)">About</RouterLink>
           <div class="navbar-item" v-if="is_user_logged_in">
-            <button class="button is-light" @click="LogoutUser">Logout</button>
+            <button aria-label="logout button" type="button" class="button is-light" @click="LogoutUser">
+              Logout
+            </button>
           </div>
           <div class="navbar-item" v-else>
             <div class="buttons">

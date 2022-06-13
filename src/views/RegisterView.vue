@@ -261,109 +261,116 @@
 </script>
 
 <template>
-  <main>
-    <div class="column is-flex is-flex-direction-row is-justify-content-center spread">
-      <div class="column main-width">
-        <h1 class="is-size-2 has-text-centered mb-4">Register</h1>
+  <div class="column is-flex is-flex-direction-row is-justify-content-center spread">
+    <div class="column main-width">
+      <h1 class="is-size-2 has-text-centered mb-4">Register</h1>
 
-        <div class="field">
-          <label class="label">Email</label>
-          <div class="control has-icons-left has-icons-right">
-            <input
-              class="input"
-              type="email"
-              placeholder="user@example.com"
-              id="email_input"
-              :readonly="is_data_being_sent"
-              required
-            />
-            <span class="icon is-small is-left">
-              <Icon icon="envelope" />
-            </span>
-            <span class="icon is-small is-right is-hidden" id="email_icon">
-              <Icon :icon="email_input_icon" />
-            </span>
-          </div>
-          <p class="help" id="email_helper"></p>
+      <div class="field">
+        <label class="label">Email</label>
+        <div class="control has-icons-left has-icons-right">
+          <input
+            class="input"
+            type="email"
+            placeholder="user@example.com"
+            id="email_input"
+            :readonly="is_data_being_sent"
+            required
+          />
+          <span class="icon is-small is-left">
+            <Icon icon="envelope" />
+          </span>
+          <span class="icon is-small is-right is-hidden" id="email_icon">
+            <Icon :icon="email_input_icon" />
+          </span>
         </div>
-        <div class="field">
-          <label class="label">Password</label>
-          <div class="control has-icons-left has-icons-right">
-            <input
-              class="input"
-              type="password"
-              placeholder="sR9ESQ7sdYzdJ0E07"
-              id="password1_input"
-              :readonly="is_data_being_sent"
-              required
-            />
-            <span class="icon is-small is-left">
-              <Icon icon="lock" />
-            </span>
-            <span class="icon is-small is-right is-hidden" id="password1_icon">
-              <Icon :icon="password1_input_icon" />
-            </span>
-          </div>
-          <p class="help" id="password1_helper"></p>
+        <p class="help" id="email_helper"></p>
+      </div>
+      <div class="field">
+        <label class="label">Password</label>
+        <div class="control has-icons-left has-icons-right">
+          <input
+            class="input"
+            type="password"
+            placeholder="sR9ESQ7sdYzdJ0E07"
+            id="password1_input"
+            :readonly="is_data_being_sent"
+            required
+          />
+          <span class="icon is-small is-left">
+            <Icon icon="lock" />
+          </span>
+          <span class="icon is-small is-right is-hidden" id="password1_icon">
+            <Icon :icon="password1_input_icon" />
+          </span>
         </div>
-        <div class="field">
-          <label class="label">Password again</label>
-          <div class="control has-icons-left has-icons-right">
-            <input
-              class="input"
-              type="password"
-              placeholder="sR9ESQ7sdYzdJ0E07"
-              id="password2_input"
-              :readonly="is_data_being_sent"
-              required
-            />
-            <span class="icon is-small is-left">
-              <Icon icon="lock" />
-            </span>
-            <span class="icon is-small is-right is-hidden" id="password2_icon">
-              <Icon :icon="password2_input_icon" />
-            </span>
-          </div>
-          <p class="help" id="password2_helper"></p>
+        <p class="help" id="password1_helper"></p>
+      </div>
+      <div class="field">
+        <label class="label">Password again</label>
+        <div class="control has-icons-left has-icons-right">
+          <input
+            class="input"
+            type="password"
+            placeholder="sR9ESQ7sdYzdJ0E07"
+            id="password2_input"
+            :readonly="is_data_being_sent"
+            required
+          />
+          <span class="icon is-small is-left">
+            <Icon icon="lock" />
+          </span>
+          <span class="icon is-small is-right is-hidden" id="password2_icon">
+            <Icon :icon="password2_input_icon" />
+          </span>
         </div>
-        <div class="field mt-5">
-          <div class="control">
-            <label class="checkbox">
-              <input type="checkbox" id="toc_checkbox" :disabled="is_data_being_sent" required />
-              I agree to the <a href="#">Terms and Conditions</a>
-            </label>
-          </div>
-          <p class="help" id="toc_helper"></p>
+        <p class="help" id="password2_helper"></p>
+      </div>
+      <div class="field mt-5">
+        <div class="control">
+          <label class="checkbox">
+            <input type="checkbox" id="toc_checkbox" :disabled="is_data_being_sent" required />
+            I agree to the <a href="#">Terms and Conditions</a>
+          </label>
         </div>
-        <div class="field is-grouped mt-6">
-          <div class="control is-flex is-flex-direction-row is-justify-content-center spread">
-            <button
-              class="button is-link"
-              @click="RegisterUser()"
-              :disabled="is_data_being_sent"
-              id="submit_button"
-            >
-              Submit
-            </button>
-          </div>
+        <p class="help" id="toc_helper"></p>
+      </div>
+      <div class="field is-grouped mt-6">
+        <div class="control is-flex is-flex-direction-row is-justify-content-center spread">
+          <button
+            aria-label="sign up button"
+            type="button"
+            class="button is-link"
+            @click="RegisterUser()"
+            :disabled="is_data_being_sent"
+            id="submit_button"
+          >
+            Submit
+          </button>
         </div>
       </div>
     </div>
-  </main>
+  </div>
 
   <div class="modal" id="modal">
     <div class="modal-background" />
     <div class="modal-card">
       <header class="modal-card-head">
         <p class="modal-card-title">Registration successfull</p>
-        <button class="delete" aria-label="close" @click="ToggleModal('close')"></button>
+        <button
+          aria-label="close modal button"
+          type="button"
+          class="delete"
+          @click="ToggleModal('close')"
+        ></button>
       </header>
       <section class="modal-card-body">
         <h3 class="is-size-5 mb-4">Thanks for signing up &lt;3</h3>
         <p>Please check your email for confirmation link.</p>
       </section>
       <footer class="modal-card-foot is-flex is-flex-direction-row is-justify-content-center">
-        <button class="button" @click="ToggleModal('close')">Close</button>
+        <button aria-label="close modal button" type="button" class="button" @click="ToggleModal('close')">
+          Close
+        </button>
         <RouterLink class="button is-success" to="/login">Sign in</RouterLink>
       </footer>
     </div>

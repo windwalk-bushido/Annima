@@ -376,67 +376,84 @@
 </script>
 
 <template>
-  <main>
-    <div class="column is-flex is-flex-direction-row is-justify-content-center spread mb-6">
-      <div
-        class="column is-9-desktop is-flex is-flex-direction-row is-flex-wrap-wrap is-justify-content-center"
-      >
-        <div class="is-flex is-flex-direction-column is-justify-content-center spread">
-          <h1 class="is-size-2 has-text-centered">Dashboard</h1>
-          <button class="button is-white is-large is-loading mb-4" disabled id="loading_button" />
-        </div>
+  <div class="column is-flex is-flex-direction-row is-justify-content-center spread mb-6">
+    <div class="column is-9-desktop is-flex is-flex-direction-row is-flex-wrap-wrap is-justify-content-center">
+      <div class="is-flex is-flex-direction-column is-justify-content-center spread">
+        <h1 class="is-size-2 has-text-centered">Dashboard</h1>
+        <button
+          aria-label="loading button"
+          type="button"
+          class="button is-white is-large is-loading mb-4"
+          disabled
+          id="loading_button"
+        />
+      </div>
 
-        <div class="has-text-centered mt-6" v-if="event_list.length === 0">
-          <Icon icon="face-sad-cry" class="is-size-1" />
-          <h2 class="mt-2">No events... yet.</h2>
-        </div>
+      <div class="has-text-centered mt-6" v-if="event_list.length === 0">
+        <Icon icon="face-sad-cry" class="is-size-1" />
+        <h2 class="mt-2">No events... yet.</h2>
+      </div>
 
-        <div class="card m-5" v-for="(event, index) in event_list" :key="index" v-else>
-          <div class="card-content p-4">
-            <div class="media">
-              <div class="media-left">
-                <figure class="image is-64x64">
-                  <img src="../assets/birthday.png" alt="Placeholder image" v-if="event.type === 'Birthday'" />
-                  <img
-                    src="../assets/anniversary.png"
-                    alt="Placeholder image"
-                    v-if="event.type === 'Anniversary'"
-                  />
-                  <img src="../assets/name-day.png" alt="Placeholder image" v-if="event.type === 'Name day'" />
-                  <img
-                    src="../assets/death-anniversary.png"
-                    alt="Placeholder image"
-                    v-if="event.type === 'Death anniversary'"
-                  />
-                  <img src="../assets/other.png" alt="Placeholder image" v-if="event.type === 'Other'" />
-                </figure>
-              </div>
-              <div class="media-content">
-                <p class="title is-4">{{ event.name }}</p>
-                <p class="subtitle is-6">{{ FormatDate(event.date) }}</p>
-              </div>
+      <div class="card m-5" v-for="(event, index) in event_list" :key="index" v-else>
+        <div class="card-content p-4">
+          <div class="media">
+            <div class="media-left">
+              <figure class="image is-64x64">
+                <img src="../assets/birthday.png" alt="Placeholder image" v-if="event.type === 'Birthday'" />
+                <img
+                  src="../assets/anniversary.png"
+                  alt="Placeholder image"
+                  v-if="event.type === 'Anniversary'"
+                />
+                <img src="../assets/name-day.png" alt="Placeholder image" v-if="event.type === 'Name day'" />
+                <img
+                  src="../assets/death-anniversary.png"
+                  alt="Placeholder image"
+                  v-if="event.type === 'Death anniversary'"
+                />
+                <img src="../assets/other.png" alt="Placeholder image" v-if="event.type === 'Other'" />
+              </figure>
             </div>
-            <div class="content">
-              <div class="notification p-4 my-card-note">{{ event.note }}</div>
+            <div class="media-content">
+              <p class="title is-4">{{ event.name }}</p>
+              <p class="subtitle is-6">{{ FormatDate(event.date) }}</p>
             </div>
           </div>
-          <footer class="card-footer p-4 is-flex is-flex-direction-row is-justify-content-center">
-            <button class="button is-danger" @click="ToggleDeleteModal('open', index)">
-              <Icon icon="trash" class="mr-2" />
-              Delete
-            </button>
-            <button class="button is-warning ml-3" @click="PrepareForEventEditing(index)">
-              <Icon icon="pen" class="mr-2" />
-              Edit
-            </button>
-          </footer>
+          <div class="content">
+            <div class="notification p-4 my-card-note">{{ event.note }}</div>
+          </div>
         </div>
+        <footer class="card-footer p-4 is-flex is-flex-direction-row is-justify-content-center">
+          <button
+            aria-label="delete event button"
+            type="button"
+            class="button is-danger"
+            @click="ToggleDeleteModal('open', index)"
+          >
+            <Icon icon="trash" class="mr-2" />
+            Delete
+          </button>
+          <button
+            aria-label="edit event button"
+            type="button"
+            class="button is-warning ml-3"
+            @click="PrepareForEventEditing(index)"
+          >
+            <Icon icon="pen" class="mr-2" />
+            Edit
+          </button>
+        </footer>
       </div>
     </div>
-  </main>
+  </div>
 
   <div class="is-flex is-flex-direction-row is-justify-content-center spread p-4 main-button">
-    <button class="button is-primary is-rounded" @click="ToggleModal('open')">
+    <button
+      aria-label="create event button"
+      type="button"
+      class="button is-primary is-rounded"
+      @click="ToggleModal('open')"
+    >
       <Icon icon="plus" class="is-size-4" />
     </button>
   </div>
@@ -446,7 +463,7 @@
     <div class="modal-card">
       <header class="modal-card-head">
         <p class="modal-card-title">New event</p>
-        <button class="delete" aria-label="close" @click="ToggleModal('close')"></button>
+        <button type="button" class="delete" aria-label="close modal" @click="ToggleModal('close')"></button>
       </header>
       <section class="modal-card-body">
         <div class="field">
@@ -512,9 +529,27 @@
         </div>
       </section>
       <footer class="modal-card-foot is-flex is-flex-direction-row is-justify-content-center">
-        <button class="button" @click="ToggleModal('close')">Close</button>
-        <button class="button is-success" @click="CreateEvent()" v-if="!is_edit_mode_on">Create</button>
-        <button class="button is-warning" @click="UpdateEvent()" v-if="is_edit_mode_on">Update</button>
+        <button aria-label="close modal" type="button" class="button" @click="ToggleModal('close')">
+          Close
+        </button>
+        <button
+          aria-label="create event button"
+          type="button"
+          class="button is-success"
+          @click="CreateEvent()"
+          v-if="!is_edit_mode_on"
+        >
+          Create
+        </button>
+        <button
+          aria-label="update event button"
+          type="button"
+          class="button is-warning"
+          @click="UpdateEvent()"
+          v-if="is_edit_mode_on"
+        >
+          Update
+        </button>
       </footer>
     </div>
   </div>
@@ -524,14 +559,28 @@
     <div class="modal-card">
       <header class="modal-card-head">
         <p class="modal-card-title">Deleting event</p>
-        <button class="delete" aria-label="close" @click="ToggleDeleteModal('close', -1)"></button>
+        <button
+          aria-label="close modal button"
+          type="button"
+          class="delete"
+          @click="ToggleDeleteModal('close', -1)"
+        ></button>
       </header>
       <section class="modal-card-body">
         <h3 class="is-size-5">Are you sure?</h3>
       </section>
       <footer class="modal-card-foot is-flex is-flex-direction-row is-justify-content-center">
-        <button class="button" @click="ToggleDeleteModal('close', -1)">Close</button>
-        <button class="button is-danger" @click="DeleteEvent()">Delete</button>
+        <button
+          aria-label="close modal button"
+          type="button"
+          class="button"
+          @click="ToggleDeleteModal('close', -1)"
+        >
+          Close
+        </button>
+        <button aria-label="delete event button" type="button" class="button is-danger" @click="DeleteEvent()">
+          Delete
+        </button>
       </footer>
     </div>
   </div>
