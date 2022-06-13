@@ -154,8 +154,9 @@
     const event_note_input = document.getElementById("event_note_input") as HTMLFormElement;
     const event_note_helper = document.getElementById("event_note_helper") as HTMLElement;
 
-    let is_event_name_good = false;
-    let is_event_date_good = false;
+    let is_event_name_good: boolean = false;
+    let is_event_date_good: boolean = false;
+    let is_event_note_good: boolean = false;
 
     if (event_name_input.value.length === 0) {
       InformUserAboutInputtedData(
@@ -196,6 +197,9 @@
       is_event_name_good = true;
     }
 
+    const today = new Date();
+    const wanted_date = event_date_input.value;
+
     if (event_date_input.value.length === 0) {
       InformUserAboutInputtedData(
         "date",
@@ -214,7 +218,7 @@
         "Earliest date you can set is 1920-01-01 (YYYY-MM-DD).",
         "BAD"
       );
-    } else if (event_date_input.value > event_date_input.max) {
+    } else if (wanted_date > today) {
       InformUserAboutInputtedData(
         "date",
         event_date_input,
@@ -235,16 +239,17 @@
       is_event_date_good = true;
     }
 
-    if (event_note_input.value.length > 300) {
+    if (event_note_input.value.length > 351) {
       event_note_input.classList.add("is-danger");
-      event_note_helper.innerHTML = "Maximum number of characters is 300.";
+      event_note_helper.innerHTML = "Maximum number of characters is 350.";
       event_note_helper.classList.add("is-danger");
     } else {
       event_note_input.classList.remove("is-danger");
       event_note_input.innerHTML = "";
+      is_event_note_good = true;
     }
 
-    if (is_event_name_good && is_event_date_good) {
+    if (is_event_name_good && is_event_date_good && is_event_note_good) {
       return true;
     } else {
       return false;
@@ -372,9 +377,11 @@
 
 <template>
   <main>
-    <div class="is-mobile mt-4">
-      <div class="column is-10 is-offset-1">
-        <div class="is-flex is-flex-direction-column is-justify-content-center">
+    <div class="column is-flex is-flex-direction-row is-justify-content-center spread mb-6">
+      <div
+        class="column is-9-desktop is-flex is-flex-direction-row is-flex-wrap-wrap is-justify-content-center"
+      >
+        <div class="is-flex is-flex-direction-column is-justify-content-center spread">
           <h1 class="is-size-2 has-text-centered">Dashboard</h1>
           <button class="button is-white is-large is-loading mb-4" disabled id="loading_button" />
         </div>
@@ -384,7 +391,7 @@
           <h2 class="mt-2">No events... yet.</h2>
         </div>
 
-        <div class="card mt-5 mb-5" v-for="(event, index) in event_list" :key="index" v-else>
+        <div class="card m-5" v-for="(event, index) in event_list" :key="index" v-else>
           <div class="card-content p-4">
             <div class="media">
               <div class="media-left">
@@ -409,8 +416,8 @@
                 <p class="subtitle is-6">{{ FormatDate(event.date) }}</p>
               </div>
             </div>
-            <div class="content" v-if="event.note !== ''">
-              <div class="notification p-4">{{ event.note }}</div>
+            <div class="content">
+              <div class="notification p-4 my-card-note">{{ event.note }}</div>
             </div>
           </div>
           <footer class="card-footer p-4 is-flex is-flex-direction-row is-justify-content-center">
@@ -424,15 +431,15 @@
             </button>
           </footer>
         </div>
-
-        <div class="is-flex is-flex-direction-row is-justify-content-center spread p-4 main-button">
-          <button class="button is-primary is-rounded" @click="ToggleModal('open')">
-            <Icon icon="plus" class="is-size-4" />
-          </button>
-        </div>
       </div>
     </div>
   </main>
+
+  <div class="is-flex is-flex-direction-row is-justify-content-center spread p-4 main-button">
+    <button class="button is-primary is-rounded" @click="ToggleModal('open')">
+      <Icon icon="plus" class="is-size-4" />
+    </button>
+  </div>
 
   <div class="modal" id="modal">
     <div class="modal-background" />
@@ -530,7 +537,7 @@
   </div>
 </template>
 
-<style>
+<style scoped>
   .main-button {
     bottom: 0;
     position: fixed;

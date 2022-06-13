@@ -349,11 +349,13 @@
 
 <template>
   <main>
-    <div class="is-mobile mt-4">
-      <div class="column is-10 is-offset-1">
-        <h1 class="is-size-2 has-text-centered">Settings</h1>
+    <div class="column is-flex is-flex-direction-row is-justify-content-center spread">
+      <div
+        class="column is-9-desktop is-flex is-flex-direction-row is-flex-wrap-wrap is-justify-content-center"
+      >
+        <h1 class="is-size-2 has-text-centered spread mb-6">Settings</h1>
 
-        <div class="card mt-5 mb-5">
+        <div class="card m-5 main-width">
           <div class="card-content p-4">
             <h1 class="is-size-4 has-text-centered mb-4">Update password</h1>
             <article class="message is-warning">
@@ -420,7 +422,7 @@
           </div>
         </div>
 
-        <div class="card mt-5 mb-5">
+        <div class="card m-5 main-width">
           <div class="card-content p-4">
             <h1 class="is-size-4 has-text-centered mb-4">Update email</h1>
             <article class="message is-info">

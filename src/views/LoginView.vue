@@ -158,8 +158,8 @@
 
 <template>
   <main>
-    <div class="is-mobile mt-4">
-      <div class="column is-10 is-offset-1">
+    <div class="column is-flex is-flex-direction-row is-justify-content-center spread">
+      <div class="column main-width">
         <h1 class="is-size-2 has-text-centered mb-4">Login</h1>
 
         <div class="field">
@@ -202,8 +202,8 @@
           </div>
           <p class="help" id="password_helper"></p>
         </div>
-        <div class="field">
-          <RouterLink class="" to="/reset-password">Forgot password?</RouterLink>
+        <div class="field is-flex is-flex-direction-row is-justify-content-center spread">
+          <RouterLink class="button is-ghost" to="/reset-password">Forgot password?</RouterLink>
         </div>
         <div class="field mt-5">
           <div class="control">

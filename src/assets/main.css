@@ -6,3 +6,12 @@ html {
 .spread {
   width: 100%;
 }
+
+.main-width {
+  max-width: 23rem;
+}
+
+.my-card-note {
+  width: 17rem;
+  height: 20rem;
+}

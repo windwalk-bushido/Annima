@@ -60,8 +60,8 @@
 
 <template>
   <main>
-    <div class="is-mobile mt-4">
-      <div class="column is-10 is-offset-1">
+    <div class="column is-flex is-flex-direction-row is-justify-content-center spread">
+      <div class="column main-width">
         <h1 class="is-size-3 has-text-centered mb-6">Reset Password</h1>
 
         <p>Type in your email address you used when signing up/in below.</p>

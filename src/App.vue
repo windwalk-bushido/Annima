@@ -49,10 +49,14 @@
   <header class="is-relative">
     <nav class="navbar is-dark is-floating is-fixed-top">
       <div class="navbar-brand">
-        <RouterLink class="navbar-item is-logo" to="/user/dashboard" v-if="is_user_logged_in"
+        <RouterLink
+          class="navbar-item is-logo"
+          to="/user/dashboard"
+          v-if="is_user_logged_in"
+          @click="ToggleMenu(0)"
           >Annima</RouterLink
         >
-        <RouterLink class="navbar-item is-logo" to="/" v-else>Annima</RouterLink>
+        <RouterLink class="navbar-item is-logo" to="/" v-else @click="ToggleMenu(0)">Annima</RouterLink>
         <a
           role="button"
           class="navbar-burger"
